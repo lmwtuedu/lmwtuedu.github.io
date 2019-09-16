@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>ELK搭建实时日志分析平台 | I AM SLOW WALKER, BUT I NEVER WALK BACK</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="reprint,code">
+    <meta name="description" content="ELK(ElasticSearch, Logstash, Kibana)搭建实时日志分析平台在搜索ELK资料的时候，发现这篇文章比较好，于是摘抄一小段：以下内容来自：http://baidu.blog.51cto.com/71938/1676798 日志主要包括系统日志、应用程序日志和安全日志。系统运维和开发人员可以通过日志了解服务器软硬件信息、检查配置过程中的错误及错误发生的原因。经常分析日志可">
+<meta name="keywords" content="reprint,code">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ELK搭建实时日志分析平台">
+<meta property="og:url" content="http://lmwtuedu.cn/2018/07/26/2018-07-26-ELK(ElasticSearch, Logstash, Kibana)搭建实时日志分析平台/index.html">
+<meta property="og:site_name" content="I AM SLOW WALKER, BUT I NEVER WALK BACK">
+<meta property="og:description" content="ELK(ElasticSearch, Logstash, Kibana)搭建实时日志分析平台在搜索ELK资料的时候，发现这篇文章比较好，于是摘抄一小段：以下内容来自：http://baidu.blog.51cto.com/71938/1676798 日志主要包括系统日志、应用程序日志和安全日志。系统运维和开发人员可以通过日志了解服务器软硬件信息、检查配置过程中的错误及错误发生的原因。经常分析日志可">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1ftnb3g1co9j31c20xnatk.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1ftnb6wvlgcj31bc1eywv1.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1ftnb9r4r82j31c20jp78v.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1ftnbf0250yj30zv0b7n23.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1ftnbg68k0oj31ev0qiwt1.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1ftnbm1fzkkj31c215dtnc.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1ftnbmq97p3j316p0mtq9a.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1ftnborznz2j31dr0lm45f.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1ftnbr8l9dpj31g70o5wje.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1ftnbsqgezaj313v0graey.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1ftnbv8aledj31kw0aa441.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1ftnbvo9i1vj30m30naaeb.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1ftnbwnt058j31hg0kl7g6.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1ftnbxs5ht3j31c208l0v7.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1ftnc0t60enj31kw0endv5.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1ftnc17fs0yj31kw0o5k5c.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcgy1ftnc4792wij31kw0pm17i.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1ftnc4m5d3wj317k0tv7hy.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1ftnc5fm6i6j31kw0lawx1.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1ftnc745twvj31kw0fgtn5.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1ftnc835w4pj31kw12s4bh.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcgy1ftnc8guq3pj31kw11ualm.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1ftnc8t5shej31kw0xvdpv.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1ftnc9831pnj31kw0u414r.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1ftnc9y6fkhj31kw11eapo.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1ftncacyi0ej31kw116wqb.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1ftncauatjsj31kw11bqcy.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1ftncb76eruj31kw0jaags.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1ftncblehm1j31kw0ub79t.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1ftncbyu8qzj31kw0hlaio.jpg">
+<meta property="og:updated_time" content="2019-08-15T06:30:56.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ELK搭建实时日志分析平台">
+<meta name="twitter:description" content="ELK(ElasticSearch, Logstash, Kibana)搭建实时日志分析平台在搜索ELK资料的时候，发现这篇文章比较好，于是摘抄一小段：以下内容来自：http://baidu.blog.51cto.com/71938/1676798 日志主要包括系统日志、应用程序日志和安全日志。系统运维和开发人员可以通过日志了解服务器软硬件信息、检查配置过程中的错误及错误发生的原因。经常分析日志可">
+<meta name="twitter:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1ftnb3g1co9j31c20xnatk.jpg">
+    
+        <link rel="alternate" type="application/atom+xml" title="I AM SLOW WALKER, BUT I NEVER WALK BACK" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/head.png">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/head_background.png)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/head.png">
+        </a>
+        <hgroup class="introduce">
+          <h4 class="nickname">darker</h4>
+          <a href="mailto:lmwtuedu@163.com" title="lmwtuedu@163.com" class="mail">lmwtuedu@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                Home
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/share" target="_blank" >
+                <i class="icon icon-lg icon-share-alt-square"></i>
+                Share Link
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-id-badge"></i>
+                About Me
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">ELK搭建实时日志分析平台</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h3 class="title">ELK搭建实时日志分析平台</h3>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-07-25T16:00:00.000Z" itemprop="datePublished" class="page-time">
+  2018-07-26
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>Table Of Content</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#ELK-ElasticSearch-Logstash-Kibana-搭建实时日志分析平台"><span class="post-toc-number">1.</span> <span class="post-toc-text">ELK(ElasticSearch, Logstash, Kibana)搭建实时日志分析平台</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#ELK平台搭建"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">ELK平台搭建</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Logstash"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">Logstash</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-2018-07-26-ELK(ElasticSearch, Logstash, Kibana)搭建实时日志分析平台"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">ELK搭建实时日志分析平台</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-07-26 00:00:00" datetime="2018-07-25T16:00:00.000Z"  itemprop="datePublished">2018-07-26</time>
+
+            
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="ELK-ElasticSearch-Logstash-Kibana-搭建实时日志分析平台"><a href="#ELK-ElasticSearch-Logstash-Kibana-搭建实时日志分析平台" class="headerlink" title="ELK(ElasticSearch, Logstash, Kibana)搭建实时日志分析平台"></a>ELK(ElasticSearch, Logstash, Kibana)搭建实时日志分析平台</h1><p>在搜索ELK资料的时候，发现这篇文章比较好，于是摘抄一小段：<br>以下内容来自：<a href="http://baidu.blog.51cto.com/71938/1676798" target="_blank" rel="noopener">http://baidu.blog.51cto.com/71938/1676798</a></p>
+<p>日志主要包括系统日志、应用程序日志和安全日志。系统运维和开发人员可以通过日志了解服务器软硬件信息、检查配置过程中的错误及错误发生的原因。经常分析日志可以了解服务器的负荷，性能安全性，从而及时采取措施纠正错误。<br>通常，日志被分散的储存不同的设备上。如果你管理数十上百台服务器，你还在使用依次登录每台机器的传统方法查阅日志。这样是不是感觉很繁琐和效率低下。当务之急我们使用集中化的日志管理，例如：开源的syslog，将所有服务器上的日志收集汇总。<br>集中化管理日志后，日志的统计和检索又成为一件比较麻烦的事情，一般我们使用grep、awk和wc等Linux命令能实现检索和统计，但是对于要求更高的查询、排序和统计等要求和庞大的机器数量依然使用这样的方法难免有点力不从心。<br>开源实时日志分析ELK平台能够完美的解决我们上述的问题，ELK由ElasticSearch、Logstash和Kiabana三个开源工具组成。官方网站：<a href="https://www.elastic.co/products" target="_blank" rel="noopener">https://www.elastic.co/products</a></p>
+<p>•    Elasticsearch是个开源分布式搜索引擎，它的特点有：分布式，零配置，自动发现，索引自动分片，索引副本机制，restful风格接口，多数据源，自动搜索负载等。</p>
+<p>•    Logstash是一个完全开源的工具，他可以对你的日志进行收集、过滤，并将其存储供以后使用（如，搜索）。</p>
+<p>•    Kibana 也是一个开源和免费的工具，它Kibana可以为 Logstash 和 ElasticSearch 提供的日志分析友好的 Web 界面，可以帮助您汇总、分析和搜索重要数据日志。</p>
+<p>—————————-摘抄内容结束——————————-</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws4.sinaimg.cn/large/006tKfTcgy1ftnb3g1co9j31c20xnatk.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<h2 id="ELK平台搭建"><a href="#ELK平台搭建" class="headerlink" title="ELK平台搭建"></a>ELK平台搭建</h2><ul>
+<li>系统环境</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">System: Centos release 6.7 (Final)</span><br><span class="line">ElasticSearch: 2.1.0</span><br><span class="line">Logstash: 2.1.1</span><br><span class="line">Kibana: 4.3.0</span><br><span class="line">Java: openjdk version  &quot;1.8.0_65&quot;</span><br></pre></td></tr></table></figure>
+
+<p>注：由于Logstash的运行依赖于Java环境， 而Logstash 1.5以上版本不低于java 1.7，因此推荐使用最新版本的Java。因为我们只需要Java的运行环境，所以可以只安装JRE，不过这里我依然使用JDK，请自行搜索安装。</p>
+<p>ELK下载：<a href="https://www.elastic.co/downloads/" target="_blank" rel="noopener">https://www.elastic.co/downloads/</a></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1ftnb6wvlgcj31bc1eywv1.jpg" alt></p>
+<p>##ElasticSearch<br>配置ElasticSearch：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf elasticsearch-2.1.0.tar.gz</span><br><span class="line">cd elasticsearch-2.1.0</span><br></pre></td></tr></table></figure>
+
+<p>安装Head插件（Optional）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./bin/plugin install mobz/elasticsearch-head</span><br></pre></td></tr></table></figure>
+
+<p>然后编辑ES的配置文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi config/elasticsearch.yml</span><br></pre></td></tr></table></figure>
+
+<p>修改以下配置项：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cluster.name=es_cluster</span><br><span class="line">node.name=node0</span><br><span class="line">path.data=/tmp/elasticsearch/data</span><br><span class="line">path.logs=/tmp/elasticsearch/logs</span><br></pre></td></tr></table></figure>
+
+<p>#当前hostname或IP，我这里是centos2</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">network.host=centos2</span><br><span class="line">network.port=9200</span><br></pre></td></tr></table></figure>
+
+<p><strong><font color="red">错误修改</font></strong></p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws3.sinaimg.cn/large/006tKfTcgy1ftnb9r4r82j31c20jp78v.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p><strong><font color="red">正确示范：</font></strong></p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws3.sinaimg.cn/large/006tKfTcgy1ftnbf0250yj30zv0b7n23.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>其他的选项保持默认，然后启动ES：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./bin/elasticsearch</span><br></pre></td></tr></table></figure>
+
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws3.sinaimg.cn/large/006tKfTcgy1ftnbg68k0oj31ev0qiwt1.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+
+<p><strong><font color="red">启动提示错误时：</font></strong></p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws2.sinaimg.cn/large/006tKfTcgy1ftnbm1fzkkj31c215dtnc.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>可以看到，它跟其他的节点的传输端口为9300，接受HTTP请求的端口为9200。<br>使用ctrl+C停止。当然，也可以使用后台进程的方式启动ES：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./bin/elasticsearch &amp;</span><br></pre></td></tr></table></figure>
+
+<p>然后可以打开页面localhost:9200，将会看到以下内容：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws2.sinaimg.cn/large/006tKfTcgy1ftnbmq97p3j316p0mtq9a.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>返回展示了配置的cluster_name和name，以及安装的ES的版本等信息<br>刚刚安装的head插件，它是一个用浏览器跟ES集群交互的插件，可以查看集群状态、集群的doc内容、执行搜索和普通的Rest请求等。现在也可以使用它打开<a href="localhost:9200/_plugin/head" target="_blank" rel="noopener">localhost:9200/_plugin/head</a>页面来查看ES集群状态：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws2.sinaimg.cn/large/006tKfTcgy1ftnborznz2j31dr0lm45f.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>可以看到，现在，ES集群中没有index，也没有type，因此这两条是空的。</p>
+<h2 id="Logstash"><a href="#Logstash" class="headerlink" title="Logstash"></a>Logstash</h2><p>Logstash的功能如下：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws2.sinaimg.cn/large/006tKfTcgy1ftnbr8l9dpj31g70o5wje.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>其实它就是一个收集器而已，我们需要为它指定Input和Output（当然Input和Output可以为多个）。由于我们需要把Java代码中Log4j的日志输出到ElasticSearch中，因此这里的Input就是Log4j，而Output就是ElasticSearch。<br>配置Logstash：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf logstash-2.1.1.tar.gz</span><br><span class="line">cd logstash-2.1.1</span><br></pre></td></tr></table></figure>
+
+<p>编写配置文件(名字和位置可以随意，这里我放在config目录下，取名为log4j_to_es.conf)：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir config</span><br><span class="line">vi config/log4j_to_es.conf</span><br></pre></td></tr></table></figure>
+
+<p>输入以下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"># For detail structure of this file</span><br><span class="line"># Set: https://www.elastic.co/guide/en/logstash/current/configuration-file-structure.html</span><br><span class="line">input &#123;</span><br><span class="line">  # For detail config for log4j as input, </span><br><span class="line">  # See: https://www.elastic.co/guide/en/logstash/current/plugins-inputs-log4j.html</span><br><span class="line">  log4j &#123;</span><br><span class="line">    mode =&gt; &quot;server&quot;</span><br><span class="line">    host =&gt; &quot;centos2&quot;</span><br><span class="line">    port =&gt; 4567</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">filter &#123;</span><br><span class="line">  #Only matched data are send to output.</span><br><span class="line">&#125;</span><br><span class="line">output &#123;</span><br><span class="line">  # For detail config for elasticsearch as output, </span><br><span class="line">  # See: https://www.elastic.co/guide/en/logstash/current/plugins-outputs-elasticsearch.html</span><br><span class="line">  elasticsearch &#123;</span><br><span class="line">    action =&gt; &quot;index&quot;            #The operation on ES</span><br><span class="line">    hosts  =&gt; &quot;centos2:9200&quot;     #ElasticSearch host, can be array.</span><br><span class="line">    index  =&gt; &quot;ec&quot;               #The index to write data to, can be any string.</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>logstash命令只有2个参数：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws2.sinaimg.cn/large/006tKfTcgy1ftnbsqgezaj313v0graey.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>因此使用agent来启动它（使用-f指定配置文件）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./bin/logstash agent -f config/log4j_to_es.conf</span><br></pre></td></tr></table></figure>
+
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws2.sinaimg.cn/large/006tKfTcgy1ftnbv8aledj31kw0aa441.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>到这里，我们已经可以使用Logstash来收集日志并保存到ES中了，下面来看看项目代码。<br>Java项目<br>照例先看项目结构图：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws4.sinaimg.cn/large/006tKfTcgy1ftnbvo9i1vj30m30naaeb.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>pom.xml，很简单，只用到了Log4j库：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;log4j&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;log4j&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;1.2.17&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+
+<p>log4j.properties，将Log4j的日志输出到SocketAppender，因为官网是这么说的：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws2.sinaimg.cn/large/006tKfTcgy1ftnbwnt058j31hg0kl7g6.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">log4j.rootLogger=INFO,console</span><br><span class="line"></span><br><span class="line"># for package com.demo.elk, log would be sent to socket appender.</span><br><span class="line">log4j.logger.com.demo.elk=DEBUG, socket</span><br><span class="line"></span><br><span class="line"># appender socket</span><br><span class="line">log4j.appender.socket=org.apache.log4j.net.SocketAppender</span><br><span class="line">log4j.appender.socket.Port=4567</span><br><span class="line">log4j.appender.socket.RemoteHost=centos2</span><br><span class="line">log4j.appender.socket.layout=org.apache.log4j.PatternLayout</span><br><span class="line">log4j.appender.socket.layout.ConversionPattern=%d [%-5p] [%l] %m%n</span><br><span class="line">log4j.appender.socket.ReconnectionDelay=10000</span><br><span class="line"></span><br><span class="line"># appender console</span><br><span class="line">log4j.appender.console=org.apache.log4j.ConsoleAppender</span><br><span class="line">log4j.appender.console.target=System.out</span><br><span class="line">log4j.appender.console.layout=org.apache.log4j.PatternLayout</span><br><span class="line">log4j.appender.console.layout.ConversionPattern=%d [%-5p] [%l] %m%n</span><br></pre></td></tr></table></figure>
+
+<p>注意：这里的端口号需要跟Logstash监听的端口号一致，这里是4567。</p>
+<p><font color="red">特别注意：工程的包名称</font></p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws4.sinaimg.cn/large/006tKfTcgy1ftnbxs5ht3j31c208l0v7.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>Application.java，使用Log4j的LOGGER打印日志即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">package com.demo.elk;</span><br><span class="line"></span><br><span class="line">import org.apache.log4j.Logger;</span><br><span class="line"></span><br><span class="line">public class Application &#123;</span><br><span class="line">    private static final Logger LOGGER = Logger.getLogger(Application.class);</span><br><span class="line">    public static void main(String[] args) throws Exception &#123;</span><br><span class="line">        for (int i = 0; i &lt; 10; i++) &#123;</span><br><span class="line">            LOGGER.error(&quot;Info log [&quot; + i + &quot;].&quot;);</span><br><span class="line">            Thread.sleep(500);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>用Head插件查看ES状态和内容<br>运行Application.java，先看看console的输出（当然，这个输出只是为了做验证，不输出到console也可以的）：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws2.sinaimg.cn/large/006tKfTcgy1ftnc0t60enj31kw0endv5.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>再来看看ES的head页面：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws4.sinaimg.cn/large/006tKfTcgy1ftnc17fs0yj31kw0o5k5c.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>切换到Browser标签：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws1.sinaimg.cn/large/006tKfTcgy1ftnc4792wij31kw0pm17i.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>单击某一个文档（doc），则会展示该文档的所有信息：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws4.sinaimg.cn/large/006tKfTcgy1ftnc4m5d3wj317k0tv7hy.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>可以看到，除了基础的message字段是我们的日志内容，Logstash还为我们增加了许多字段。而在<a href="https://www.elastic.co/guide/en/logstash/current/plugins-inputs-log4j.html" target="_blank" rel="noopener">https://www.elastic.co/guide/en/logstash/current/plugins-inputs-log4j.html</a>中也明确说明了这一点：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws2.sinaimg.cn/large/006tKfTcgy1ftnc5fm6i6j31kw0lawx1.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>上面使用了ES的Head插件观察了ES集群的状态和数据，但这只是个简单的用于跟ES交互的页面而已，并不能生成报表或者图表什么的，接下来使用Kibana来执行搜索并生成图表。</p>
+<p>##Kibana<br>配置Kibana:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf kibana-4.3.0-linux-x86.tar.gz</span><br><span class="line">cd kibana-4.3.0-linux-x86</span><br><span class="line">vi config/kibana.yml</span><br></pre></td></tr></table></figure>
+
+<p>修改以下几项（由于是单机版的，因此host的值也可以使用localhost来代替，这里仅仅作为演示）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">server.port: 5601</span><br><span class="line">server.host: “centos2”</span><br><span class="line">elasticsearch.url: http://centos2:9200</span><br><span class="line">kibana.index: “.kibana”</span><br></pre></td></tr></table></figure>
+
+<p>启动kibana：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./bin/kibana</span><br></pre></td></tr></table></figure>
+
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws3.sinaimg.cn/large/006tKfTcgy1ftnc745twvj31kw0fgtn5.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>用浏览器打开该地址：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws2.sinaimg.cn/large/006tKfTcgy1ftnc835w4pj31kw12s4bh.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>为了后续使用Kibana，需要配置至少一个Index名字或者Pattern，它用于在分析时确定ES中的Index。这里我输入之前配置的Index名字applog，Kibana会自动加载该Index下doc的field，并自动选择合适的field用于图标中的时间字段：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws1.sinaimg.cn/large/006tKfTcgy1ftnc8guq3pj31kw11ualm.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+
+<p>点击Create后，可以看到左侧增加了配置的Index名字：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws2.sinaimg.cn/large/006tKfTcgy1ftnc8t5shej31kw0xvdpv.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>接下来切换到Discover标签上，注意右上角是查询的时间范围，如果没有查找到数据，那么你就可能需要调整这个时间范围了，这里我选择Today：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws4.sinaimg.cn/large/006tKfTcgy1ftnc9831pnj31kw0u414r.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+
+<p>接下来就能看到ES中的数据了：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws3.sinaimg.cn/large/006tKfTcgy1ftnc9y6fkhj31kw11eapo.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+
+<p>执行搜索看看呢：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws4.sinaimg.cn/large/006tKfTcgy1ftncacyi0ej31kw116wqb.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>点击右边的保存按钮，保存该查询为search_all_logs。接下来去Visualize页面，点击新建一个柱状图（Vertical Bar Chart），然后选择刚刚保存的查询search_all_logs，之后，Kibana将生成类似于下图的柱状图（只有10条日志，而且是在同一时间段的，比较丑，但足可以说明问题了：)  ）：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws4.sinaimg.cn/large/006tKfTcgy1ftncauatjsj31kw11bqcy.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>你可以在左边设置图形的各项参数，点击Apply Changes按钮，右边的图形将被更新。同理，其他类型的图形都可以实时更新。<br>点击右边的保存，保存此图，命名为search_all_logs_visual。接下来切换到Dashboard页面：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws3.sinaimg.cn/large/006tKfTcgy1ftncb76eruj31kw0jaags.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>单击新建按钮，选择刚刚保存的search_all_logs_visual图形，面板上将展示该图：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws4.sinaimg.cn/large/006tKfTcgy1ftncblehm1j31kw0ub79t.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>如果有较多数据，我们可以根据业务需求和关注点在Dashboard页面添加多个图表：柱形图，折线图，地图，饼图等等。当然，我们可以设置更新频率，让图表自动更新：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws3.sinaimg.cn/large/006tKfTcgy1ftncbyu8qzj31kw0hlaio.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>如果设置的时间间隔够短，就很趋近于实时分析了。<br>到这里，ELK平台部署和基本的测试已完成。</p>
+<p>参考：<br><a href="http://baidu.blog.51cto.com/71938/1676798" target="_blank" rel="noopener">http://baidu.blog.51cto.com/71938/1676798</a><br><a href="http://blog.csdn.net/cnweike/article/details/33736429" target="_blank" rel="noopener">http://blog.csdn.net/cnweike/article/details/33736429</a></p>
+<p>来自： <a href="http://my.oschina.net/itblog/blog/547250" target="_blank" rel="noopener">http://my.oschina.net/itblog/blog/547250</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-08-15T06:30:56.000Z" itemprop="dateUpdated">2019-08-15 14:30:56</time>
+</span><br>
+
+
+        
+        欢迎访问http://lmwtuedu.cn，希望此文章对您有帮助!
+        
+    </div>
+    
+    <footer>
+        <a href="http://lmwtuedu.cn">
+            <img src="/img/head.png" alt="darker">
+            darker
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/code/">code</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/reprint/">reprint</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://lmwtuedu.cn/2018/07/26/2018-07-26-ELK(ElasticSearch, Logstash, Kibana)搭建实时日志分析平台/&title=《ELK搭建实时日志分析平台》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&pic=http://lmwtuedu.cn/img/head.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://lmwtuedu.cn/2018/07/26/2018-07-26-ELK(ElasticSearch, Logstash, Kibana)搭建实时日志分析平台/&title=《ELK搭建实时日志分析平台》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://lmwtuedu.cn/2018/07/26/2018-07-26-ELK(ElasticSearch, Logstash, Kibana)搭建实时日志分析平台/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《ELK搭建实时日志分析平台》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&url=http://lmwtuedu.cn/2018/07/26/2018-07-26-ELK(ElasticSearch, Logstash, Kibana)搭建实时日志分析平台/&via=http://lmwtuedu.cn" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://lmwtuedu.cn/2018/07/26/2018-07-26-ELK(ElasticSearch, Logstash, Kibana)搭建实时日志分析平台/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/08/29/2018-08-29-学习参考设计架构/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">学习架构参考</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/07/26/2018-08-06-爆雷之后 中产惊惶/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">爆雷之后 中产惊惶</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        请喝维他奶~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.PNG" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.PNG" data-alipay="/img/alipay.PNG">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>darker &copy; 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://lmwtuedu.cn/2018/07/26/2018-07-26-ELK(ElasticSearch, Logstash, Kibana)搭建实时日志分析平台/&title=《ELK搭建实时日志分析平台》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&pic=http://lmwtuedu.cn/img/head.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://lmwtuedu.cn/2018/07/26/2018-07-26-ELK(ElasticSearch, Logstash, Kibana)搭建实时日志分析平台/&title=《ELK搭建实时日志分析平台》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://lmwtuedu.cn/2018/07/26/2018-07-26-ELK(ElasticSearch, Logstash, Kibana)搭建实时日志分析平台/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《ELK搭建实时日志分析平台》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&url=http://lmwtuedu.cn/2018/07/26/2018-07-26-ELK(ElasticSearch, Logstash, Kibana)搭建实时日志分析平台/&via=http://lmwtuedu.cn" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://lmwtuedu.cn/2018/07/26/2018-07-26-ELK(ElasticSearch, Logstash, Kibana)搭建实时日志分析平台/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQ4AAAEOCAAAAABd2qZ5AAAD5ElEQVR42u3bW27bUAwFwOx/0+lvi8LyOSSTtMDoy1Dk+xgVoMnLfnzE12d8/f7883efn3x1J3/y72+dXThw4MCBY7HV2bI2c+Xjz1jfzIsDBw4cOI44Xi3l1TNJ4NwEy6tx8j3iwIEDB46f4mhpnrfxPOMs8UvWjAMHDhw4/k2OtgCXPD9LC9sfCjhw4MCB46s5NsdIyUI3CVs+Vx7yD2qlOHDgwIHj/Zgf+cb+r89f0t+BAwcOHDjK9oK8uWEWmGf3Z20N0e5w4MCBA8eaY1Owy49/2rCXHFC1R1PFvnDgwIEDxxFHu+E20OaFxVmgbVvrikQOBw4cOHDEHC1E20yQfytvSsjXWc+OAwcOHDjWHLNWgNnm82aCJGRuwv8bYhw4cODAseDIA2276HbkDUGbix2UBXHgwIEDR8DRlufyZK8NtG2aN2uzqM/WcODAgQNH3EXQhsNk8+2C8qOmTTIZPYkDBw4cOBYcs8Ul92fhud3M1Zh/FAdx4MCBA8cRR3sstDmgatO/TdqWlxpx4MCBA8eeI5mmvWYEM+Krl1eUC3HgwIEDx4gjT5/aCTZtE7PSZL5yHDhw4MCx55iFz00Brm0yyMNn/pKi8zccOHDgwLHg2ATavFQ3O1JqX8lZMoYDBw4cOI6SsVVDQDnOrLC4KTviwIEDB47v4UgqiJsw1o4/Az2YCwcOHDhw3MxV//fRPG1r2yZm69mv/82WcODAgQPHEccsoLYtC20mNXsyfxk4cODAgWPPkZTbNk3SOVz+133ojfhw4MCBA8eIoy265c0K+Z1ZW94sXXzzjwAHDhw4cCw4bhsRnu/PWis27XfDUzgcOHDgwLHgyJfYTrPZcDvj7HipLobiwIEDB46YY5aG5cdCs4LgLNzOZsGBAwcOHF/BsUnD2oa5trA4C8bPu4iaGHDgwIEDx4ijLZ9twuHmcKgt57UNFjhw4MCBY89xUEF8XGI+2iYBS15J9BkHDhw4cBxx7NOz2ZHPrMiYpILta1jFeRw4cODA8YIjWdwMJed+HmFTsowCMA4cOHDgOOJoQ2ybgOWbbGmufhzgwIEDB44rjjZAzhKkoo2gDMBfcriFAwcOHDgWHJ/l1Ya69tCohdgfZeHAgQMHjluOzdBteH4mywuRbQBOPtdYOHDgwIHjkaNtOGsTvNlhUh7I2/EP3jwOHDhw4Ag4bgNhPs7VS2p/O7ypleLAgQMHjm/nyNOkfIS2aNgem0UBGAcOHDhw/BDH5gBp1oIwI6sLmjhw4MCB44ijbWKYTTkbYbbhdhc4cODAgeOKoy2ltb0SVyE2T+pyxFlhEQcOHDhwvBjnFx8iAZOlrLTKAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'Cherry Up';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'Champion';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>分布式设计架构初步思路 | I AM SLOW WALKER, BUT I NEVER WALK BACK</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="code,SNADS">
+    <meta name="description" content="分布设计架构思路初步设计网站的访问特点和现实世界的财富分配一样遵循二八定律： 80%的业务访问集中在20%的数据上。既然大部分的业务访问集中在一小部分的数据上，那么如果把这一小部分数据缓存在内存中，是不是可以减少数据库的访问压力呢？ 提高整个网站的数据访问速度，改善数据库的写入性能呢？ 网站使用的缓存可以分为两种： 缓存在应用服务器上的本地缓存和缓存在专门的分布式缓存服务器上的远程缓存。本地缓存的">
+<meta name="keywords" content="code,SNADS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分布式设计架构初步思路">
+<meta property="og:url" content="http://lmwtuedu.cn/2018/03/05/2018-03-05-分布设计架构思路/index.html">
+<meta property="og:site_name" content="I AM SLOW WALKER, BUT I NEVER WALK BACK">
+<meta property="og:description" content="分布设计架构思路初步设计网站的访问特点和现实世界的财富分配一样遵循二八定律： 80%的业务访问集中在20%的数据上。既然大部分的业务访问集中在一小部分的数据上，那么如果把这一小部分数据缓存在内存中，是不是可以减少数据库的访问压力呢？ 提高整个网站的数据访问速度，改善数据库的写入性能呢？ 网站使用的缓存可以分为两种： 缓存在应用服务器上的本地缓存和缓存在专门的分布式缓存服务器上的远程缓存。本地缓存的">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79gy1foyjm3jg7yj30kg0fp0ts.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79gy1foykc75g2dj30r90fpdh9.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79gy1foykzuawthj30r90h0tag.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcgy1fp1qnmet5yj30t60l6768.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1fp1qxys6wzj30tt0jk407.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1fp1r97zw8fj30tt0jkq4w.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcgy1fp1xt3gijdj30tt0jktb4.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1fp1y7nakpgj30tt0q0tbl.jpg">
+<meta property="og:updated_time" content="2019-08-15T06:30:56.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="分布式设计架构初步思路">
+<meta name="twitter:description" content="分布设计架构思路初步设计网站的访问特点和现实世界的财富分配一样遵循二八定律： 80%的业务访问集中在20%的数据上。既然大部分的业务访问集中在一小部分的数据上，那么如果把这一小部分数据缓存在内存中，是不是可以减少数据库的访问压力呢？ 提高整个网站的数据访问速度，改善数据库的写入性能呢？ 网站使用的缓存可以分为两种： 缓存在应用服务器上的本地缓存和缓存在专门的分布式缓存服务器上的远程缓存。本地缓存的">
+<meta name="twitter:image" content="https://ws2.sinaimg.cn/large/006tNc79gy1foyjm3jg7yj30kg0fp0ts.jpg">
+    
+        <link rel="alternate" type="application/atom+xml" title="I AM SLOW WALKER, BUT I NEVER WALK BACK" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/head.png">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/head_background.png)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/head.png">
+        </a>
+        <hgroup class="introduce">
+          <h4 class="nickname">darker</h4>
+          <a href="mailto:lmwtuedu@163.com" title="lmwtuedu@163.com" class="mail">lmwtuedu@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                Home
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/share" target="_blank" >
+                <i class="icon icon-lg icon-share-alt-square"></i>
+                Share Link
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-id-badge"></i>
+                About Me
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">分布式设计架构初步思路</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h3 class="title">分布式设计架构初步思路</h3>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-03-04T16:00:00.000Z" itemprop="datePublished" class="page-time">
+  2018-03-05
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>Table Of Content</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#分布设计架构思路"><span class="post-toc-number">1.</span> <span class="post-toc-text">分布设计架构思路</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#初步设计"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">初步设计</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#进一步提升（应用集群）"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">进一步提升（应用集群）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#进一步升级（数据库读写分离）"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">进一步升级（数据库读写分离）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#再次简单升级（反向代理和CDN加速网站响应）"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">再次简单升级（反向代理和CDN加速网站响应）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#再次升级（分布式文件-分布式数据库）"><span class="post-toc-number">1.5.</span> <span class="post-toc-text">再次升级（分布式文件/分布式数据库）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#优化设计（NoSQL和搜索引擎）"><span class="post-toc-number">1.6.</span> <span class="post-toc-text">优化设计（NoSQL和搜索引擎）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#拆分设计（业务拆分）"><span class="post-toc-number">1.7.</span> <span class="post-toc-text">拆分设计（业务拆分）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#分布式服务"><span class="post-toc-number">1.8.</span> <span class="post-toc-text">分布式服务</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-2018-03-05-分布设计架构思路"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">分布式设计架构初步思路</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-03-05 00:00:00" datetime="2018-03-04T16:00:00.000Z"  itemprop="datePublished">2018-03-05</time>
+
+            
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="分布设计架构思路"><a href="#分布设计架构思路" class="headerlink" title="分布设计架构思路"></a>分布设计架构思路</h2><h3 id="初步设计"><a href="#初步设计" class="headerlink" title="初步设计"></a>初步设计</h3><p>网站的访问特点和现实世界的财富分配一样遵循二八定律： 80%的业务访问集中在20%的数据上。既然大部分的业务访问集中在一小部分的数据上，那么如果把这一小部分数据缓存在内存中，是不是可以减少数据库的访问压力呢？ 提高整个网站的数据访问速度，改善数据库的写入性能呢？</p>
+<p>网站使用的缓存可以分为两种： 缓存在应用服务器上的本地缓存和缓存在专门的分布式缓存服务器上的远程缓存。本地缓存的访问速度更快些，但是受应用服务器内存的限制，其缓存数量有限，而且会出现和应用程序争用内存的情况。 远程分布式缓存可以使用集群的方式，部署大内存的服务器作为专门的缓存服务器，可以理论上做到不受内存容量限制的缓存服务。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws2.sinaimg.cn/large/006tNc79gy1foyjm3jg7yj30kg0fp0ts.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>使用缓存后，数据访问的压力得到有效的缓解，但是单一应用服务器能够处理的请求连接有限；在网站访问的高峰期，应用服务器成为整个网站的瓶颈。</p>
+<h3 id="进一步提升（应用集群）"><a href="#进一步提升（应用集群）" class="headerlink" title="进一步提升（应用集群）"></a>进一步提升（应用集群）</h3><p>应用服务器集群改善网站的并发处理能力，使用集群时网站解决高并发、海量数据问题的常用手段。当一台服务器的处理能力、存储空间不足时，不要企图去换更强大的服务器，对大型网站而言，不管多么强大的服务器，都满足不了网站持续增长的业务需求。这种情况下，更恰当的做法是增加一台服务器分担原有服务器的访问以及存储压力。</p>
+<p>对网站架构而言，只要能通过增加一台服务器的方式改善负载压力，就可以以同样的方式持续增加服务器不断改善系统性能，从而实现系统的可伸缩性。应用系统服务器实现集群时网站可伸缩集群架构设计中较为简单成熟的一种。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws3.sinaimg.cn/large/006tNc79gy1foykc75g2dj30r90fpdh9.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>通过负载均衡调度器，可以将用户浏览器的访问请求分发到应用服务器集群中的任何一台服务器上，如果有更多的用户，就在集群中加入更多的应用服务器，使应用服务器的负载压力不再成为网站的瓶颈。</p>
+<h3 id="进一步升级（数据库读写分离）"><a href="#进一步升级（数据库读写分离）" class="headerlink" title="进一步升级（数据库读写分离）"></a>进一步升级（数据库读写分离）</h3><p>网站使用缓存后，绝大部分数据读操作访问都可以不通过数据库就能够完成，但是仍有一部分读操作（缓存访问不命中、缓存过期）和全部的写操作都需要访问数据库，在网站到达一定规模后，数据库因为负载压力过高而成为网站的瓶颈。</p>
+<p>目前大部分的主流数据库都是提供主从热备功能，通过配置两台数据库主从关系，可以将一台数据库服务器的数据更新同步到另一台服务器上。网站利用数据库的这一功能，实现数据库读写分离，从而改善数据库负载压力。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws2.sinaimg.cn/large/006tNc79gy1foykzuawthj30r90h0tag.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>应用服务器在写数据的时候，访问主数据库，主数据库通过主从复制机制将数据库更新同步到从数据库，这样当应用服务器读数据的时候，就可以通过从数据库获得数据。为了便于应用程序访问读写分离后的数据库，通常在应用服务器端使用专门的数据访问模块，使数据库读写分离对应用透明。</p>
+<h3 id="再次简单升级（反向代理和CDN加速网站响应）"><a href="#再次简单升级（反向代理和CDN加速网站响应）" class="headerlink" title="再次简单升级（反向代理和CDN加速网站响应）"></a>再次简单升级（反向代理和CDN加速网站响应）</h3><p>用户规模越来越大，由于中国的复杂网络环境，不同地区的用户访问网站时，速度差别也极大。数据显示： 网站访问延迟和用户流失率正相关，网站访问越慢，用户越容易失去耐心而离开。 为了提供更好的用户体验，留在用户，需要加速网站访问速度。 主要手段使用CDN和反向代理。</p>
+<p>反向代理和CDN的基本原理是缓存，区别在于CDN部署在网络提供商的机房，使用户在请求网站服务时，可以从距离自己最近的网络提供商机房获取数据； 而反向代理则部署在网站的中心机房，当用户请求到达中心机房后，首先访问的服务器是反向代理服务器，如果反向代理服务器中缓存着用户请求的资源，就将其直接返回给用户。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fp1qnmet5yj30t60l6768.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+
+
+<h3 id="再次升级（分布式文件-分布式数据库）"><a href="#再次升级（分布式文件-分布式数据库）" class="headerlink" title="再次升级（分布式文件/分布式数据库）"></a>再次升级（分布式文件/分布式数据库）</h3><p>数据库经过读写分离后，从一台服务器拆分成两台服务器，但是随着网站业务的发展依然不能满足，这时需要使用分布式数据库。 文件系统也是一样，需要使用分布式系统。 分布式数据库是网站数据库拆分的最后手段，只有在单表数据规模非常庞大的时候才使用。不到不得已时，网站更常用的数据库拆分手段时业务分库，将不同业务的数据部署在不同的物理服务器上。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fp1qxys6wzj30tt0jk407.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+
+<h3 id="优化设计（NoSQL和搜索引擎）"><a href="#优化设计（NoSQL和搜索引擎）" class="headerlink" title="优化设计（NoSQL和搜索引擎）"></a>优化设计（NoSQL和搜索引擎）</h3><p>随着网站业务越来越复杂，对数据存储和检索的需求也越来越复杂化，网站需要采用一些非关系数据技术如NoSQL和非数据库查询技术如搜索引擎。</p>
+<p>NoSQL和搜索引擎都是源自互联网的技术手段，对可伸缩的分布式特效具有更好的支持。 应用服务器则通过一个统一数据访问模块访问各种数据，减少应用程序管理的诸多数据源的麻烦。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fp1r97zw8fj30tt0jkq4w.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+
+<h3 id="拆分设计（业务拆分）"><a href="#拆分设计（业务拆分）" class="headerlink" title="拆分设计（业务拆分）"></a>拆分设计（业务拆分）</h3><p>大型网站为了应对日益复杂的业务场景，通过使用分而治之的手段将整个网站业务分成不同的产品线。 具体到技术上，将一个网站拆分成为许多不同的应用（有点微服务器的感觉）， 每个应用独立部署维护。 应用之间可以通过一个超链接建立关系（在首页上的导航链接每个都指向不同的应用地址），也可以通过消息队列进行数据分发，当然最多的还是通过访问同一个数据存储系统来构建一个关联的完整系统。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fp1xt3gijdj30tt0jktb4.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+
+<h3 id="分布式服务"><a href="#分布式服务" class="headerlink" title="分布式服务"></a>分布式服务</h3><p>由于所有应用要和所有数据库系统连接，在数万台服务器规模的网站中，这些连接的数目是服务器规模的平方，导致存数据库接资源不足，拒绝服务。</p>
+<p>既然每一个应用都需要执行相同的业务操作，比如： 用户管理、商品管理等，那么可以将这些共有的业务提取出来，独立部署。 由这些可复用的业务连接数据库，提供共用业务服务，而应用系统只需要管理用户界面，通过分布式服务调用共有业务服务完成具体业务操作。</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcgy1fp1y7nakpgj30tt0q0tbl.jpg" alt></p>
+<p>书籍参考： 大型网站架构核心原理与解析</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-08-15T06:30:56.000Z" itemprop="dateUpdated">2019-08-15 14:30:56</time>
+</span><br>
+
+
+        
+        欢迎访问http://lmwtuedu.cn，希望此文章对您有帮助!
+        
+    </div>
+    
+    <footer>
+        <a href="http://lmwtuedu.cn">
+            <img src="/img/head.png" alt="darker">
+            darker
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SNADS/">SNADS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/code/">code</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://lmwtuedu.cn/2018/03/05/2018-03-05-分布设计架构思路/&title=《分布式设计架构初步思路》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&pic=http://lmwtuedu.cn/img/head.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://lmwtuedu.cn/2018/03/05/2018-03-05-分布设计架构思路/&title=《分布式设计架构初步思路》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://lmwtuedu.cn/2018/03/05/2018-03-05-分布设计架构思路/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《分布式设计架构初步思路》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&url=http://lmwtuedu.cn/2018/03/05/2018-03-05-分布设计架构思路/&via=http://lmwtuedu.cn" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://lmwtuedu.cn/2018/03/05/2018-03-05-分布设计架构思路/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/03/26/2018-03-26-lombok注解/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">lombok注解简单介绍</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/03/02/2018-03-02-当前流行-的一些软件保护技术/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">当前流行的一些软件保护技术</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        请喝维他奶~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.PNG" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.PNG" data-alipay="/img/alipay.PNG">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>darker &copy; 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://lmwtuedu.cn/2018/03/05/2018-03-05-分布设计架构思路/&title=《分布式设计架构初步思路》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&pic=http://lmwtuedu.cn/img/head.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://lmwtuedu.cn/2018/03/05/2018-03-05-分布设计架构思路/&title=《分布式设计架构初步思路》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://lmwtuedu.cn/2018/03/05/2018-03-05-分布设计架构思路/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《分布式设计架构初步思路》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&url=http://lmwtuedu.cn/2018/03/05/2018-03-05-分布设计架构思路/&via=http://lmwtuedu.cn" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://lmwtuedu.cn/2018/03/05/2018-03-05-分布设计架构思路/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACtElEQVR42u3awU7kMBAE0Pn/nwZpr5BsVXc8gPRyGoXg5PlgW9X9esXXx7/r6+/8r1/vX73l6slkhOGFh4eHN/r0q+vqxffPJ89c3UnYyTfj4eHhnea1m8HVa9rN4P75+/GjzQMPDw/vR3ktMge0eDw8PLy/y2tJsxHajQoPDw/vPbwkOMgDgjwOvn/X/e+HsxY8PDy8mLcpgP3U7zfV9/Dw8PDKqvp+8W0LZpui1zcj4+Hh4R3g5cfc9q/tst62KRTxLh4eHt4BXhuMzqYgwefLfV1Iw8PDw3uU1xbv25aCTTEsL8LV9T08PDy8h3jt0rwpSrX3h1OAh4eHd4yXLLgnwtw2jEgqXK+kqwsPDw9vxNscppMlOwkO8hC5PbLj4eHhvYfXLvdtcJBPR37/8hk8PDy8A7wkFMiHS5oGjrQF3H8tHh4e3qO89rDbhq3Do/Ai2sDDw8M7zZttD20Jv229aic0mho8PDy8Y7w2YJ2FsMkxetai+p+NAQ8PD+9RXv6C/P79mJsQZHhAx8PDw3uIl0eos+NvUsrK2fUhGw8PD+8ALz/yzmKLWdPArCEs+l88PDy8h3izJtHNUbuNkvOvxcPDwzvNm7WHbgLW2SE+n1w8PDy8c7wZbHb4zmPZ9uh8eZTHw8PDewtvXwDLY4KnYo5ix8PDw8Nb89qFvm2NmgW77XTg4eHhvZO3iV/bFqt2hFkzFh4eHt5p3qwE1ca7+cTlG0kNw8PDw3uI91Fe+9LUrEUgH+2yAIaHh4f3EK8tQW3ihk3k0TYr4OHh4Z3m7TeDfFOZUWflNzw8PLzTvKdihfwTV00AeciLh4eH92t4mzh41tTVThAeHh7eb+DlmDwsyEOHYesAHh4e3jHefsnOI+Bk/E2Au8pa8PDw8A7U1vfNVW0M0U7Qq73w8PDwUt4nGBKccUb3bQEAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'Cherry Up';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'Champion';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

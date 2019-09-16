@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>Java集合06-Deque和ArrayDeque | I AM SLOW WALKER, BUT I NEVER WALK BACK</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="集合">
+    <meta name="description" content="Java集合06-Deque和ArrayDeque 一般人很少有耐心去阅读英文注解，最近在看斗罗大陆电视剧（PS：以前阅读过小说）；阅读源码也是一种修行，天赋是非常重要，但是 药师说过，基础很重要，树根越扎越深，你的基础就巩固；所以我们需要慢下来细心品读巨人写的代码。  Deque 是不是很眼熟， LinkedList的双向链表里面，继承了Deque ； Deque全称是double ended">
+<meta name="keywords" content="集合">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java集合06-Deque和ArrayDeque">
+<meta property="og:url" content="http://lmwtuedu.cn/2018/09/26/2018-09-26-Java集合06-Deque和ArrayDeque/index.html">
+<meta property="og:site_name" content="I AM SLOW WALKER, BUT I NEVER WALK BACK">
+<meta property="og:description" content="Java集合06-Deque和ArrayDeque 一般人很少有耐心去阅读英文注解，最近在看斗罗大陆电视剧（PS：以前阅读过小说）；阅读源码也是一种修行，天赋是非常重要，但是 药师说过，基础很重要，树根越扎越深，你的基础就巩固；所以我们需要慢下来细心品读巨人写的代码。  Deque 是不是很眼熟， LinkedList的双向链表里面，继承了Deque ； Deque全称是double ended">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79gy1fvmysj8pypj30gq0frgo9.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79gy1fvmz4l6frzj30gr0g577p.jpg">
+<meta property="og:updated_time" content="2019-08-15T06:30:56.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java集合06-Deque和ArrayDeque">
+<meta name="twitter:description" content="Java集合06-Deque和ArrayDeque 一般人很少有耐心去阅读英文注解，最近在看斗罗大陆电视剧（PS：以前阅读过小说）；阅读源码也是一种修行，天赋是非常重要，但是 药师说过，基础很重要，树根越扎越深，你的基础就巩固；所以我们需要慢下来细心品读巨人写的代码。  Deque 是不是很眼熟， LinkedList的双向链表里面，继承了Deque ； Deque全称是double ended">
+<meta name="twitter:image" content="https://ws2.sinaimg.cn/large/006tNc79gy1fvmysj8pypj30gq0frgo9.jpg">
+    
+        <link rel="alternate" type="application/atom+xml" title="I AM SLOW WALKER, BUT I NEVER WALK BACK" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/head.png">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/head_background.png)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/head.png">
+        </a>
+        <hgroup class="introduce">
+          <h4 class="nickname">darker</h4>
+          <a href="mailto:lmwtuedu@163.com" title="lmwtuedu@163.com" class="mail">lmwtuedu@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                Home
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/share" target="_blank" >
+                <i class="icon icon-lg icon-share-alt-square"></i>
+                Share Link
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-id-badge"></i>
+                About Me
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Java集合06-Deque和ArrayDeque</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h3 class="title">Java集合06-Deque和ArrayDeque</h3>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-09-25T16:00:00.000Z" itemprop="datePublished" class="page-time">
+  2018-09-26
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>Table Of Content</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Java集合06-Deque和ArrayDeque"><span class="post-toc-number">1.</span> <span class="post-toc-text">Java集合06-Deque和ArrayDeque</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Deque"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">Deque</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#第一部分：两侧的插入和删除"><span class="post-toc-number">1.1.1.</span> <span class="post-toc-text">第一部分：两侧的插入和删除</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#第二部分：Queue的"><span class="post-toc-number">1.1.2.</span> <span class="post-toc-text">第二部分：Queue的</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#第三部分：Stack"><span class="post-toc-number">1.1.3.</span> <span class="post-toc-text">第三部分：Stack</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#第四部分：Collection"><span class="post-toc-number">1.1.4.</span> <span class="post-toc-text">第四部分：Collection</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#ArrayDeque"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">ArrayDeque</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#定义"><span class="post-toc-number">1.2.1.</span> <span class="post-toc-text">定义</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#构造函数"><span class="post-toc-number">1.2.2.</span> <span class="post-toc-text">构造函数</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#add"><span class="post-toc-number">1.2.3.</span> <span class="post-toc-text">add</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#小结"><span class="post-toc-number">1.2.4.</span> <span class="post-toc-text">小结</span></a></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-2018-09-26-Java集合06-Deque和ArrayDeque"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Java集合06-Deque和ArrayDeque</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-09-26 00:00:00" datetime="2018-09-25T16:00:00.000Z"  itemprop="datePublished">2018-09-26</time>
+
+            
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="Java集合06-Deque和ArrayDeque"><a href="#Java集合06-Deque和ArrayDeque" class="headerlink" title="Java集合06-Deque和ArrayDeque"></a>Java集合06-Deque和ArrayDeque</h1><blockquote>
+<p>一般人很少有耐心去阅读英文注解，最近在看斗罗大陆电视剧（PS：以前阅读过小说）；阅读源码也是一种修行，天赋是非常重要，但是 药师说过，基础很重要，树根越扎越深，你的基础就巩固；所以我们需要慢下来细心品读巨人写的代码。</p>
+</blockquote>
+<p>Deque 是不是很眼熟， LinkedList的双向链表里面，继承了Deque ； Deque全称是double ended queue,即双向列表， 它允许在两侧插入和删除元素； 不建议向其插入null值，Deque大多数情况不会限制元素的数量，但这不是必须的。</p>
+<p>Deque中定义的分为四部分： 第一部分：Deque定义所言，提供两侧插入或者删除的方法； 第二部分：继承Queue的实现； 第三部分： 如果基于实现stack 需要实现的方法； 第四部分： 继承Collection方法。</p>
+<h2 id="Deque"><a href="#Deque" class="headerlink" title="Deque"></a>Deque</h2><p>注解源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * A linear collection that supports element insertion and removal at</span></span><br><span class="line"><span class="comment"> * both ends.  The name &lt;i&gt;deque&lt;/i&gt; is short for "double ended queue"</span></span><br><span class="line"><span class="comment"> * and is usually pronounced "deck".  Most &#123;<span class="doctag">@code</span> Deque&#125;</span></span><br><span class="line"><span class="comment"> * implementations place no fixed limits on the number of elements</span></span><br><span class="line"><span class="comment"> * they may contain, but this interface supports capacity-restricted</span></span><br><span class="line"><span class="comment"> * deques as well as those with no fixed size limit.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;This interface defines methods to access the elements at both</span></span><br><span class="line"><span class="comment"> * ends of the deque.  Methods are provided to insert, remove, and</span></span><br><span class="line"><span class="comment"> * examine the element.  Each of these methods exists in two forms:</span></span><br><span class="line"><span class="comment"> * one throws an exception if the operation fails, the other returns a</span></span><br><span class="line"><span class="comment"> * special value (either &#123;<span class="doctag">@code</span> null&#125; or &#123;<span class="doctag">@code</span> false&#125;, depending on</span></span><br><span class="line"><span class="comment"> * the operation).  The latter form of the insert operation is</span></span><br><span class="line"><span class="comment"> * designed specifically for use with capacity-restricted</span></span><br><span class="line"><span class="comment"> * &#123;<span class="doctag">@code</span> Deque&#125; implementations; in most implementations, insert</span></span><br><span class="line"><span class="comment"> * operations cannot fail.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;The twelve methods described above are summarized in the</span></span><br><span class="line"><span class="comment"> * following table:</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * &lt;table BORDER CELLPADDING=3 CELLSPACING=1&gt;</span></span><br><span class="line"><span class="comment"> * &lt;caption&gt;Summary of Deque methods&lt;/caption&gt;</span></span><br><span class="line"><span class="comment"> *  &lt;tr&gt;</span></span><br><span class="line"><span class="comment"> *    &lt;td&gt;&lt;/td&gt;</span></span><br><span class="line"><span class="comment"> *    &lt;td ALIGN=CENTER COLSPAN = 2&gt; &lt;b&gt;First Element (Head)&lt;/b&gt;&lt;/td&gt;</span></span><br><span class="line"><span class="comment"> *    &lt;td ALIGN=CENTER COLSPAN = 2&gt; &lt;b&gt;Last Element (Tail)&lt;/b&gt;&lt;/td&gt;</span></span><br><span class="line"><span class="comment"> *  &lt;/tr&gt;</span></span><br><span class="line"><span class="comment"> *  &lt;tr&gt;</span></span><br><span class="line"><span class="comment"> *    &lt;td&gt;&lt;/td&gt;</span></span><br><span class="line"><span class="comment"> *    &lt;td ALIGN=CENTER&gt;&lt;em&gt;Throws exception&lt;/em&gt;&lt;/td&gt;</span></span><br><span class="line"><span class="comment"> *    &lt;td ALIGN=CENTER&gt;&lt;em&gt;Special value&lt;/em&gt;&lt;/td&gt;</span></span><br><span class="line"><span class="comment"> *    &lt;td ALIGN=CENTER&gt;&lt;em&gt;Throws exception&lt;/em&gt;&lt;/td&gt;</span></span><br><span class="line"><span class="comment"> *    &lt;td ALIGN=CENTER&gt;&lt;em&gt;Special value&lt;/em&gt;&lt;/td&gt;</span></span><br><span class="line"><span class="comment"> *  &lt;/tr&gt;</span></span><br><span class="line"><span class="comment"> *  &lt;tr&gt;</span></span><br><span class="line"><span class="comment"> *    &lt;td&gt;&lt;b&gt;Insert&lt;/b&gt;&lt;/td&gt;</span></span><br><span class="line"><span class="comment"> *    &lt;td&gt;&#123;<span class="doctag">@link</span> Deque#addFirst addFirst(e)&#125;&lt;/td&gt;</span></span><br><span class="line"><span class="comment"> *    &lt;td&gt;&#123;<span class="doctag">@link</span> Deque#offerFirst offerFirst(e)&#125;&lt;/td&gt;</span></span><br><span class="line"><span class="comment"> *    &lt;td&gt;&#123;<span class="doctag">@link</span> Deque#addLast addLast(e)&#125;&lt;/td&gt;</span></span><br><span class="line"><span class="comment"> *    &lt;td&gt;&#123;<span class="doctag">@link</span> Deque#offerLast offerLast(e)&#125;&lt;/td&gt;</span></span><br><span class="line"><span class="comment"> *  &lt;/tr&gt;</span></span><br><span class="line"><span class="comment"> *  &lt;tr&gt;</span></span><br><span class="line"><span class="comment"> *    &lt;td&gt;&lt;b&gt;Remove&lt;/b&gt;&lt;/td&gt;</span></span><br><span class="line"><span class="comment"> *    &lt;td&gt;&#123;<span class="doctag">@link</span> Deque#removeFirst removeFirst()&#125;&lt;/td&gt;</span></span><br><span class="line"><span class="comment"> *    &lt;td&gt;&#123;<span class="doctag">@link</span> Deque#pollFirst pollFirst()&#125;&lt;/td&gt;</span></span><br><span class="line"><span class="comment"> *    &lt;td&gt;&#123;<span class="doctag">@link</span> Deque#removeLast removeLast()&#125;&lt;/td&gt;</span></span><br><span class="line"><span class="comment"> *    &lt;td&gt;&#123;<span class="doctag">@link</span> Deque#pollLast pollLast()&#125;&lt;/td&gt;</span></span><br><span class="line"><span class="comment"> *  &lt;/tr&gt;</span></span><br><span class="line"><span class="comment"> *  &lt;tr&gt;</span></span><br><span class="line"><span class="comment"> *    &lt;td&gt;&lt;b&gt;Examine&lt;/b&gt;&lt;/td&gt;</span></span><br><span class="line"><span class="comment"> *    &lt;td&gt;&#123;<span class="doctag">@link</span> Deque#getFirst getFirst()&#125;&lt;/td&gt;</span></span><br><span class="line"><span class="comment"> *    &lt;td&gt;&#123;<span class="doctag">@link</span> Deque#peekFirst peekFirst()&#125;&lt;/td&gt;</span></span><br><span class="line"><span class="comment"> *    &lt;td&gt;&#123;<span class="doctag">@link</span> Deque#getLast getLast()&#125;&lt;/td&gt;</span></span><br><span class="line"><span class="comment"> *    &lt;td&gt;&#123;<span class="doctag">@link</span> Deque#peekLast peekLast()&#125;&lt;/td&gt;</span></span><br><span class="line"><span class="comment"> *  &lt;/tr&gt;</span></span><br><span class="line"><span class="comment"> * &lt;/table&gt;</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+
+  <table border cellpadding="3" cellspacing="1">
+  <caption>Summary of Deque methods</caption>
+   <tr>
+     <td></td>
+     <td align="CENTER" colspan="2"> <b>First Element (Head)</b></td>
+     <td align="CENTER" colspan="2"> <b>Last Element (Tail)</b></td>
+   </tr>
+   <tr>
+     <td></td>
+     <td align="CENTER"><em>Throws exception</em></td>
+     <td align="CENTER"><em>Special value</em></td>
+     <td align="CENTER"><em>Throws exception</em></td>
+     <td align="CENTER"><em>Special value</em></td>
+   </tr>
+   <tr>
+     <td><b>Insert</b></td>
+     <td>{@link Deque#addFirst addFirst(e)}</td>
+     <td>{@link Deque#offerFirst offerFirst(e)}</td>
+     <td>{@link Deque#addLast addLast(e)}</td>
+     <td>{@link Deque#offerLast offerLast(e)}</td>
+   </tr>
+   <tr>
+     <td><b>Remove</b></td>
+     <td>{@link Deque#removeFirst removeFirst()}</td>
+     <td>{@link Deque#pollFirst pollFirst()}</td>
+     <td>{@link Deque#removeLast removeLast()}</td>
+     <td>{@link Deque#pollLast pollLast()}</td>
+   </tr>
+   <tr>
+     <td><b>Examine</b></td>
+     <td>{@link Deque#getFirst getFirst()}</td>
+     <td>{@link Deque#peekFirst peekFirst()}</td>
+     <td>{@link Deque#getLast getLast()}</td>
+     <td>{@link Deque#peekLast peekLast()}</td>
+   </tr>
+  </table>
+
+
+
+<h3 id="第一部分：两侧的插入和删除"><a href="#第一部分：两侧的插入和删除" class="headerlink" title="第一部分：两侧的插入和删除"></a>第一部分：两侧的插入和删除</h3><p>源码分析：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Inserts the specified element at the front of this deque if it is</span></span><br><span class="line"><span class="comment">    * possible to do so immediately without violating capacity restrictions,</span></span><br><span class="line"><span class="comment">    * throwing an &#123;<span class="doctag">@code</span> IllegalStateException&#125; if no space is currently</span></span><br><span class="line"><span class="comment">    * available.  When using a capacity-restricted deque, it is generally</span></span><br><span class="line"><span class="comment">    * preferable to use method &#123;<span class="doctag">@link</span> #offerFirst&#125;.</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> e the element to add</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> IllegalStateException if the element cannot be added at this</span></span><br><span class="line"><span class="comment">    *         time due to capacity restrictions</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> ClassCastException if the class of the specified element</span></span><br><span class="line"><span class="comment">    *         prevents it from being added to this deque</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> NullPointerException if the specified element is null and this</span></span><br><span class="line"><span class="comment">    *         deque does not permit null elements</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> IllegalArgumentException if some property of the specified</span></span><br><span class="line"><span class="comment">    *         element prevents it from being added to this deque</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">void</span> <span class="title">addFirst</span><span class="params">(E e)</span></span>;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Inserts the specified element at the end of this deque if it is</span></span><br><span class="line"><span class="comment">    * possible to do so immediately without violating capacity restrictions,</span></span><br><span class="line"><span class="comment">    * throwing an &#123;<span class="doctag">@code</span> IllegalStateException&#125; if no space is currently</span></span><br><span class="line"><span class="comment">    * available.  When using a capacity-restricted deque, it is generally</span></span><br><span class="line"><span class="comment">    * preferable to use method &#123;<span class="doctag">@link</span> #offerLast&#125;.</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * &lt;p&gt;This method is equivalent to &#123;<span class="doctag">@link</span> #add&#125;.</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> e the element to add</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> IllegalStateException if the element cannot be added at this</span></span><br><span class="line"><span class="comment">    *         time due to capacity restrictions</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> ClassCastException if the class of the specified element</span></span><br><span class="line"><span class="comment">    *         prevents it from being added to this deque</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> NullPointerException if the specified element is null and this</span></span><br><span class="line"><span class="comment">    *         deque does not permit null elements</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> IllegalArgumentException if some property of the specified</span></span><br><span class="line"><span class="comment">    *         element prevents it from being added to this deque</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">void</span> <span class="title">addLast</span><span class="params">(E e)</span></span>;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Inserts the specified element at the front of this deque unless it would</span></span><br><span class="line"><span class="comment">    * violate capacity restrictions.  When using a capacity-restricted deque,</span></span><br><span class="line"><span class="comment">    * this method is generally preferable to the &#123;<span class="doctag">@link</span> #addFirst&#125; method,</span></span><br><span class="line"><span class="comment">    * which can fail to insert an element only by throwing an exception.</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> e the element to add</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span> &#123;<span class="doctag">@code</span> true&#125; if the element was added to this deque, else</span></span><br><span class="line"><span class="comment">    *         &#123;<span class="doctag">@code</span> false&#125;</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> ClassCastException if the class of the specified element</span></span><br><span class="line"><span class="comment">    *         prevents it from being added to this deque</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> NullPointerException if the specified element is null and this</span></span><br><span class="line"><span class="comment">    *         deque does not permit null elements</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> IllegalArgumentException if some property of the specified</span></span><br><span class="line"><span class="comment">    *         element prevents it from being added to this deque</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">boolean</span> <span class="title">offerFirst</span><span class="params">(E e)</span></span>;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Inserts the specified element at the end of this deque unless it would</span></span><br><span class="line"><span class="comment">    * violate capacity restrictions.  When using a capacity-restricted deque,</span></span><br><span class="line"><span class="comment">    * this method is generally preferable to the &#123;<span class="doctag">@link</span> #addLast&#125; method,</span></span><br><span class="line"><span class="comment">    * which can fail to insert an element only by throwing an exception.</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> e the element to add</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span> &#123;<span class="doctag">@code</span> true&#125; if the element was added to this deque, else</span></span><br><span class="line"><span class="comment">    *         &#123;<span class="doctag">@code</span> false&#125;</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> ClassCastException if the class of the specified element</span></span><br><span class="line"><span class="comment">    *         prevents it from being added to this deque</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> NullPointerException if the specified element is null and this</span></span><br><span class="line"><span class="comment">    *         deque does not permit null elements</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> IllegalArgumentException if some property of the specified</span></span><br><span class="line"><span class="comment">    *         element prevents it from being added to this deque</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">boolean</span> <span class="title">offerLast</span><span class="params">(E e)</span></span>;</span><br><span class="line">   </span><br><span class="line">       <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Retrieves and removes the first element of this deque.  This method</span></span><br><span class="line"><span class="comment">    * differs from &#123;<span class="doctag">@link</span> #pollFirst pollFirst&#125; only in that it throws an</span></span><br><span class="line"><span class="comment">    * exception if this deque is empty.</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span> the head of this deque</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> NoSuchElementException if this deque is empty</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function">E <span class="title">removeFirst</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Retrieves and removes the last element of this deque.  This method</span></span><br><span class="line"><span class="comment">    * differs from &#123;<span class="doctag">@link</span> #pollLast pollLast&#125; only in that it throws an</span></span><br><span class="line"><span class="comment">    * exception if this deque is empty.</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span> the tail of this deque</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> NoSuchElementException if this deque is empty</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function">E <span class="title">removeLast</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Retrieves and removes the first element of this deque,</span></span><br><span class="line"><span class="comment">    * or returns &#123;<span class="doctag">@code</span> null&#125; if this deque is empty.</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span> the head of this deque, or &#123;<span class="doctag">@code</span> null&#125; if this deque is empty</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function">E <span class="title">pollFirst</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Retrieves and removes the last element of this deque,</span></span><br><span class="line"><span class="comment">    * or returns &#123;<span class="doctag">@code</span> null&#125; if this deque is empty.</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span> the tail of this deque, or &#123;<span class="doctag">@code</span> null&#125; if this deque is empty</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function">E <span class="title">pollLast</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Retrieves, but does not remove, the first element of this deque.</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * This method differs from &#123;<span class="doctag">@link</span> #peekFirst peekFirst&#125; only in that it</span></span><br><span class="line"><span class="comment">    * throws an exception if this deque is empty.</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span> the head of this deque</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> NoSuchElementException if this deque is empty</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function">E <span class="title">getFirst</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Retrieves, but does not remove, the last element of this deque.</span></span><br><span class="line"><span class="comment">    * This method differs from &#123;<span class="doctag">@link</span> #peekLast peekLast&#125; only in that it</span></span><br><span class="line"><span class="comment">    * throws an exception if this deque is empty.</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span> the tail of this deque</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> NoSuchElementException if this deque is empty</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function">E <span class="title">getLast</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Retrieves, but does not remove, the first element of this deque,</span></span><br><span class="line"><span class="comment">    * or returns &#123;<span class="doctag">@code</span> null&#125; if this deque is empty.</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span> the head of this deque, or &#123;<span class="doctag">@code</span> null&#125; if this deque is empty</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function">E <span class="title">peekFirst</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Retrieves, but does not remove, the last element of this deque,</span></span><br><span class="line"><span class="comment">    * or returns &#123;<span class="doctag">@code</span> null&#125; if this deque is empty.</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span> the tail of this deque, or &#123;<span class="doctag">@code</span> null&#125; if this deque is empty</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function">E <span class="title">peekLast</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Removes the first occurrence of the specified element from this deque.</span></span><br><span class="line"><span class="comment">    * If the deque does not contain the element, it is unchanged.</span></span><br><span class="line"><span class="comment">    * More formally, removes the first element &#123;<span class="doctag">@code</span> e&#125; such that</span></span><br><span class="line"><span class="comment">    * &lt;tt&gt;(o==null&amp;nbsp;?&amp;nbsp;e==null&amp;nbsp;:&amp;nbsp;o.equals(e))&lt;/tt&gt;</span></span><br><span class="line"><span class="comment">    * (if such an element exists).</span></span><br><span class="line"><span class="comment">    * Returns &#123;<span class="doctag">@code</span> true&#125; if this deque contained the specified element</span></span><br><span class="line"><span class="comment">    * (or equivalently, if this deque changed as a result of the call).</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> o element to be removed from this deque, if present</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span> &#123;<span class="doctag">@code</span> true&#125; if an element was removed as a result of this call</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> ClassCastException if the class of the specified element</span></span><br><span class="line"><span class="comment">    *         is incompatible with this deque</span></span><br><span class="line"><span class="comment">    * (&lt;a href="Collection.html#optional-restrictions"&gt;optional&lt;/a&gt;)</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> NullPointerException if the specified element is null and this</span></span><br><span class="line"><span class="comment">    *         deque does not permit null elements</span></span><br><span class="line"><span class="comment">    * (&lt;a href="Collection.html#optional-restrictions"&gt;optional&lt;/a&gt;)</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">boolean</span> <span class="title">removeFirstOccurrence</span><span class="params">(Object o)</span></span>;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Removes the last occurrence of the specified element from this deque.</span></span><br><span class="line"><span class="comment">    * If the deque does not contain the element, it is unchanged.</span></span><br><span class="line"><span class="comment">    * More formally, removes the last element &#123;<span class="doctag">@code</span> e&#125; such that</span></span><br><span class="line"><span class="comment">    * &lt;tt&gt;(o==null&amp;nbsp;?&amp;nbsp;e==null&amp;nbsp;:&amp;nbsp;o.equals(e))&lt;/tt&gt;</span></span><br><span class="line"><span class="comment">    * (if such an element exists).</span></span><br><span class="line"><span class="comment">    * Returns &#123;<span class="doctag">@code</span> true&#125; if this deque contained the specified element</span></span><br><span class="line"><span class="comment">    * (or equivalently, if this deque changed as a result of the call).</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> o element to be removed from this deque, if present</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span> &#123;<span class="doctag">@code</span> true&#125; if an element was removed as a result of this call</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> ClassCastException if the class of the specified element</span></span><br><span class="line"><span class="comment">    *         is incompatible with this deque</span></span><br><span class="line"><span class="comment">    * (&lt;a href="Collection.html#optional-restrictions"&gt;optional&lt;/a&gt;)</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> NullPointerException if the specified element is null and this</span></span><br><span class="line"><span class="comment">    *         deque does not permit null elements</span></span><br><span class="line"><span class="comment">    * (&lt;a href="Collection.html#optional-restrictions"&gt;optional&lt;/a&gt;)</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">boolean</span> <span class="title">removeLastOccurrence</span><span class="params">(Object o)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>添加队首： addFirst、offerFirst; 注意区别</p>
+</li>
+<li><p>添加队尾巴： addLast 、 offerLast； 注意区别</p>
+</li>
+<li><p>删除队首： removeFirst 、pollFirst; 注意区别</p>
+</li>
+<li><p>删除队尾巴: removeLast、 pollLast; 注意区别</p>
+</li>
+<li><p>获取队头: getFirst、 peekFirst ; 注意区别</p>
+</li>
+<li><p>获取队尾巴： getLast、 peekLast; 注意区别</p>
+</li>
+<li><p>removeFirstOcurrence: 删除掉第一个匹配的元素</p>
+</li>
+<li><p>removeLastOccurrence: 删除掉最后一个匹配的</p>
+</li>
+</ul>
+<p>疑问： removeLastOccurrence怎么知道最后一个呢？ </p>
+<blockquote>
+<p>TODO: 阅读removeLastOccurrence 的实现源码</p>
+</blockquote>
+<h3 id="第二部分：Queue的"><a href="#第二部分：Queue的" class="headerlink" title="第二部分：Queue的"></a>第二部分：Queue的</h3><p>源码上：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// *** Queue methods ***</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Inserts the specified element into the queue represented by this deque</span></span><br><span class="line"><span class="comment"> * (in other words, at the tail of this deque) if it is possible to do so</span></span><br><span class="line"><span class="comment"> * immediately without violating capacity restrictions, returning</span></span><br><span class="line"><span class="comment"> * &#123;<span class="doctag">@code</span> true&#125; upon success and throwing an</span></span><br><span class="line"><span class="comment"> * &#123;<span class="doctag">@code</span> IllegalStateException&#125; if no space is currently available.</span></span><br><span class="line"><span class="comment"> * When using a capacity-restricted deque, it is generally preferable to</span></span><br><span class="line"><span class="comment"> * use &#123;<span class="doctag">@link</span> #offer(Object) offer&#125;.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;This method is equivalent to &#123;<span class="doctag">@link</span> #addLast&#125;.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> e the element to add</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> &#123;<span class="doctag">@code</span> true&#125; (as specified by &#123;<span class="doctag">@link</span> Collection#add&#125;)</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> IllegalStateException if the element cannot be added at this</span></span><br><span class="line"><span class="comment"> *         time due to capacity restrictions</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> ClassCastException if the class of the specified element</span></span><br><span class="line"><span class="comment"> *         prevents it from being added to this deque</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> NullPointerException if the specified element is null and this</span></span><br><span class="line"><span class="comment"> *         deque does not permit null elements</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> IllegalArgumentException if some property of the specified</span></span><br><span class="line"><span class="comment"> *         element prevents it from being added to this deque</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Inserts the specified element into the queue represented by this deque</span></span><br><span class="line"><span class="comment"> * (in other words, at the tail of this deque) if it is possible to do so</span></span><br><span class="line"><span class="comment"> * immediately without violating capacity restrictions, returning</span></span><br><span class="line"><span class="comment"> * &#123;<span class="doctag">@code</span> true&#125; upon success and &#123;<span class="doctag">@code</span> false&#125; if no space is currently</span></span><br><span class="line"><span class="comment"> * available.  When using a capacity-restricted deque, this method is</span></span><br><span class="line"><span class="comment"> * generally preferable to the &#123;<span class="doctag">@link</span> #add&#125; method, which can fail to</span></span><br><span class="line"><span class="comment"> * insert an element only by throwing an exception.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;This method is equivalent to &#123;<span class="doctag">@link</span> #offerLast&#125;.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> e the element to add</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> &#123;<span class="doctag">@code</span> true&#125; if the element was added to this deque, else</span></span><br><span class="line"><span class="comment"> *         &#123;<span class="doctag">@code</span> false&#125;</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> ClassCastException if the class of the specified element</span></span><br><span class="line"><span class="comment"> *         prevents it from being added to this deque</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> NullPointerException if the specified element is null and this</span></span><br><span class="line"><span class="comment"> *         deque does not permit null elements</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> IllegalArgumentException if some property of the specified</span></span><br><span class="line"><span class="comment"> *         element prevents it from being added to this deque</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">offer</span><span class="params">(E e)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Retrieves and removes the head of the queue represented by this deque</span></span><br><span class="line"><span class="comment"> * (in other words, the first element of this deque).</span></span><br><span class="line"><span class="comment"> * This method differs from &#123;<span class="doctag">@link</span> #poll poll&#125; only in that it throws an</span></span><br><span class="line"><span class="comment"> * exception if this deque is empty.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;This method is equivalent to &#123;<span class="doctag">@link</span> #removeFirst()&#125;.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> the head of the queue represented by this deque</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> NoSuchElementException if this deque is empty</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function">E <span class="title">remove</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Retrieves and removes the head of the queue represented by this deque</span></span><br><span class="line"><span class="comment"> * (in other words, the first element of this deque), or returns</span></span><br><span class="line"><span class="comment"> * &#123;<span class="doctag">@code</span> null&#125; if this deque is empty.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;This method is equivalent to &#123;<span class="doctag">@link</span> #pollFirst()&#125;.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> the first element of this deque, or &#123;<span class="doctag">@code</span> null&#125; if</span></span><br><span class="line"><span class="comment"> *         this deque is empty</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function">E <span class="title">poll</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Retrieves, but does not remove, the head of the queue represented by</span></span><br><span class="line"><span class="comment"> * this deque (in other words, the first element of this deque).</span></span><br><span class="line"><span class="comment"> * This method differs from &#123;<span class="doctag">@link</span> #peek peek&#125; only in that it throws an</span></span><br><span class="line"><span class="comment"> * exception if this deque is empty.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;This method is equivalent to &#123;<span class="doctag">@link</span> #getFirst()&#125;.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> the head of the queue represented by this deque</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> NoSuchElementException if this deque is empty</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function">E <span class="title">element</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Retrieves, but does not remove, the head of the queue represented by</span></span><br><span class="line"><span class="comment"> * this deque (in other words, the first element of this deque), or</span></span><br><span class="line"><span class="comment"> * returns &#123;<span class="doctag">@code</span> null&#125; if this deque is empty.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;This method is equivalent to &#123;<span class="doctag">@link</span> #peekFirst()&#125;.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> the head of the queue represented by this deque, or</span></span><br><span class="line"><span class="comment"> *         &#123;<span class="doctag">@code</span> null&#125; if this deque is empty</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function">E <span class="title">peek</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>Queue的解释部分，可以查阅前面一篇介绍。</p>
+<h3 id="第三部分：Stack"><a href="#第三部分：Stack" class="headerlink" title="第三部分：Stack"></a>第三部分：Stack</h3><p>源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// *** Stack methods ***</span></span><br><span class="line"></span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Pushes an element onto the stack represented by this deque (in other</span></span><br><span class="line"><span class="comment">    * words, at the head of this deque) if it is possible to do so</span></span><br><span class="line"><span class="comment">    * immediately without violating capacity restrictions, throwing an</span></span><br><span class="line"><span class="comment">    * &#123;<span class="doctag">@code</span> IllegalStateException&#125; if no space is currently available.</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * &lt;p&gt;This method is equivalent to &#123;<span class="doctag">@link</span> #addFirst&#125;.</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> e the element to push</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> IllegalStateException if the element cannot be added at this</span></span><br><span class="line"><span class="comment">    *         time due to capacity restrictions</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> ClassCastException if the class of the specified element</span></span><br><span class="line"><span class="comment">    *         prevents it from being added to this deque</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> NullPointerException if the specified element is null and this</span></span><br><span class="line"><span class="comment">    *         deque does not permit null elements</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> IllegalArgumentException if some property of the specified</span></span><br><span class="line"><span class="comment">    *         element prevents it from being added to this deque</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">void</span> <span class="title">push</span><span class="params">(E e)</span></span>;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Pops an element from the stack represented by this deque.  In other</span></span><br><span class="line"><span class="comment">    * words, removes and returns the first element of this deque.</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * &lt;p&gt;This method is equivalent to &#123;<span class="doctag">@link</span> #removeFirst()&#125;.</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span> the element at the front of this deque (which is the top</span></span><br><span class="line"><span class="comment">    *         of the stack represented by this deque)</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> NoSuchElementException if this deque is empty</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function">E <span class="title">pop</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="第四部分：Collection"><a href="#第四部分：Collection" class="headerlink" title="第四部分：Collection"></a>第四部分：Collection</h3><p>源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// *** Collection methods ***</span></span><br><span class="line"></span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Removes the first occurrence of the specified element from this deque.</span></span><br><span class="line"><span class="comment">    * If the deque does not contain the element, it is unchanged.</span></span><br><span class="line"><span class="comment">    * More formally, removes the first element &#123;<span class="doctag">@code</span> e&#125; such that</span></span><br><span class="line"><span class="comment">    * &lt;tt&gt;(o==null&amp;nbsp;?&amp;nbsp;e==null&amp;nbsp;:&amp;nbsp;o.equals(e))&lt;/tt&gt;</span></span><br><span class="line"><span class="comment">    * (if such an element exists).</span></span><br><span class="line"><span class="comment">    * Returns &#123;<span class="doctag">@code</span> true&#125; if this deque contained the specified element</span></span><br><span class="line"><span class="comment">    * (or equivalently, if this deque changed as a result of the call).</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * &lt;p&gt;This method is equivalent to &#123;<span class="doctag">@link</span> #removeFirstOccurrence(Object)&#125;.</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> o element to be removed from this deque, if present</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span> &#123;<span class="doctag">@code</span> true&#125; if an element was removed as a result of this call</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> ClassCastException if the class of the specified element</span></span><br><span class="line"><span class="comment">    *         is incompatible with this deque</span></span><br><span class="line"><span class="comment">    * (&lt;a href="Collection.html#optional-restrictions"&gt;optional&lt;/a&gt;)</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> NullPointerException if the specified element is null and this</span></span><br><span class="line"><span class="comment">    *         deque does not permit null elements</span></span><br><span class="line"><span class="comment">    * (&lt;a href="Collection.html#optional-restrictions"&gt;optional&lt;/a&gt;)</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(Object o)</span></span>;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Returns &#123;<span class="doctag">@code</span> true&#125; if this deque contains the specified element.</span></span><br><span class="line"><span class="comment">    * More formally, returns &#123;<span class="doctag">@code</span> true&#125; if and only if this deque contains</span></span><br><span class="line"><span class="comment">    * at least one element &#123;<span class="doctag">@code</span> e&#125; such that</span></span><br><span class="line"><span class="comment">    * &lt;tt&gt;(o==null&amp;nbsp;?&amp;nbsp;e==null&amp;nbsp;:&amp;nbsp;o.equals(e))&lt;/tt&gt;.</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> o element whose presence in this deque is to be tested</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span> &#123;<span class="doctag">@code</span> true&#125; if this deque contains the specified element</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> ClassCastException if the type of the specified element</span></span><br><span class="line"><span class="comment">    *         is incompatible with this deque</span></span><br><span class="line"><span class="comment">    * (&lt;a href="Collection.html#optional-restrictions"&gt;optional&lt;/a&gt;)</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> NullPointerException if the specified element is null and this</span></span><br><span class="line"><span class="comment">    *         deque does not permit null elements</span></span><br><span class="line"><span class="comment">    * (&lt;a href="Collection.html#optional-restrictions"&gt;optional&lt;/a&gt;)</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(Object o)</span></span>;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Returns the number of elements in this deque.</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span> the number of elements in this deque</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">size</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Returns an iterator over the elements in this deque in proper sequence.</span></span><br><span class="line"><span class="comment">    * The elements will be returned in order from first (head) to last (tail).</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span> an iterator over the elements in this deque in proper sequence</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function">Iterator&lt;E&gt; <span class="title">iterator</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Returns an iterator over the elements in this deque in reverse</span></span><br><span class="line"><span class="comment">    * sequential order.  The elements will be returned in order from</span></span><br><span class="line"><span class="comment">    * last (tail) to first (head).</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span> an iterator over the elements in this deque in reverse</span></span><br><span class="line"><span class="comment">    * sequence</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function">Iterator&lt;E&gt; <span class="title">descendingIterator</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="ArrayDeque"><a href="#ArrayDeque" class="headerlink" title="ArrayDeque"></a>ArrayDeque</h2><p>为什么学习这个东西？ 请查看源码注解：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Resizable-array implementation of the &#123;@link Deque&#125; interface.  Array</span></span><br><span class="line"><span class="comment"> * deques have no capacity restrictions; they grow as necessary to support</span></span><br><span class="line"><span class="comment"> * usage.  They are not thread-safe; in the absence of external</span></span><br><span class="line"><span class="comment"> * synchronization, they do not support concurrent access by multiple threads.</span></span><br><span class="line"><span class="comment"> * Null elements are prohibited.  This class is likely to be faster than</span></span><br><span class="line"><span class="comment"> * &#123;@link Stack&#125; when used as a stack, and faster than &#123;@link LinkedList&#125;</span></span><br><span class="line"><span class="comment"> * when used as a queue.</span></span><br><span class="line"><span class="comment"> * /</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>This class is likely to be faster than<br> {@link Stack} when used as a stack, and faster than {@link LinkedList}<br> when used as a queue.</p>
+</blockquote>
+<p><code>Resizable-array implementation of the Deque interface</code> 动态的调整大小的数组实现了Deque，听起来有没有有点像：ArrayList？ </p>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ArrayDeque</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">AbstractCollection</span>&lt;<span class="title">E</span>&gt;</span></span><br><span class="line"><span class="class">                           <span class="keyword">implements</span> <span class="title">Deque</span>&lt;<span class="title">E</span>&gt;, <span class="title">Cloneable</span>, <span class="title">Serializable</span></span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * The array in which the elements of the deque are stored.</span></span><br><span class="line"><span class="comment">    * The capacity of the deque is the length of this array, which is</span></span><br><span class="line"><span class="comment">    * always a power of two. The array is never allowed to become</span></span><br><span class="line"><span class="comment">    * full, except transiently within an addX method where it is</span></span><br><span class="line"><span class="comment">    * resized (see doubleCapacity) immediately upon becoming full,</span></span><br><span class="line"><span class="comment">    * thus avoiding head and tail wrapping around to equal each</span></span><br><span class="line"><span class="comment">    * other.  We also guarantee that all array cells not holding</span></span><br><span class="line"><span class="comment">    * deque elements are always null.</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="keyword">transient</span> Object[] elements; <span class="comment">// non-private to simplify nested class access</span></span><br><span class="line"></span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * The index of the element at the head of the deque (which is the</span></span><br><span class="line"><span class="comment">    * element that would be removed by remove() or pop()); or an</span></span><br><span class="line"><span class="comment">    * arbitrary number equal to tail if the deque is empty.</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="keyword">transient</span> <span class="keyword">int</span> head;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * The index at which the next element would be added to the tail</span></span><br><span class="line"><span class="comment">    * of the deque (via addLast(E), add(E), or push(E)).</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="keyword">transient</span> <span class="keyword">int</span> tail;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * The minimum capacity that we'll use for a newly created deque.</span></span><br><span class="line"><span class="comment">    * Must be a power of 2.</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MIN_INITIAL_CAPACITY = <span class="number">8</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h3><p>源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Constructs an empty array deque with an initial capacity</span></span><br><span class="line"><span class="comment"> * sufficient to hold 16 elements.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ArrayDeque</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    elements = <span class="keyword">new</span> Object[<span class="number">16</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Constructs an empty array deque with an initial capacity</span></span><br><span class="line"><span class="comment"> * sufficient to hold the specified number of elements.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> numElements  lower bound on initial capacity of the deque</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ArrayDeque</span><span class="params">(<span class="keyword">int</span> numElements)</span> </span>&#123;</span><br><span class="line">    allocateElements(numElements);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Constructs a deque containing the elements of the specified</span></span><br><span class="line"><span class="comment"> * collection, in the order they are returned by the collection's</span></span><br><span class="line"><span class="comment"> * iterator.  (The first element returned by the collection's</span></span><br><span class="line"><span class="comment"> * iterator becomes the first element, or &lt;i&gt;front&lt;/i&gt; of the</span></span><br><span class="line"><span class="comment"> * deque.)</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> c the collection whose elements are to be placed into the deque</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> NullPointerException if the specified collection is null</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ArrayDeque</span><span class="params">(Collection&lt;? extends E&gt; c)</span> </span>&#123;</span><br><span class="line">    allocateElements(c.size());</span><br><span class="line">    addAll(c);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>分析： ArrayDeque的构造函数看默认的 16 长度数组； 分析查看一下allocateElements</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Allocates empty array to hold the given number of elements.</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> numElements  the number of elements to hold</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">allocateElements</span><span class="params">(<span class="keyword">int</span> numElements)</span> </span>&#123;</span><br><span class="line">       elements = <span class="keyword">new</span> Object[calculateSize(numElements)];</span><br><span class="line">   &#125;</span><br><span class="line">   </span><br><span class="line">   </span><br><span class="line">   <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">calculateSize</span><span class="params">(<span class="keyword">int</span> numElements)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">int</span> initialCapacity = MIN_INITIAL_CAPACITY;</span><br><span class="line">       <span class="comment">// Find the best power of two to hold elements.</span></span><br><span class="line">       <span class="comment">// Tests "&lt;=" because arrays aren't kept full.</span></span><br><span class="line">       <span class="keyword">if</span> (numElements &gt;= initialCapacity) &#123;</span><br><span class="line">           initialCapacity = numElements;</span><br><span class="line">           initialCapacity |= (initialCapacity &gt;&gt;&gt;  <span class="number">1</span>);</span><br><span class="line">           initialCapacity |= (initialCapacity &gt;&gt;&gt;  <span class="number">2</span>);</span><br><span class="line">           initialCapacity |= (initialCapacity &gt;&gt;&gt;  <span class="number">4</span>);</span><br><span class="line">           initialCapacity |= (initialCapacity &gt;&gt;&gt;  <span class="number">8</span>);</span><br><span class="line">           initialCapacity |= (initialCapacity &gt;&gt;&gt; <span class="number">16</span>);</span><br><span class="line">           initialCapacity++;</span><br><span class="line"></span><br><span class="line">           <span class="keyword">if</span> (initialCapacity &lt; <span class="number">0</span>)   <span class="comment">// Too many elements, must back off</span></span><br><span class="line">               initialCapacity &gt;&gt;&gt;= <span class="number">1</span>;<span class="comment">// Good luck allocating 2 ^ 30 elements</span></span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> initialCapacity;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>查阅网上资料分析：calculateSize的实现</p>
+<p>主要解决 <code>&gt;&gt;&gt;</code> 这个是一个啥意思操作？</p>
+<ul>
+<li><code>&gt;&gt;&gt;</code> : 无符号右移，忽略符号位，空位都以0 补齐。</li>
+<li><code>|</code>: 位或运算； 按照位进行操作，逢1为1.</li>
+</ul>
+<p>int java 是 32位；  (-2)^31 到 2^31-1; 最高位是符号为 0正数，1负数</p>
+<p>我们知道，计算机存储任何数据都是采用二进制形式，所以一个int值为80的数在内存中可能是这样的：</p>
+<blockquote>
+<p>0000 0000 0000 0000 0000 0000 0101 0000</p>
+</blockquote>
+<p>比80大的最近的2次幂是128，其值是这样的：</p>
+<blockquote>
+<p>0000 0000 0000 0000 0000 0000 1000 0000</p>
+</blockquote>
+<p>我们多找几组数据就可以发现规律：</p>
+<p>每个2的次幂用二进制表示时，只有一位为 1，其余位均为 0（不包含符合位）</p>
+<p>要找到比一个数大的2的次幂（在正数范围内），只需要将其最高位左移一位（从左往右第一个 1 出现的位置），其余位置 0 即可。</p>
+<p>但从实践上讲，没有可行的方法能够进行以上操作，即使通过&amp;操作符可以将某一位置 0 或置 1，也无法确认最高位出现的位置，也就是基于最高位进行操作不可行。</p>
+<p>但还有一个很整齐的数字可以被我们利用，那就是 2n-1，我们看下128-1=127的表示形式：</p>
+<blockquote>
+<p>0000 0000 0000 0000 0000 0000 0111 1111</p>
+</blockquote>
+<p>把它和80对比一下：</p>
+<blockquote>
+<p>0000 0000 0000 0000 0000 0000 0101 0000 //80<br>0000 0000 0000 0000 0000 0000 0111 1111 //127</p>
+</blockquote>
+<p>可以发现，我们只要把80从最高位起每一位全置为1，就可以得到离它最近且比它大的 2n-1，最后再执行一次+1操作即可。具体操作步骤为（为了演示，这里使用了很大的数字）：<br>原值：</p>
+<blockquote>
+<p>0011 0000 0000 0000 0000 0000 0000 0010</p>
+</blockquote>
+<p>无符号右移1位</p>
+<blockquote>
+<p>0001 1000 0000 0000 0000 0000 0000 0001</p>
+</blockquote>
+<p>与原值|操作：</p>
+<blockquote>
+<p>0011 1000 0000 0000 0000 0000 0000 0011</p>
+</blockquote>
+<p>可以看到最高2位都是1了，也仅能保证前两位为1，这时就可以直接移动两位</p>
+<p>无符号右移2位</p>
+<blockquote>
+<p>0000 1110 0000 0000 0000 0000 0000 0000</p>
+</blockquote>
+<p>与原值|操作：</p>
+<blockquote>
+<p>0011 1110 0000 0000 0000 0000 0000 0011</p>
+</blockquote>
+<p>此时就可以保证前4位为1了，下一步移动4位</p>
+<p>无符号右移4位</p>
+<blockquote>
+<p>0000 0011 1110 0000 0000 0000 0000 0000</p>
+</blockquote>
+<p>与原值|操作：</p>
+<blockquote>
+<p>0011 1111 1110 0000 0000 0000 0000 0011</p>
+</blockquote>
+<p>此时就可以保证前8位为1了，下一步移动8位</p>
+<p>无符号右移8位</p>
+<blockquote>
+<p>0000 0000 0011 1111 1110 0000 0000 0000</p>
+</blockquote>
+<p>与原值|操作：</p>
+<blockquote>
+<p>0011 1111 1111 1111 1110 0000 0000 0011</p>
+</blockquote>
+<p>此时前16位都是1，只需要再移位操作一次，即可把32位都置为1了。</p>
+<p>无符号右移16位</p>
+<blockquote>
+<p>0000 0000 0000 0000 0011 1111 1111 1111</p>
+</blockquote>
+<p>与原值|操作：</p>
+<blockquote>
+<p>0011 1111 1111 1111 1111 1111 1111 1111</p>
+</blockquote>
+<p>进行+1操作：</p>
+<blockquote>
+<p>0100 0000 0000 0000 0000 0000 0000 0000</p>
+</blockquote>
+<p>如此经过11步操作后，我们终于找到了合适的2次幂。写成代码就是：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">initialCapacity |= (initialCapacity &gt;&gt;&gt;  <span class="number">1</span>);</span><br><span class="line">initialCapacity |= (initialCapacity &gt;&gt;&gt;  <span class="number">2</span>);</span><br><span class="line">initialCapacity |= (initialCapacity &gt;&gt;&gt;  <span class="number">4</span>);</span><br><span class="line">initialCapacity |= (initialCapacity &gt;&gt;&gt;  <span class="number">8</span>);</span><br><span class="line">initialCapacity |= (initialCapacity &gt;&gt;&gt; <span class="number">16</span>);</span><br><span class="line">initialCapacity++;</span><br></pre></td></tr></table></figure>
+
+<p>不过为了防止溢出，导致出现负值（如果把符号位置为1，就为负值了）还需要一次校验：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (initialCapacity &lt; <span class="number">0</span>)   <span class="comment">// Too many elements, must back off</span></span><br><span class="line">     initialCapacity &gt;&gt;&gt;= <span class="number">1</span>;<span class="comment">// Good luck allocating 2 ^ 30 elements</span></span><br></pre></td></tr></table></figure>
+
+<p>至此，初始化的过程就完毕了。</p>
+<p>这就是为什么效率高的原因：里面包含很多位运算；</p>
+<h3 id="add"><a href="#add" class="headerlink" title="add"></a>add</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Inserts the specified element at the front of this deque.</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> e the element to add</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> NullPointerException if the specified element is null</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addFirst</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">if</span> (e == <span class="keyword">null</span>)</span><br><span class="line">           <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">       elements[head = (head - <span class="number">1</span>) &amp; (elements.length - <span class="number">1</span>)] = e;</span><br><span class="line">       <span class="keyword">if</span> (head == tail)</span><br><span class="line">           doubleCapacity();</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Inserts the specified element at the end of this deque.</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * &lt;p&gt;This method is equivalent to &#123;<span class="doctag">@link</span> #add&#125;.</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> e the element to add</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> NullPointerException if the specified element is null</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addLast</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">if</span> (e == <span class="keyword">null</span>)</span><br><span class="line">           <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">       elements[tail] = e;</span><br><span class="line">       <span class="keyword">if</span> ( (tail = (tail + <span class="number">1</span>) &amp; (elements.length - <span class="number">1</span>)) == head)</span><br><span class="line">           doubleCapacity();</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>elements[head = (head - 1) &amp; (elements.length - 1)] = e;</p>
+</blockquote>
+<p>完全没搞明白？？？</p>
+<p>很明显这是一个赋值操作，而且应该是给head之前的位置赋值，所以head = (head - 1)是合理的操作，那这个&amp; (elements.length - 1)又表示什么呢？</p>
+<p>在之前的定义与初始化中，elements.length要求为2的次幂，也就是 2n 形式，那这个&amp; (elements.length - 1)也就是 2n-1 了，在内存中用二进制表示就是从最高位起每一位都是1。我们还以之前的127为例：</p>
+<blockquote>
+<p>0000 0000 0000 0000 0000 0000 0111 1111</p>
+</blockquote>
+<p>&amp;就是按位与，全1才为1。那么任意一个正数和127进行按位与操作后，都只有最右侧7位被保留了下来，其他位全部置0（除符号位），而对一个负数而言，则会把它的符号位置为0，&amp;操作后会变成正数。比如-1的值是1111 … 1111（32个1），和127按位操作后结果就变成了127 。所以，*<em>对于正数它就是取模，对于负数，它就是把元素插入了数组的结尾</em>。所以，这个数组并不是向前添加元素就向前扩展，向后添加就向后扩展，它是循环的，类似这样:</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws2.sinaimg.cn/large/006tNc79gy1fvmysj8pypj30gq0frgo9.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+
+<p>初始时，head与tail都指向a[0]，这时候数组是空的。当执行addFirst()方法时，head指针移动一位，指向a[elements.length-1]，并赋值，也就是给a[elements.length-1]赋值。当执行addLast()操作时，先给a[0]赋值，再将tail指针移动一位，指向a[1]。所以执行完之后head指针位置是有值的，而tail位置是没有值的。</p>
+<p>随着添加操作执行，数组总会占满，那么怎么判断它满了然后扩容呢？首先，如果head==tail，则说明数组是空的，所以在添加元素时必须保证head与tail不相等。假如现在只有一个位置可以添加元素了，类似下图：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws2.sinaimg.cn/large/006tNc79gy1fvmz4l6frzj30gr0g577p.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+
+<p>此时，tail指向了a[8]，head已经填充到a[9]了，只有a[8]是空闲的。很显然，不管是addFirst还是addLast，再添加一个元素后都会导致head==tail。这时候就不得不扩容了，因为head==tail是判断是否为空的条件。扩容就比较简单了，直接翻倍，我们看代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Doubles the capacity of this deque.  Call only when full, i.e.,</span></span><br><span class="line"><span class="comment">    * when head and tail have wrapped around to become equal.</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">doubleCapacity</span><span class="params">()</span> </span>&#123;</span><br><span class="line">   	 <span class="comment">// 只有head等于tail才扩容</span></span><br><span class="line">       <span class="keyword">assert</span> head == tail;</span><br><span class="line">       <span class="keyword">int</span> p = head;</span><br><span class="line">       <span class="keyword">int</span> n = elements.length;</span><br><span class="line">       <span class="keyword">int</span> r = n - p; <span class="comment">// number of elements to the right of p</span></span><br><span class="line">       </span><br><span class="line">       <span class="comment">//直接翻倍</span></span><br><span class="line">       <span class="keyword">int</span> newCapacity = n &lt;&lt; <span class="number">1</span>;</span><br><span class="line">       <span class="keyword">if</span> (newCapacity &lt; <span class="number">0</span>)</span><br><span class="line">           <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Sorry, deque too big"</span>);</span><br><span class="line">       Object[] a = <span class="keyword">new</span> Object[newCapacity];</span><br><span class="line">       <span class="comment">// 左侧数据拷贝</span></span><br><span class="line">       System.arraycopy(elements, p, a, <span class="number">0</span>, r);</span><br><span class="line">       <span class="comment">// 右侧数据拷贝</span></span><br><span class="line">       System.arraycopy(elements, <span class="number">0</span>, a, r, p);</span><br><span class="line">       elements = a;</span><br><span class="line">       head = <span class="number">0</span>;</span><br><span class="line">       tail = n;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>ArrayDeque通过循环数组的方式实现的循环队列，并通过位运算来提高效率，容量大小始终是2的次幂。当数据充满数组时，它的容量将翻倍。作为Stack，因为<strong>其非线程安全</strong>所以效率高于java.util.Stack，<strong>而作为队列，因为其不需要结点支持所以更快（LinkedList使用Node存储数据，这个对象频繁的new与clean，使得其效率略低于ArrayDeque）。但队列更多的用来处理多线程问题，所以我们更多的使用BlockingQueue，关于多线程的问题，以后再认真研究。</strong></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-08-15T06:30:56.000Z" itemprop="dateUpdated">2019-08-15 14:30:56</time>
+</span><br>
+
+
+        
+        欢迎访问http://lmwtuedu.cn，希望此文章对您有帮助!
+        
+    </div>
+    
+    <footer>
+        <a href="http://lmwtuedu.cn">
+            <img src="/img/head.png" alt="darker">
+            darker
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/集合/">集合</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://lmwtuedu.cn/2018/09/26/2018-09-26-Java集合06-Deque和ArrayDeque/&title=《Java集合06-Deque和ArrayDeque》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&pic=http://lmwtuedu.cn/img/head.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://lmwtuedu.cn/2018/09/26/2018-09-26-Java集合06-Deque和ArrayDeque/&title=《Java集合06-Deque和ArrayDeque》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://lmwtuedu.cn/2018/09/26/2018-09-26-Java集合06-Deque和ArrayDeque/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java集合06-Deque和ArrayDeque》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&url=http://lmwtuedu.cn/2018/09/26/2018-09-26-Java集合06-Deque和ArrayDeque/&via=http://lmwtuedu.cn" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://lmwtuedu.cn/2018/09/26/2018-09-26-Java集合06-Deque和ArrayDeque/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/10/17/2018-10-17-燕十八MYSQL练习/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">燕十八的MYSQL练习</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/09/26/2018-09-26-Java集合04-Iterable_Collection/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Java集合04-Iterable和Collection</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        请喝维他奶~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.PNG" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.PNG" data-alipay="/img/alipay.PNG">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>darker &copy; 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://lmwtuedu.cn/2018/09/26/2018-09-26-Java集合06-Deque和ArrayDeque/&title=《Java集合06-Deque和ArrayDeque》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&pic=http://lmwtuedu.cn/img/head.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://lmwtuedu.cn/2018/09/26/2018-09-26-Java集合06-Deque和ArrayDeque/&title=《Java集合06-Deque和ArrayDeque》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://lmwtuedu.cn/2018/09/26/2018-09-26-Java集合06-Deque和ArrayDeque/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java集合06-Deque和ArrayDeque》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&url=http://lmwtuedu.cn/2018/09/26/2018-09-26-Java集合06-Deque和ArrayDeque/&via=http://lmwtuedu.cn" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://lmwtuedu.cn/2018/09/26/2018-09-26-Java集合06-Deque和ArrayDeque/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACoklEQVR42u3aQXLjMAwEQP//08kDdq2dAUStDu1TKuXQbLmKRAb4fOLXzx+v5Pff1mlXvl7zhhceHh7eeuv3Mr6RrldO1rzeMx4eHt5pXrvF/LBONn19Jaz2g4eHh/cCXn5Az2D7d+Lh4eG9kzfbVntV7MMOPDw8vHO8fLkkaMjfn0cSx7MWPDw8vEmVGwUKb/j5SH8PDw8Pb91Vvz5w82b/7Mq5Ybd4eHh4B3htEyuPJGaYfHQg3yceHh7evby8YZ8EqUmU0I52zfaDh4eH9wxvE7luhglmLa4in8bDw8M7xmsP+n0k0e6kjZXx8PDwzvFmQWp7YeSBRduQqxMUPDw8vAWvDWTzkno2fJCw69ErPDw8vMO8/LBu/2pfUuftt9VG8fDw8ErerBbNy+KE15bR9b2Hh4eHt+BtDuvZId5eIasgAw8PD+8Yb9+4SsYI9o2uti2Hh4eH9794+8K3LdbbrlYxdIWHh4e35rXjArPHsdn65t8APDw8vBO8dkNJcTwb4doU3/+IcfHw8PAO8PKjv23zt4NZm3D5Lz/j4eHhHeO1gwKbkjoJizfxxDBrwcPDwyt5m1d+ZJ9ufeHh4eE9w9t//OzyaMcUksGF6DvEw8PDu5WXt6OS1lQbMbRFfLEHPDw8vMO859tayXjB7IHi4eHhPc/L21Gzgjgv39t34uHh4T3P2zf7kw/ejBcUJTseHh7erbxZu6vdetGsmn0/3z4XDw8P7wBvtnS+0Kyw3gcin82Tw8PDwxsduEn8usfPEoM8FsHDw8M7zWvj3bxE3gxj7S8wPDw8vDfwklGAzcpJKFw8Gjw8PLzX8NqRqXwAa1NYF7cWHh4e3prXDk4l0UN+xLefVZT+eHh4eAd4bcw6GxdIHuWJeAIPDw/vVt4vCJOccdAMo0gAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'Cherry Up';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'Champion';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

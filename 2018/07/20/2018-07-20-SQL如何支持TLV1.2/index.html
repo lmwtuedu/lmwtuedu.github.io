@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>SQL如何支持TLS1.2 | I AM SLOW WALKER, BUT I NEVER WALK BACK</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="reprint,code">
+    <meta name="description" content="SQL如何支持TLS1.2近期工作需要送检项目被扫描处以下漏洞：                                                                                                             注意： solution给出的方案是update；当时我看到这个句话时，我内心时崩溃的以及一脸的问好❓❓ 更新，更新W">
+<meta name="keywords" content="reprint,code">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQL如何支持TLS1.2">
+<meta property="og:url" content="http://lmwtuedu.cn/2018/07/20/2018-07-20-SQL如何支持TLV1.2/index.html">
+<meta property="og:site_name" content="I AM SLOW WALKER, BUT I NEVER WALK BACK">
+<meta property="og:description" content="SQL如何支持TLS1.2近期工作需要送检项目被扫描处以下漏洞：                                                                                                             注意： solution给出的方案是update；当时我看到这个句话时，我内心时崩溃的以及一脸的问好❓❓ 更新，更新W">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1ftf6esgntej30sl0l141u.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1ftf76b6r68j30oh0b840r.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1ftf7iba2c9j30n00by0xl.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79gy1ftg4vmjo1qj30om0j9wfu.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79gy1ftg4vmsrl4j30om0j9wgf.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79gy1ftgah4km3fj30ho0bqq4u.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79gy1ftgb1s4xejj30gm07b3zx.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79gy1ftgbdxg8znj30pf02cwfc.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79gy1ftgbf9a2hsj30px0b4acy.jpg">
+<meta property="og:updated_time" content="2019-08-15T06:30:56.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SQL如何支持TLS1.2">
+<meta name="twitter:description" content="SQL如何支持TLS1.2近期工作需要送检项目被扫描处以下漏洞：                                                                                                             注意： solution给出的方案是update；当时我看到这个句话时，我内心时崩溃的以及一脸的问好❓❓ 更新，更新W">
+<meta name="twitter:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1ftf6esgntej30sl0l141u.jpg">
+    
+        <link rel="alternate" type="application/atom+xml" title="I AM SLOW WALKER, BUT I NEVER WALK BACK" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/head.png">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/head_background.png)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/head.png">
+        </a>
+        <hgroup class="introduce">
+          <h4 class="nickname">darker</h4>
+          <a href="mailto:lmwtuedu@163.com" title="lmwtuedu@163.com" class="mail">lmwtuedu@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                Home
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/share" target="_blank" >
+                <i class="icon icon-lg icon-share-alt-square"></i>
+                Share Link
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-id-badge"></i>
+                About Me
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">SQL如何支持TLS1.2</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h3 class="title">SQL如何支持TLS1.2</h3>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-07-19T16:00:00.000Z" itemprop="datePublished" class="page-time">
+  2018-07-20
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>Table Of Content</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#SQL如何支持TLS1-2"><span class="post-toc-number">1.</span> <span class="post-toc-text">SQL如何支持TLS1.2</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-2018-07-20-SQL如何支持TLV1.2"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">SQL如何支持TLS1.2</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-07-20 00:00:00" datetime="2018-07-19T16:00:00.000Z"  itemprop="datePublished">2018-07-20</time>
+
+            
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="SQL如何支持TLS1-2"><a href="#SQL如何支持TLS1-2" class="headerlink" title="SQL如何支持TLS1.2"></a>SQL如何支持TLS1.2</h1><p>近期工作需要送检项目被扫描处以下漏洞：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws3.sinaimg.cn/large/006tKfTcgy1ftf6esgntej30sl0l141u.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>注意： solution给出的方案是update；当时我看到这个句话时，我内心时崩溃的以及一脸的问好❓❓</p>
+<p>更新，更新What？</p>
+<p>丢给公司的技术支持先查询了（因为我是第一次遇见此问题，手头还有其他项目要忙）； 其他项目忙完已经是两个星期之后，刚忙完手头其他项目（公司对此项目比较重视）； 领导领导的上级来了，来了一顿逼叨逼叨的，说了一大堆； 唉，呀， 我是那种不干活的人吗？ 来了一句“你处理问题能力有问题？” “WTF？？？” 怀疑我的能力，默默的收拾一下，来吧，搞定此bug漏洞所在！有点扯远了，来吧，言归正传！</p>
+<p>环境：</p>
+<ul>
+<li>Windows7（64位系统 4G内存）</li>
+<li>SQL2005 </li>
+<li>我司送检软件</li>
+</ul>
+<p>查询了一下：</p>
+<ol>
+<li>此漏洞是啥？<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws2.sinaimg.cn/large/006tKfTcgy1ftf76b6r68j30oh0b840r.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+</li>
+</ol>
+<p>此漏洞对OpenSSL协议有问题？ SSL3？ 那我软件协议是啥版本？ 能支持啥版本呢？ 排查对象<br>还有 针对 CBC模式的呢？？？ 我得搞清楚用了哪些东西（协议以及算法）</p>
+<p>链接🔗<a href="https://segmentfault.com/a/1190000012731888" target="_blank" rel="noopener">常见的几种SSL/TLS漏洞及攻击方式</a></p>
+<p>Google以及百度，查询到有这样的一个软件：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws4.sinaimg.cn/large/006tKfTcgy1ftf7iba2c9j30n00by0xl.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>对对对，专门针对IIS的一款非常棒棒哒的神器；可以很直观的设置协议<br>看见木有： protocols： 协议； ciphers : 密码（算法）； hash：哈希； KeyExchange：密钥交换；</p>
+<p>我们需要设置如下：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws1.sinaimg.cn/large/006tNc79gy1ftg4vmjo1qj30om0j9wfu.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws2.sinaimg.cn/large/006tNc79gy1ftg4vmsrl4j30om0j9wgf.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>CipherSuites的选择是根据什么来决定的呢？ 是根据系统的加密套件决定的；加密套件哪里寻找呢？</p>
+<p>windows 系统下有一个命令： gpedit.msc</p>
+<p>SSL的组件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line">确定安全套接字层(SSL)使用的密码套件。</span><br><span class="line"></span><br><span class="line">如果启用此设置，则 SSL 密码套件将按指定的顺序进行排列。</span><br><span class="line"></span><br><span class="line">如果禁用或不配置此设置，则将使用出厂默认密码套件顺序。</span><br><span class="line"></span><br><span class="line">SSL2、SSL3、TLS 1.0 和 TLS 1.1 密码套件:</span><br><span class="line"></span><br><span class="line">TLS_RSA_WITH_AES_128_CBC_SHA</span><br><span class="line">TLS_RSA_WITH_AES_256_CBC_SHA</span><br><span class="line">TLS_RSA_WITH_RC4_128_SHA</span><br><span class="line">TLS_RSA_WITH_3DES_EDE_CBC_SHA</span><br><span class="line">TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA_P256</span><br><span class="line">TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA_P384</span><br><span class="line">TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA_P521</span><br><span class="line">TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA_P256</span><br><span class="line">TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA_P384</span><br><span class="line">TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA_P521</span><br><span class="line">TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA_P256</span><br><span class="line">TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA_P384</span><br><span class="line">TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA_P521</span><br><span class="line">TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA_P256</span><br><span class="line">TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA_P384</span><br><span class="line">TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA_P521</span><br><span class="line">TLS_DHE_DSS_WITH_AES_128_CBC_SHA</span><br><span class="line">TLS_DHE_DSS_WITH_AES_256_CBC_SHA</span><br><span class="line">TLS_DHE_DSS_WITH_3DES_EDE_CBC_SHA</span><br><span class="line">TLS_RSA_WITH_RC4_128_MD5</span><br><span class="line">SSL_CK_RC4_128_WITH_MD5</span><br><span class="line">SSL_CK_DES_192_EDE3_CBC_WITH_MD5</span><br><span class="line">TLS_RSA_WITH_NULL_SHA</span><br><span class="line">TLS_RSA_WITH_NULL_MD5</span><br><span class="line"></span><br><span class="line">TLS 1.2 SHA256 和 SHA384 密码套件:</span><br><span class="line"></span><br><span class="line">TLS_RSA_WITH_AES_128_CBC_SHA256</span><br><span class="line">TLS_RSA_WITH_AES_256_CBC_SHA256</span><br><span class="line">TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256</span><br><span class="line">TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P384</span><br><span class="line">TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P521</span><br><span class="line">TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P256</span><br><span class="line">TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384</span><br><span class="line">TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P521</span><br><span class="line">TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256_P256</span><br><span class="line">TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256_P384</span><br><span class="line">TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256_P521</span><br><span class="line">TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384_P384</span><br><span class="line">TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384_P521</span><br><span class="line">TLS_DHE_DSS_WITH_AES_128_CBC_SHA256</span><br><span class="line">TLS_DHE_DSS_WITH_AES_256_CBC_SHA256</span><br><span class="line">TLS_RSA_WITH_NULL_SHA256</span><br><span class="line"></span><br><span class="line">TLS 1.2 ECC GCM 密码套件:</span><br><span class="line"></span><br><span class="line">TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256_P256</span><br><span class="line">TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256_P384</span><br><span class="line">TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256_P521</span><br><span class="line">TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384_P384</span><br><span class="line">TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384_P521</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">如何修改此设置:</span><br><span class="line"></span><br><span class="line">1. 打开一个空白写字板文档。</span><br><span class="line"></span><br><span class="line">2. 复制可用套件的列表并将其粘贴到该文档中。</span><br><span class="line"></span><br><span class="line">3. 按正确顺序排列套件；删除不想使用的所有套件。</span><br><span class="line"></span><br><span class="line">4. 在每个套件名称的末尾键入一个逗号(最后一个套件名称除外)。确保没有嵌入空格。</span><br><span class="line"></span><br><span class="line">5. 删除所有换行符，以便密码套件名称位于单独的一个长行上。</span><br><span class="line"></span><br><span class="line">6. 将密码套件行复制到剪贴板，然后将其粘贴到编辑框中。最大长度为 1023 个字符。</span><br></pre></td></tr></table></figure>
+
+<p>为了防止被一些扫描软件扫描出一些什么 TLV POOOLED的这种漏洞；所以我建议你配置TLS1.2 ECC GCM 密码套件； 与之使用的软件也要支持才行，否者OpenSSL进行会话密钥协商的时候，会出错！</p>
+<p>SQL2016的数据连接的时候，采用OpenSSL的连接，其实说白了就是走的是HTTPS；如果你不信，可以点击打开浏览器查看百度的协议是啥：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws1.sinaimg.cn/large/006tNc79gy1ftgah4km3fj30ho0bqq4u.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+
+<p>所以我们配置TLS1.2的时候只配置 GCM的密码套件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">TLS 1.2 ECC GCM 密码套件:</span><br><span class="line"></span><br><span class="line">TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256_P256</span><br><span class="line">TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256_P384</span><br><span class="line">TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256_P521</span><br><span class="line">TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384_P384</span><br><span class="line">TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384_P521</span><br></pre></td></tr></table></figure>
+
+<p>这样在漏洞扫描的时候，是绝对不会出现 TLS POOLED的漏洞的！</p>
+<p>那其他的漏洞原理是如何设置还有修复的呢？？</p>
+<p>网上查阅过一记录：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br></pre></td><td class="code"><pre><span class="line"># Copyright 2016, Alexander Hass</span><br><span class="line"># http://www.hass.de/content/setup-your-iis-ssl-perfect-forward-secrecy-and-tls-12</span><br><span class="line">#</span><br><span class="line"># Version 1.7</span><br><span class="line"># - Windows Version compare failed. Get-CimInstance requires Windows 2012 or later.</span><br><span class="line"># Version 1.6</span><br><span class="line"># - OS version detection for cipher suites order.</span><br><span class="line"># Version 1.5</span><br><span class="line"># - Enabled ECDH and more secure hash functions and reorderd cipher list.</span><br><span class="line"># - Added Client setting for all ciphers.</span><br><span class="line"># Version 1.4</span><br><span class="line"># - RC4 has been disabled.</span><br><span class="line"># Version 1.3</span><br><span class="line"># - MD5 has been disabled.</span><br><span class="line"># Version 1.2</span><br><span class="line"># - Re-factored code style and output</span><br><span class="line"># Version 1.1</span><br><span class="line"># - SSLv3 has been disabled. (Poodle attack protection)</span><br><span class="line">  </span><br><span class="line">Write-Host &apos;Configuring IIS with SSL/TLS Deployment Best Practices...&apos;</span><br><span class="line">Write-Host &apos;--------------------------------------------------------------------------------&apos;</span><br><span class="line">  </span><br><span class="line"># Disable Multi-Protocol Unified Hello</span><br><span class="line">New-Item &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\Multi-Protocol Unified Hello\Server&apos; -Force | Out-Null</span><br><span class="line">New-ItemProperty -path &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\Multi-Protocol Unified Hello\Server&apos; -name Enabled -value 0 -PropertyType &apos;DWord&apos; -Force | Out-Null</span><br><span class="line">New-ItemProperty -path &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\Multi-Protocol Unified Hello\Server&apos; -name &apos;DisabledByDefault&apos; -value 1 -PropertyType &apos;DWord&apos; -Force | Out-Null</span><br><span class="line">New-Item &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\Multi-Protocol Unified Hello\Client&apos; -Force | Out-Null</span><br><span class="line">New-ItemProperty -path &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\Multi-Protocol Unified Hello\Client&apos; -name Enabled -value 0 -PropertyType &apos;DWord&apos; -Force | Out-Null</span><br><span class="line">New-ItemProperty -path &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\Multi-Protocol Unified Hello\Client&apos; -name &apos;DisabledByDefault&apos; -value 1 -PropertyType &apos;DWord&apos; -Force | Out-Null</span><br><span class="line">Write-Host &apos;Multi-Protocol Unified Hello has been disabled.&apos;</span><br><span class="line">  </span><br><span class="line"># Disable PCT 1.0</span><br><span class="line">New-Item &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\PCT 1.0\Server&apos; -Force | Out-Null</span><br><span class="line">New-ItemProperty -path &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\PCT 1.0\Server&apos; -name Enabled -value 0 -PropertyType &apos;DWord&apos; -Force | Out-Null</span><br><span class="line">New-ItemProperty -path &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\PCT 1.0\Server&apos; -name &apos;DisabledByDefault&apos; -value 1 -PropertyType &apos;DWord&apos; -Force | Out-Null</span><br><span class="line">New-Item &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\PCT 1.0\Client&apos; -Force | Out-Null</span><br><span class="line">New-ItemProperty -path &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\PCT 1.0\Client&apos; -name Enabled -value 0 -PropertyType &apos;DWord&apos; -Force | Out-Null</span><br><span class="line">New-ItemProperty -path &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\PCT 1.0\Client&apos; -name &apos;DisabledByDefault&apos; -value 1 -PropertyType &apos;DWord&apos; -Force | Out-Null</span><br><span class="line">Write-Host &apos;PCT 1.0 has been disabled.&apos;</span><br><span class="line">  </span><br><span class="line"># Disable SSL 2.0 (PCI Compliance)</span><br><span class="line">New-Item &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\Server&apos; -Force | Out-Null</span><br><span class="line">New-ItemProperty -path &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\Server&apos; -name Enabled -value 0 -PropertyType &apos;DWord&apos; -Force | Out-Null</span><br><span class="line">New-ItemProperty -path &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\Server&apos; -name &apos;DisabledByDefault&apos; -value 1 -PropertyType &apos;DWord&apos; -Force | Out-Null</span><br><span class="line">New-Item &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\Client&apos; -Force | Out-Null</span><br><span class="line">New-ItemProperty -path &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\Client&apos; -name Enabled -value 0 -PropertyType &apos;DWord&apos; -Force | Out-Null</span><br><span class="line">New-ItemProperty -path &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\Client&apos; -name &apos;DisabledByDefault&apos; -value 1 -PropertyType &apos;DWord&apos; -Force | Out-Null</span><br><span class="line">Write-Host &apos;SSL 2.0 has been disabled.&apos;</span><br><span class="line">  </span><br><span class="line"># NOTE: If you disable SSL 3.0 the you may lock out some people still using</span><br><span class="line"># Windows XP with IE6/7. Without SSL 3.0 enabled, there is no protocol available</span><br><span class="line"># for these people to fall back. Safer shopping certifications may require that</span><br><span class="line"># you disable SSLv3.</span><br><span class="line">#</span><br><span class="line"># Disable SSL 3.0 (PCI Compliance) and enable &quot;Poodle&quot; protection</span><br><span class="line">New-Item &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 3.0\Server&apos; -Force | Out-Null</span><br><span class="line">New-ItemProperty -path &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 3.0\Server&apos; -name Enabled -value 0 -PropertyType &apos;DWord&apos; -Force | Out-Null</span><br><span class="line">New-ItemProperty -path &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 3.0\Server&apos; -name &apos;DisabledByDefault&apos; -value 1 -PropertyType &apos;DWord&apos; -Force | Out-Null</span><br><span class="line">New-Item &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 3.0\Client&apos; -Force | Out-Null</span><br><span class="line">New-ItemProperty -path &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 3.0\Client&apos; -name Enabled -value 0 -PropertyType &apos;DWord&apos; -Force | Out-Null</span><br><span class="line">New-ItemProperty -path &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 3.0\Client&apos; -name &apos;DisabledByDefault&apos; -value 1 -PropertyType &apos;DWord&apos; -Force | Out-Null</span><br><span class="line">Write-Host &apos;SSL 3.0 has been disabled.&apos;</span><br><span class="line">  </span><br><span class="line"># Add and Enable TLS 1.0 for client and server SCHANNEL communications</span><br><span class="line">New-Item &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server&apos; -Force | Out-Null</span><br><span class="line">New-ItemProperty -path &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server&apos; -name &apos;Enabled&apos; -value &apos;0xffffffff&apos; -PropertyType &apos;DWord&apos; -Force | Out-Null</span><br><span class="line">New-ItemProperty -path &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server&apos; -name &apos;DisabledByDefault&apos; -value 0 -PropertyType &apos;DWord&apos; -Force | Out-Null</span><br><span class="line">New-Item &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client&apos; -Force | Out-Null</span><br><span class="line">New-ItemProperty -path &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client&apos; -name &apos;Enabled&apos; -value &apos;0xffffffff&apos; -PropertyType &apos;DWord&apos; -Force | Out-Null</span><br><span class="line">New-ItemProperty -path &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client&apos; -name &apos;DisabledByDefault&apos; -value 0 -PropertyType &apos;DWord&apos; -Force | Out-Null</span><br><span class="line">Write-Host &apos;TLS 1.0 has been enabled.&apos;</span><br><span class="line">  </span><br><span class="line"># Add and Enable TLS 1.1 for client and server SCHANNEL communications</span><br><span class="line">New-Item &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server&apos; -Force | Out-Null</span><br><span class="line">New-ItemProperty -path &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server&apos; -name &apos;Enabled&apos; -value &apos;0xffffffff&apos; -PropertyType &apos;DWord&apos; -Force | Out-Null</span><br><span class="line">New-ItemProperty -path &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server&apos; -name &apos;DisabledByDefault&apos; -value 0 -PropertyType &apos;DWord&apos; -Force | Out-Null</span><br><span class="line">New-Item &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client&apos; -Force | Out-Null</span><br><span class="line">New-ItemProperty -path &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client&apos; -name &apos;Enabled&apos; -value &apos;0xffffffff&apos; -PropertyType &apos;DWord&apos; -Force | Out-Null</span><br><span class="line">New-ItemProperty -path &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client&apos; -name &apos;DisabledByDefault&apos; -value 0 -PropertyType &apos;DWord&apos; -Force | Out-Null</span><br><span class="line">Write-Host &apos;TLS 1.1 has been enabled.&apos;</span><br><span class="line">  </span><br><span class="line"># Add and Enable TLS 1.2 for client and server SCHANNEL communications</span><br><span class="line">New-Item &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Server&apos; -Force | Out-Null</span><br><span class="line">New-ItemProperty -path &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Server&apos; -name &apos;Enabled&apos; -value &apos;0xffffffff&apos; -PropertyType &apos;DWord&apos; -Force | Out-Null</span><br><span class="line">New-ItemProperty -path &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Server&apos; -name &apos;DisabledByDefault&apos; -value 0 -PropertyType &apos;DWord&apos; -Force | Out-Null</span><br><span class="line">New-Item &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Client&apos; -Force | Out-Null</span><br><span class="line">New-ItemProperty -path &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Client&apos; -name &apos;Enabled&apos; -value &apos;0xffffffff&apos; -PropertyType &apos;DWord&apos; -Force | Out-Null</span><br><span class="line">New-ItemProperty -path &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Client&apos; -name &apos;DisabledByDefault&apos; -value 0 -PropertyType &apos;DWord&apos; -Force | Out-Null</span><br><span class="line">Write-Host &apos;TLS 1.2 has been enabled.&apos;</span><br><span class="line">  </span><br><span class="line"># Re-create the ciphers key.</span><br><span class="line">New-Item &apos;HKLM:SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers&apos; -Force | Out-Null</span><br><span class="line">  </span><br><span class="line"># Disable insecure/weak ciphers.</span><br><span class="line">$insecureCiphers = @(</span><br><span class="line">  &apos;DES 56/56&apos;,</span><br><span class="line">  &apos;NULL&apos;,</span><br><span class="line">  &apos;RC2 128/128&apos;,</span><br><span class="line">  &apos;RC2 40/128&apos;,</span><br><span class="line">  &apos;RC2 56/128&apos;,</span><br><span class="line">  &apos;RC4 40/128&apos;,</span><br><span class="line">  &apos;RC4 56/128&apos;,</span><br><span class="line">  &apos;RC4 64/128&apos;,</span><br><span class="line">  &apos;RC4 128/128&apos;</span><br><span class="line">)</span><br><span class="line">Foreach ($insecureCipher in $insecureCiphers) &#123;</span><br><span class="line">  $key = (Get-Item HKLM:\).OpenSubKey(&apos;SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers&apos;, $true).CreateSubKey($insecureCipher)</span><br><span class="line">  $key.SetValue(&apos;Enabled&apos;, 0, &apos;DWord&apos;)</span><br><span class="line">  $key.close()</span><br><span class="line">  Write-Host &quot;Weak cipher $insecureCipher has been disabled.&quot;</span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line"># Enable new secure ciphers.</span><br><span class="line"># - RC4: It is recommended to disable RC4, but you may lock out WinXP/IE8 if you enforce this. This is a requirement for FIPS 140-2.</span><br><span class="line"># - 3DES: It is recommended to disable these in near future. This is the last cipher supported by Windows XP.</span><br><span class="line"># - Windows Vista and before &apos;Triple DES 168&apos; was named &apos;Triple DES 168/168&apos; per https://support.microsoft.com/en-us/kb/245030</span><br><span class="line">$secureCiphers = @(</span><br><span class="line">  &apos;AES 128/128&apos;,</span><br><span class="line">  &apos;AES 256/256&apos;,</span><br><span class="line">  &apos;Triple DES 168&apos;</span><br><span class="line">)</span><br><span class="line">Foreach ($secureCipher in $secureCiphers) &#123;</span><br><span class="line">  $key = (Get-Item HKLM:\).OpenSubKey(&apos;SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers&apos;, $true).CreateSubKey($secureCipher)</span><br><span class="line">  New-ItemProperty -path &quot;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\$secureCipher&quot; -name &apos;Enabled&apos; -value &apos;0xffffffff&apos; -PropertyType &apos;DWord&apos; -Force | Out-Null</span><br><span class="line">  $key.close()</span><br><span class="line">  Write-Host &quot;Strong cipher $secureCipher has been enabled.&quot;</span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line"># Set hashes configuration.</span><br><span class="line">New-Item &apos;HKLM:SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes&apos; -Force | Out-Null</span><br><span class="line">New-Item &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes\MD5&apos; -Force | Out-Null</span><br><span class="line">New-ItemProperty -path &apos;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes\MD5&apos; -name Enabled -value 0 -PropertyType &apos;DWord&apos; -Force | Out-Null</span><br><span class="line">  </span><br><span class="line">$secureHashes = @(</span><br><span class="line">  &apos;SHA&apos;,</span><br><span class="line">  &apos;SHA256&apos;,</span><br><span class="line">  &apos;SHA384&apos;,</span><br><span class="line">  &apos;SHA512&apos;</span><br><span class="line">)</span><br><span class="line">Foreach ($secureHash in $secureHashes) &#123;</span><br><span class="line">  $key = (Get-Item HKLM:\).OpenSubKey(&apos;SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes&apos;, $true).CreateSubKey($secureHash)</span><br><span class="line">  New-ItemProperty -path &quot;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes\$secureHash&quot; -name &apos;Enabled&apos; -value &apos;0xffffffff&apos; -PropertyType &apos;DWord&apos; -Force | Out-Null</span><br><span class="line">  $key.close()</span><br><span class="line">  Write-Host &quot;Hash $secureHash has been enabled.&quot;</span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line"># Set KeyExchangeAlgorithms configuration.</span><br><span class="line">New-Item &apos;HKLM:SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\KeyExchangeAlgorithms&apos; -Force | Out-Null</span><br><span class="line">$secureKeyExchangeAlgorithms = @(</span><br><span class="line">  &apos;Diffie-Hellman&apos;,</span><br><span class="line">  &apos;ECDH&apos;,</span><br><span class="line">  &apos;PKCS&apos;</span><br><span class="line">)</span><br><span class="line">Foreach ($secureKeyExchangeAlgorithm in $secureKeyExchangeAlgorithms) &#123;</span><br><span class="line">  $key = (Get-Item HKLM:\).OpenSubKey(&apos;SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\KeyExchangeAlgorithms&apos;, $true).CreateSubKey($secureKeyExchangeAlgorithm)</span><br><span class="line">  New-ItemProperty -path &quot;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\KeyExchangeAlgorithms\$secureKeyExchangeAlgorithm&quot; -name &apos;Enabled&apos; -value &apos;0xffffffff&apos; -PropertyType &apos;DWord&apos; -Force | Out-Null</span><br><span class="line">  $key.close()</span><br><span class="line">  Write-Host &quot;KeyExchangeAlgorithm $secureKeyExchangeAlgorithm has been enabled.&quot;</span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line"># Set cipher suites order as secure as possible (Enables Perfect Forward Secrecy).</span><br><span class="line">$os = Get-WmiObject -class Win32_OperatingSystem</span><br><span class="line">if ([System.Version]$os.Version -lt [System.Version]&apos;10.0&apos;) &#123;</span><br><span class="line">  Write-Host &apos;Use cipher suites order for Windows 2008R2/2012/2012R2.&apos;</span><br><span class="line">  $cipherSuitesOrder = @(</span><br><span class="line">    &apos;TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P521&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P256&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P521&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P384&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA_P521&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA_P384&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA_P256&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA_P521&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA_P384&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA_P256&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384_P521&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384_P384&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256_P521&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256_P384&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256_P256&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384_P521&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384_P384&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256_P521&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256_P384&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256_P256&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA_P521&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA_P384&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA_P256&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA_P521&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA_P384&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA_P256&apos;,</span><br><span class="line">    &apos;TLS_RSA_WITH_AES_256_GCM_SHA384&apos;,</span><br><span class="line">    &apos;TLS_RSA_WITH_AES_128_GCM_SHA256&apos;,</span><br><span class="line">    &apos;TLS_RSA_WITH_AES_256_CBC_SHA256&apos;,</span><br><span class="line">    &apos;TLS_RSA_WITH_AES_128_CBC_SHA256&apos;,</span><br><span class="line">    &apos;TLS_RSA_WITH_AES_256_CBC_SHA&apos;,</span><br><span class="line">    &apos;TLS_RSA_WITH_AES_128_CBC_SHA&apos;,</span><br><span class="line">    &apos;TLS_RSA_WITH_3DES_EDE_CBC_SHA&apos;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line">else &#123;</span><br><span class="line">  Write-Host &apos;Use cipher suites order for Windows 10/2016 and later.&apos;</span><br><span class="line">  $cipherSuitesOrder = @(</span><br><span class="line">    &apos;TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA&apos;,</span><br><span class="line">    &apos;TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA&apos;,</span><br><span class="line">    &apos;TLS_RSA_WITH_AES_256_GCM_SHA384&apos;,</span><br><span class="line">    &apos;TLS_RSA_WITH_AES_128_GCM_SHA256&apos;,</span><br><span class="line">    &apos;TLS_RSA_WITH_AES_256_CBC_SHA256&apos;,</span><br><span class="line">    &apos;TLS_RSA_WITH_AES_128_CBC_SHA256&apos;,</span><br><span class="line">    &apos;TLS_RSA_WITH_AES_256_CBC_SHA&apos;,</span><br><span class="line">    &apos;TLS_RSA_WITH_AES_128_CBC_SHA&apos;,</span><br><span class="line">    &apos;TLS_RSA_WITH_3DES_EDE_CBC_SHA&apos;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line">$cipherSuitesAsString = [string]::join(&apos;,&apos;, $cipherSuitesOrder)</span><br><span class="line"># One user reported this key does not exists on Windows 2012R2. Cannot repro myself on a brand new Windows 2012R2 core machine. Adding this just to be save.</span><br><span class="line">New-Item &apos;HKLM:\SOFTWARE\Policies\Microsoft\Cryptography\Configuration\SSL\00010002&apos; -ErrorAction SilentlyContinue</span><br><span class="line">New-ItemProperty -path &apos;HKLM:\SOFTWARE\Policies\Microsoft\Cryptography\Configuration\SSL\00010002&apos; -name &apos;Functions&apos; -value $cipherSuitesAsString -PropertyType &apos;String&apos; -Force | Out-Null</span><br><span class="line">  </span><br><span class="line">Write-Host &apos;--------------------------------------------------------------------------------&apos;</span><br><span class="line">Write-Host &apos;NOTE: After the system has been rebooted you can verify your server&apos;</span><br><span class="line">Write-Host &apos;      configuration at https://www.ssllabs.com/ssltest/&apos;</span><br><span class="line">Write-Host &quot;--------------------------------------------------------------------------------`n&quot;</span><br><span class="line">  </span><br><span class="line">Write-Host -ForegroundColor Red &apos;A computer restart is required to apply settings. Restart computer now?&apos;</span><br><span class="line">Restart-Computer -Force -Confirm</span><br></pre></td></tr></table></figure>
+
+<p>注意提示： 有些cipherSuitesOrder已经是弱的，或者已经是漏洞的算法；<br>注意上面提到的一些内容，只是作为参考其深入原理。</p>
+<p>我在操作的过程中查阅到了一些问题：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws3.sinaimg.cn/large/006tNc79gy1ftgb1s4xejj30gm07b3zx.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>因为我发现我设置通信协议为 TLS1.2 之后 SQL的客户端连接访问木有问题； 但是我的程序跑不起来了；坑爹了，到底哪里有问题了；就查阅到可能不支持TLS1.2；就是上述的截图；地址🔗<a href="http://kenhamady.com/cru/archives/2867" target="_blank" rel="noopener">http://kenhamady.com/cru/archives/2867</a></p>
+<p>原来它娘的不支持TLS1.2 走的是TLS1.0； 哎呀，有点坑爹呀，木办法，继续得查询资料Google到这样子的一份资料：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws1.sinaimg.cn/large/006tNc79gy1ftgbdxg8znj30pf02cwfc.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>需要安装新的驱动程序，然后才能通过新的语法去连接SQL高版本支持的TLS1.2；</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws2.sinaimg.cn/large/006tNc79gy1ftgbf9a2hsj30px0b4acy.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>驱动连接的下载地址：<a href="https://docs.microsoft.com/en-us/sql/connect/oledb/oledb-driver-for-sql-server?view=sql-server-2017#3-microsoft-ole-db-driver-for-sql-server-msoledbsql" target="_blank" rel="noopener">https://docs.microsoft.com/en-us/sql/connect/oledb/oledb-driver-for-sql-server?view=sql-server-2017#3-microsoft-ole-db-driver-for-sql-server-msoledbsql</a></p>
+<p>有点特别强调： SQL2005版本是无法支持TLS1.2的；所以它是有TLS1.0的漏洞 TLS POOLED的；</p>
+<p>希望我写的东西，能帮到一些童鞋理解一些里面的东西～～～～</p>
+<p>说白了很简单： 下载SQL20016的数据库，好好安装；完成之后下载客户端2017或者其他支持TLS1.2的都行，最好是最新版本，为什么捏？因为新的东西支持的算法以及协议会比较完善；不会太多漏洞；但是也是有风险的，例如一些语法可能不支持了，需要修改你程序的一些代码才能兼容和运行起来； 然后下载新的连接驱动；那么，就基本OK了。</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-08-15T06:30:56.000Z" itemprop="dateUpdated">2019-08-15 14:30:56</time>
+</span><br>
+
+
+        
+        欢迎访问http://lmwtuedu.cn，希望此文章对您有帮助!
+        
+    </div>
+    
+    <footer>
+        <a href="http://lmwtuedu.cn">
+            <img src="/img/head.png" alt="darker">
+            darker
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/code/">code</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/reprint/">reprint</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://lmwtuedu.cn/2018/07/20/2018-07-20-SQL如何支持TLV1.2/&title=《SQL如何支持TLS1.2》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&pic=http://lmwtuedu.cn/img/head.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://lmwtuedu.cn/2018/07/20/2018-07-20-SQL如何支持TLV1.2/&title=《SQL如何支持TLS1.2》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://lmwtuedu.cn/2018/07/20/2018-07-20-SQL如何支持TLV1.2/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《SQL如何支持TLS1.2》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&url=http://lmwtuedu.cn/2018/07/20/2018-07-20-SQL如何支持TLV1.2/&via=http://lmwtuedu.cn" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://lmwtuedu.cn/2018/07/20/2018-07-20-SQL如何支持TLV1.2/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/07/26/2018-08-06-爆雷之后 中产惊惶/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">爆雷之后 中产惊惶</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/06/14/2018-06-14-SQL2005 配置SSL证书流程/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">SQL2005 配置SSL证书流程</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        请喝维他奶~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.PNG" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.PNG" data-alipay="/img/alipay.PNG">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>darker &copy; 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://lmwtuedu.cn/2018/07/20/2018-07-20-SQL如何支持TLV1.2/&title=《SQL如何支持TLS1.2》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&pic=http://lmwtuedu.cn/img/head.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://lmwtuedu.cn/2018/07/20/2018-07-20-SQL如何支持TLV1.2/&title=《SQL如何支持TLS1.2》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://lmwtuedu.cn/2018/07/20/2018-07-20-SQL如何支持TLV1.2/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《SQL如何支持TLS1.2》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&url=http://lmwtuedu.cn/2018/07/20/2018-07-20-SQL如何支持TLV1.2/&via=http://lmwtuedu.cn" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://lmwtuedu.cn/2018/07/20/2018-07-20-SQL如何支持TLV1.2/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACsklEQVR42u3a0WrrMBAE0Pz/T7dwX4PtmZWU9MLxU2ldVScF7TLa1yt+fv497995//7V+/e/+/71/TubHzw8PLzR1q+ee8xeRvLke8bDw8M7zbs/3JOFEkx7hicrP1jw8PDwvsrLm+n1opLsAQ8PD+9/5OUt70qg8LXCgIeHh3fLS7a7EijkoXC+h81ZCx4eHl7May/A/sLXB+/38PDw8BZu1dvQth04yMOO4VUZHh4e3gHe3uAg/wiSIDj/EB/exMPDwzvMuwfn4e9KADErPJf/GDw8PLytvNlwwIlDPylLbayMh4eHd5rXpqB5TNCOZK1EGJeFAQ8PD28Tb6VRXrm8n2GKACLPS/Dw8PBKXjsgtRKnzuKG2foP93t4eHh4C7z2+F7fShJV5IAkLMbDw8Pby2vD04Tdtt0JfrhDPDw8vGO8/FBuo9X1JrsNfPHw8PA+z5vFrG00sD4WEF2G4eHh4R3gtUd8XirajeahRr0mHh4e3gHebNNtsPvQ/h4rJ3h4eHgneLPhgPZDaYe3Zhdml3UPDw8P7wBvJVSdxQdtCRkWKjw8PLzDvPUBgqVDPCYVb+Lh4eEd4M0Cgjb2bRvuvLHGw8PD+ySvXSJvdvPBgvyqLI8nXslCeHh4eCNefhzPjvK2DOTP5hgXDw8PL+bNxgJazKwAzFbGw8PD+yQvb3/zoYF2pKAdrnr4i3h4eHgHeCtH8K7hgFlc2w6B4eHh4e3i7YoAdh3xs+Gqh2KAh4eHt5U3O3xnUW9OaotT0Vjj4eHhbeKtXDW1P20HvGYRcz3RgIeHhzfi5cUgHwhoRxPaQhK9j4eHh/dVXtI058Vg1mrnjT4eHh7e3+QlTXC+3ZXRrsv18fDw8I7x2kChLQZtW7wy/oWHh4d3mrc02BRfg7XrrPyVpdEBPDw8vDveL7gbIhb9SSTPAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'Cherry Up';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'Champion';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

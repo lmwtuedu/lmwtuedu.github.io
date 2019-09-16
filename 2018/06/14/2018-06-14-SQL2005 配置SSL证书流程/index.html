@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>SQL2005 配置SSL证书流程 | I AM SLOW WALKER, BUT I NEVER WALK BACK</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="reprint,code">
+    <meta name="description" content="SQL2005 配置SSL证书流程背景 本人负责公司项目，送检公安部的时候，SQL2005的数据库被检测出如下问题，需要修复证书制作问题，查阅问题，特整理出来供大家参考。">
+<meta name="keywords" content="reprint,code">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQL2005 配置SSL证书流程">
+<meta property="og:url" content="http://lmwtuedu.cn/2018/06/14/2018-06-14-SQL2005 配置SSL证书流程/index.html">
+<meta property="og:site_name" content="I AM SLOW WALKER, BUT I NEVER WALK BACK">
+<meta property="og:description" content="SQL2005 配置SSL证书流程背景 本人负责公司项目，送检公安部的时候，SQL2005的数据库被检测出如下问题，需要修复证书制作问题，查阅问题，特整理出来供大家参考。">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1fsapuuv5vpj30sd0ikn0d.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1fsaqbln8q9j30sm0hrwh3.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcgy1fsaqntm1pzj30bv0brgn2.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1fsaqvxmvjij3072071glu.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1fsar5b5oc7j30io0cyt9o.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1fsarb6077bj30oo07bglx.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1fsarb6077bj30oo07bglx.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcgy1fsarc43h0zj313s0iytby.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1fsarfk4qtaj31ba0qan0w.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1fsare1d8x1j314r0gndij.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1fsarf448n5j319u0q30x4.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcgy1fsarkpaq8qj312n0db0vp.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1fsarpm3q3hj31c10fzgv7.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcgy1fsarrbk4shj31c10q3u00.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1fsarrxsavqj31c10gpgy0.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1fsarsqn0vhj31c1195b29.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1fsarta15z2j31c10qm4qp.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcgy1fsartql8bfj31c10oan8p.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1fsarwmmuvhj31c10mqdwx.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1fsasc3zsa9j31c1088acb.jpg">
+<meta property="og:updated_time" content="2019-08-15T06:30:56.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SQL2005 配置SSL证书流程">
+<meta name="twitter:description" content="SQL2005 配置SSL证书流程背景 本人负责公司项目，送检公安部的时候，SQL2005的数据库被检测出如下问题，需要修复证书制作问题，查阅问题，特整理出来供大家参考。">
+<meta name="twitter:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1fsapuuv5vpj30sd0ikn0d.jpg">
+    
+        <link rel="alternate" type="application/atom+xml" title="I AM SLOW WALKER, BUT I NEVER WALK BACK" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/head.png">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/head_background.png)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/head.png">
+        </a>
+        <hgroup class="introduce">
+          <h4 class="nickname">darker</h4>
+          <a href="mailto:lmwtuedu@163.com" title="lmwtuedu@163.com" class="mail">lmwtuedu@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                Home
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/share" target="_blank" >
+                <i class="icon icon-lg icon-share-alt-square"></i>
+                Share Link
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-id-badge"></i>
+                About Me
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">SQL2005 配置SSL证书流程</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h3 class="title">SQL2005 配置SSL证书流程</h3>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-06-13T16:00:00.000Z" itemprop="datePublished" class="page-time">
+  2018-06-14
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>Table Of Content</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#SQL2005-配置SSL证书流程"><span class="post-toc-number">1.</span> <span class="post-toc-text">SQL2005 配置SSL证书流程</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#背景"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">背景</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#制作流程"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">制作流程</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#启动系统的ISS"><span class="post-toc-number">1.2.1.</span> <span class="post-toc-text">启动系统的ISS</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#SQL安装"><span class="post-toc-number">1.2.2.</span> <span class="post-toc-text">SQL安装</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#制作证书"><span class="post-toc-number">1.2.3.</span> <span class="post-toc-text">制作证书</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#安装证书"><span class="post-toc-number">1.2.4.</span> <span class="post-toc-text">安装证书</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#SQL2005注册表查看替换SQL默认证书"><span class="post-toc-number">1.2.5.</span> <span class="post-toc-text">SQL2005注册表查看替换SQL默认证书</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#重新链接SQL2005"><span class="post-toc-number">1.2.6.</span> <span class="post-toc-text">重新链接SQL2005</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#OK，SQL2005-的SSL配置完成"><span class="post-toc-number">1.2.7.</span> <span class="post-toc-text">OK，SQL2005 的SSL配置完成</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#参考资料"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">参考资料</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-2018-06-14-SQL2005 配置SSL证书流程"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">SQL2005 配置SSL证书流程</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-06-14 00:00:00" datetime="2018-06-13T16:00:00.000Z"  itemprop="datePublished">2018-06-14</time>
+
+            
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="SQL2005-配置SSL证书流程"><a href="#SQL2005-配置SSL证书流程" class="headerlink" title="SQL2005 配置SSL证书流程"></a>SQL2005 配置SSL证书流程</h1><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><blockquote>
+<p>本人负责公司项目，送检公安部的时候，SQL2005的数据库被检测出如下问题，需要修复证书制作问题，查阅问题，特整理出来供大家参考。</p>
+</blockquote>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fsapuuv5vpj30sd0ikn0d.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fsaqbln8q9j30sm0hrwh3.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>说明： 安装的SQL2005的数据库，自带动生成的证书是RSA1024和SHA-1的算法；SHA-1的算法已经被视为弱哈希算法（2017一月份）。所以我们得自己制作一张RSA1024以上的SHA256以上的证书，而且要是服务器的证书；</p>
+<h2 id="制作流程"><a href="#制作流程" class="headerlink" title="制作流程"></a>制作流程</h2><p>检测环境： windows7 64位系统；</p>
+<p>制作环境： windows7 64位系统；</p>
+<h3 id="启动系统的ISS"><a href="#启动系统的ISS" class="headerlink" title="启动系统的ISS"></a>启动系统的ISS</h3><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fsaqntm1pzj30bv0brgn2.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>说明： 安装SQL2005数据库的时候，如果报的任何错误和警告⚠️都需要认真查看和解决！ SQL2005数据库安装提前启动ISS服务，我本人操作时，先开启windos功能； web管理器的里面全部开启，万维网的也全部开启； （先不管有木有用，反正你也不清楚安装过程那些需要哪些不需要，先全部开放，后续如果不需要再关闭）； 有人可能会问，为什么不先安装后续解决开启； 呃，因为安装过程中软件会建立一些联系关系呀，例如路径之类的，注册表之类的，没有开启，它如何寻找到哪里呢？ 所以本人不建议你先安装而不去开启这些服务（这都是本人踩过很多坑总结的）；还有一点就是SQL的卸载很麻烦；所以争取一次搞定，不出现任何问题。前人已经帮你栽树，你只需乘凉就好啦！</p>
+<h3 id="SQL安装"><a href="#SQL安装" class="headerlink" title="SQL安装"></a>SQL安装</h3><ol>
+<li>具体安装流程我就不细说了，注意我截图的内容，强调二个位置（公司技术支持竟然不知道区别，得拉出去打屁屁）；</li>
+</ol>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws4.sinaimg.cn/large/006tKfTcgy1fsaqvxmvjij3072071glu.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>SQL Server Management Studio 是客户端的登陆界面；</p>
+<p>SQL Server Configuration Management才是SQL的服务设置界面</p>
+<h3 id="制作证书"><a href="#制作证书" class="headerlink" title="制作证书"></a>制作证书</h3><ul>
+<li><p>前提安装VS2010的环境，因为只有VS2010的才支持SHA256之后的哈希算法；VS2008只支持MD5和SHA1（我司编译器，哎呀，讨厌死微软一套了）</p>
+</li>
+<li><p>如果你们的公司有证书服务器的话，可以略过此步骤啦，没有得继续查看哟</p>
+</li>
+</ul>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws4.sinaimg.cn/large/006tKfTcgy1fsar5b5oc7j30io0cyt9o.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws4.sinaimg.cn/large/006tKfTcgy1fsarb6077bj30oo07bglx.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<h3 id="安装证书"><a href="#安装证书" class="headerlink" title="安装证书"></a>安装证书</h3><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws4.sinaimg.cn/large/006tKfTcgy1fsarb6077bj30oo07bglx.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<ul>
+<li>证书安装到ISS服务</li>
+</ul>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fsarc43h0zj313s0iytby.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<ul>
+<li>自己制作的证书只适合测试用，不受CA信赖，所以需要注册到根证书池；双击安装到证书池</li>
+</ul>
+<h3 id="SQL2005注册表查看替换SQL默认证书"><a href="#SQL2005注册表查看替换SQL默认证书" class="headerlink" title="SQL2005注册表查看替换SQL默认证书"></a>SQL2005注册表查看替换SQL默认证书</h3><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fsarfk4qtaj31ba0qan0w.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<ul>
+<li><p>Certificate 的存储的事证书的指纹哈希值；即IIS服务器证书的指纹哈希值</p>
+</li>
+<li><p>安装之后重新启动SQL的服务器程序；通过配置查看证书是否成功</p>
+</li>
+</ul>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws4.sinaimg.cn/large/006tKfTcgy1fsare1d8x1j314r0gndij.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<ul>
+<li><p>如果报错，或者启动不了，说明CN的制作的名称与SQL的ServerName的名称不一样，最好的方式事查看 SQL的日志 ERRORLOG的文件，里面有一行数据会显示server name的名称；我们需要记录，用于制作证书作为 CN的名称；</p>
+</li>
+<li><p>也可查看注册表</p>
+</li>
+</ul>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws3.sinaimg.cn/large/006tKfTcgy1fsarf448n5j319u0q30x4.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+
+<h3 id="重新链接SQL2005"><a href="#重新链接SQL2005" class="headerlink" title="重新链接SQL2005"></a>重新链接SQL2005</h3><ul>
+<li>注意服务器启动项</li>
+</ul>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fsarkpaq8qj312n0db0vp.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<ul>
+<li>如果你是普通用户，请以管理员的身份运行程序（我司技术支持不知道如何用管理员身份运行，打屁屁）； 右键点击运行程序，选择管理员运行；</li>
+</ul>
+<h3 id="OK，SQL2005-的SSL配置完成"><a href="#OK，SQL2005-的SSL配置完成" class="headerlink" title="OK，SQL2005 的SSL配置完成"></a>OK，SQL2005 的SSL配置完成</h3><ul>
+<li>用户可以明文链接</li>
+<li>用户可以用SSL证书链接</li>
+<li>用户可以用window程序登陆链接</li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><font color="red">不分先后顺序，对我解决我自己的问题，提供很大帮助和思路</font></li>
+</ul>
+<p>【资料参考】：<br><a href="https://blogs.msdn.microsoft.com/apgcdsd/2011/03/21/sql-server-1-sql-server-connection-encyption/" target="_blank" rel="noopener">https://blogs.msdn.microsoft.com/apgcdsd/2011/03/21/sql-server-1-sql-server-connection-encyption/</a></p>
+<p>【内容截图显示】：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws3.sinaimg.cn/large/006tKfTcgy1fsarpm3q3hj31c10fzgv7.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+
+<p>[参考资料]<br>SQL制作证书流程：<br><a href="https://blogs.msdn.microsoft.com/apgcdsd/2011/01/19/how-tosql-server/" target="_blank" rel="noopener">https://blogs.msdn.microsoft.com/apgcdsd/2011/01/19/how-tosql-server/</a></p>
+<p>【参考资料】<br><a href="https://docs.microsoft.com/zh-cn/sql/tools/configuration-manager/protocols-for-mssqlserver-properties-flags-tab?view=sql-server-2017" target="_blank" rel="noopener">https://docs.microsoft.com/zh-cn/sql/tools/configuration-manager/protocols-for-mssqlserver-properties-flags-tab?view=sql-server-2017</a></p>
+<p>【内容截图】<br>证书内容截图：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fsarrbk4shj31c10q3u00.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+
+<p>如何查找证书<br>【参考资料】<br><a href="https://support.microsoft.com/en-us/help/318605/how-sql-server-uses-a-certificate-when-the-force-protocol-encryption-o" target="_blank" rel="noopener">https://support.microsoft.com/en-us/help/318605/how-sql-server-uses-a-certificate-when-the-force-protocol-encryption-o</a></p>
+<p>bug漏洞：<br>5号： SSLv3 Padding Oracle On Downgraded Legacy Encryption Vulnerability(POOLE)<br>6号： TLS Padding Oracle Information Disclosure Vulnerability(TLS POODLE)<br>【参考资料】<br><a href="https://blog.csdn.net/u011078940/article/details/51554210" target="_blank" rel="noopener">https://blog.csdn.net/u011078940/article/details/51554210</a></p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws3.sinaimg.cn/large/006tKfTcgy1fsarrxsavqj31c10gpgy0.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>修改修改SQL的注册键值<br>【参考资料】<br><a href="http://stackoverflow.org.cn/front/ask/view?ask_id=660021" target="_blank" rel="noopener">http://stackoverflow.org.cn/front/ask/view?ask_id=660021</a></p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws4.sinaimg.cn/large/006tKfTcgy1fsarsqn0vhj31c1195b29.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>还有一点要注意的是：CN的名称； 如果CN的名称和主机不一样注意修改：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws3.sinaimg.cn/large/006tKfTcgy1fsarta15z2j31c10qm4qp.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+
+<p>证书从哪里来？<br>制作证书的流程：<br>【资料参考】<br>【网站】<br><a href="https://blogs.msdn.microsoft.com/apgcdsd/2011/01/19/how-tosql-server/" target="_blank" rel="noopener">https://blogs.msdn.microsoft.com/apgcdsd/2011/01/19/how-tosql-server/</a></p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fsartql8bfj31c10oan8p.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+
+<p>注意:<br>selfssl.exe 制作的证书默认的哈希算法是SHA-1； 不能修改，而SHA-1已经在2017年已经被判定为不安全哈希算法；因此不能制作RSA2048SHA256的证书。<br>只能通过makeCert的方式进行制作。</p>
+<p>而通过makecert制作的时候，makecert的版本也要注意，VS2008版本只能制作MD5和SHA1的；VS2010的版本才可以制作SHA256以上的版本；<br>【参考资料】<br><a href="https://msdn.microsoft.com/zh-cn/library/bfsktky3(v=vs.100).aspx" target="_blank" rel="noopener">https://msdn.microsoft.com/zh-cn/library/bfsktky3(v=vs.100).aspx</a></p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fsarwmmuvhj31c10mqdwx.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>注意此版本信息查阅：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws3.sinaimg.cn/large/006tKfTcgy1fsasc3zsa9j31c1088acb.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>证书制作好了之后，就是安装证书：</p>
+<p>链接地址参考：</p>
+<p><a href="http://stackoverflow.org.cn/front/ask/view?ask_id=660021" target="_blank" rel="noopener">http://stackoverflow.org.cn/front/ask/view?ask_id=660021</a></p>
+<p><a href="https://blog.csdn.net/u011078940/article/details/51554210" target="_blank" rel="noopener">https://blog.csdn.net/u011078940/article/details/51554210</a></p>
+<p><a href="https://blogs.msdn.microsoft.com/apgcdsd/2011/01/19/how-tosql-server/" target="_blank" rel="noopener">https://blogs.msdn.microsoft.com/apgcdsd/2011/01/19/how-tosql-server/</a></p>
+<p><a href="https://docs.microsoft.com/en-us/previous-versions/dotnet/netframework-1.1/bfsktky3(v=vs.71)" target="_blank" rel="noopener">https://docs.microsoft.com/en-us/previous-versions/dotnet/netframework-1.1/bfsktky3(v=vs.71)</a></p>
+<p><a href="https://www.microsoft.com/en-us/download/confirmation.aspx?id=17275" target="_blank" rel="noopener">https://www.microsoft.com/en-us/download/confirmation.aspx?id=17275</a></p>
+<p><a href="https://docs.microsoft.com/zh-cn/sql/tools/configuration-manager/protocols-for-mssqlserver-properties-flags-tab?view=sql-server-2017" target="_blank" rel="noopener">https://docs.microsoft.com/zh-cn/sql/tools/configuration-manager/protocols-for-mssqlserver-properties-flags-tab?view=sql-server-2017</a></p>
+<p><a href="https://blogs.msdn.microsoft.com/apgcdsd/2011/03/21/sql-server-1-sql-server-connection-encyption/" target="_blank" rel="noopener">https://blogs.msdn.microsoft.com/apgcdsd/2011/03/21/sql-server-1-sql-server-connection-encyption/</a></p>
+<p><a href="https://support.microsoft.com/en-us/help/316898/how-to-enable-ssl-encryption-for-an-instance-of-sql-server-by-using-mi" target="_blank" rel="noopener">https://support.microsoft.com/en-us/help/316898/how-to-enable-ssl-encryption-for-an-instance-of-sql-server-by-using-mi</a></p>
+<p><a href="https://social.technet.microsoft.com/Forums/ie/en-US/f9dfdf68-df16-45c6-a349-72b3129f97fc/how-to-generate-a-csr-in-iis-75-with-sha2-algorithm?forum=winserversecurity" target="_blank" rel="noopener">https://social.technet.microsoft.com/Forums/ie/en-US/f9dfdf68-df16-45c6-a349-72b3129f97fc/how-to-generate-a-csr-in-iis-75-with-sha2-algorithm?forum=winserversecurity</a></p>
+<p><a href="https://blog.csdn.net/wuwo333/article/details/53020403" target="_blank" rel="noopener">https://blog.csdn.net/wuwo333/article/details/53020403</a></p>
+<p><a href="https://www.cnblogs.com/daxueba-ITdaren/p/4635784.html" target="_blank" rel="noopener">https://www.cnblogs.com/daxueba-ITdaren/p/4635784.html</a></p>
+<p><a href="https://technet.microsoft.com/en-us/library/dd632629.aspx" target="_blank" rel="noopener">https://technet.microsoft.com/en-us/library/dd632629.aspx</a></p>
+<p><a href="https://stackoverflow.com/questions/36817627/ssl-certificate-missing-from-dropdown-in-sql-server-configuration-manager" target="_blank" rel="noopener">https://stackoverflow.com/questions/36817627/ssl-certificate-missing-from-dropdown-in-sql-server-configuration-manager</a></p>
+<p><a href="https://msdn.microsoft.com/zh-sg/library/bfsktky3(v=vs.100)" target="_blank" rel="noopener">https://msdn.microsoft.com/zh-sg/library/bfsktky3(v=vs.100)</a></p>
+<p><a href="https://msdn.microsoft.com/zh-sg/library/bfsktky3(v=vs.100)" target="_blank" rel="noopener">https://msdn.microsoft.com/zh-sg/library/bfsktky3(v=vs.100)</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-08-15T06:30:56.000Z" itemprop="dateUpdated">2019-08-15 14:30:56</time>
+</span><br>
+
+
+        
+        欢迎访问http://lmwtuedu.cn，希望此文章对您有帮助!
+        
+    </div>
+    
+    <footer>
+        <a href="http://lmwtuedu.cn">
+            <img src="/img/head.png" alt="darker">
+            darker
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/code/">code</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/reprint/">reprint</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://lmwtuedu.cn/2018/06/14/2018-06-14-SQL2005 配置SSL证书流程/&title=《SQL2005 配置SSL证书流程》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&pic=http://lmwtuedu.cn/img/head.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://lmwtuedu.cn/2018/06/14/2018-06-14-SQL2005 配置SSL证书流程/&title=《SQL2005 配置SSL证书流程》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://lmwtuedu.cn/2018/06/14/2018-06-14-SQL2005 配置SSL证书流程/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《SQL2005 配置SSL证书流程》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&url=http://lmwtuedu.cn/2018/06/14/2018-06-14-SQL2005 配置SSL证书流程/&via=http://lmwtuedu.cn" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://lmwtuedu.cn/2018/06/14/2018-06-14-SQL2005 配置SSL证书流程/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/07/20/2018-07-20-SQL如何支持TLV1.2/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">SQL如何支持TLS1.2</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/06/08/2018-06-08-前后端API交互如何保证数据安全性？/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">前后端API交互如何保证数据安全性</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        请喝维他奶~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.PNG" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.PNG" data-alipay="/img/alipay.PNG">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>darker &copy; 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://lmwtuedu.cn/2018/06/14/2018-06-14-SQL2005 配置SSL证书流程/&title=《SQL2005 配置SSL证书流程》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&pic=http://lmwtuedu.cn/img/head.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://lmwtuedu.cn/2018/06/14/2018-06-14-SQL2005 配置SSL证书流程/&title=《SQL2005 配置SSL证书流程》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://lmwtuedu.cn/2018/06/14/2018-06-14-SQL2005 配置SSL证书流程/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《SQL2005 配置SSL证书流程》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&url=http://lmwtuedu.cn/2018/06/14/2018-06-14-SQL2005 配置SSL证书流程/&via=http://lmwtuedu.cn" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://lmwtuedu.cn/2018/06/14/2018-06-14-SQL2005 配置SSL证书流程/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACu0lEQVR42u3aQW7jMBAEwPz/0w6QU4BEcjeHtBOgdMpBK7G0AGfcw4+P+Hp8XVd/f7/yp/38V/fPyZ9fX3h4eHhLS7+6khe3gKtn5m9P1oyHh4d3mpcUg5933oOvYPOCURQPPDw8vLfycvbVotsWOVkDHh4e3n/hreHXlviGwoCHh4cX8JIwIm9875eSANr4eEPWgoeHhxfz5gOw1//90vkeHh4eXlwS7jfcNkpoN/S8DFw+DQ8PD+8Ar22Fdx04yBvuvFEufjHg4eHhjXn5o5Nl5YUkCRHW3niJxMPDwxvz8p/3SYO7NlRrW+riaXh4eHiHebsiieT+pFlvC9UvT8DDw8N7Ia8dOLVj++S97YcY/T7Aw8PD66ZUTxY6GU0ln6Adra1Fw3h4eHh7eZMXJCFsPtBqW+3oOXh4eHhbeUkjmx+cao8XtOFvXVrw8PDwDvDWhlLt5p432fOGGw8PD+80r41T22NPa7lIOwCLDl3h4eHhbeLlW3C+Hd8vrg1/J+0+Hh4e3gneWhS7N6Jd2+6jwBcPDw/vhby1MHf+UeafLCoMeHh4eONMdXLIKdm+k/KTX23wgYeHh3eONy8G7fh/3mRH/xl4eHh4x3jRKYNBdJuPuPLihIeHh/deXjuCapvpe14e47aHtPDw8PDO8VrSWkPc3pm09U/WhoeHh7eVN3/xrpF/GzREK8fDw8M7zFvbpk83ym2k+ySGwMPDwxvzkmi1vScf/587XoCHh4d3jvcor3zjLmLW8eGqJ8UADw8PbytvvpW3EcNawJF/uMXSgoeHh1fy8mLQLjeJaHfFEMXJCDw8PLxNvEk8kR+r2jUwK9aJh4eH91bepIS03f1arIyHh4f3l3mT0HatEV87iICHh4d3jtdu9ycGUcWi4yYbDw8P7wRvfiSrHYntHa0dOTqAh4eH9/s9n5bhnHHZfYKyAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'Cherry Up';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'Champion';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

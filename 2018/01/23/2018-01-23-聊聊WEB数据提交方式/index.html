@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>聊聊WEB数据提交方式-POST | I AM SLOW WALKER, BUT I NEVER WALK BACK</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="code">
+    <meta name="description" content="聊聊WEB数据提交方式-POST知识点摘录(网络转载)大家都知道HTTP1.1规定了HTTP的请求方法：OPTIONS、GET、HEAD、POST、PUT、DELETE、TRACE、CONNECT 。 POST就是向服务端提交数据的。 我们知道，HTTP 协议是以 ASCII 码传输，建立在 TCP/IP 协议之上的应用层规范。规范把 HTTP 请求分为三个部分：状态行、请求头、消息主体。类似于下">
+<meta name="keywords" content="code">
+<meta property="og:type" content="article">
+<meta property="og:title" content="聊聊WEB数据提交方式-POST">
+<meta property="og:url" content="http://lmwtuedu.cn/2018/01/23/2018-01-23-聊聊WEB数据提交方式/index.html">
+<meta property="og:site_name" content="I AM SLOW WALKER, BUT I NEVER WALK BACK">
+<meta property="og:description" content="聊聊WEB数据提交方式-POST知识点摘录(网络转载)大家都知道HTTP1.1规定了HTTP的请求方法：OPTIONS、GET、HEAD、POST、PUT、DELETE、TRACE、CONNECT 。 POST就是向服务端提交数据的。 我们知道，HTTP 协议是以 ASCII 码传输，建立在 TCP/IP 协议之上的应用层规范。规范把 HTTP 请求分为三个部分：状态行、请求头、消息主体。类似于下">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79gy1fnqof06wkgj30vg0dq77g.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79gy1fnqokrg011j30u40elwi5.jpg">
+<meta property="og:updated_time" content="2019-08-15T06:30:56.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="聊聊WEB数据提交方式-POST">
+<meta name="twitter:description" content="聊聊WEB数据提交方式-POST知识点摘录(网络转载)大家都知道HTTP1.1规定了HTTP的请求方法：OPTIONS、GET、HEAD、POST、PUT、DELETE、TRACE、CONNECT 。 POST就是向服务端提交数据的。 我们知道，HTTP 协议是以 ASCII 码传输，建立在 TCP/IP 协议之上的应用层规范。规范把 HTTP 请求分为三个部分：状态行、请求头、消息主体。类似于下">
+<meta name="twitter:image" content="https://ws1.sinaimg.cn/large/006tNc79gy1fnqof06wkgj30vg0dq77g.jpg">
+    
+        <link rel="alternate" type="application/atom+xml" title="I AM SLOW WALKER, BUT I NEVER WALK BACK" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/head.png">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/head_background.png)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/head.png">
+        </a>
+        <hgroup class="introduce">
+          <h4 class="nickname">darker</h4>
+          <a href="mailto:lmwtuedu@163.com" title="lmwtuedu@163.com" class="mail">lmwtuedu@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                Home
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/share" target="_blank" >
+                <i class="icon icon-lg icon-share-alt-square"></i>
+                Share Link
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-id-badge"></i>
+                About Me
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">聊聊WEB数据提交方式-POST</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h3 class="title">聊聊WEB数据提交方式-POST</h3>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-01-22T16:00:00.000Z" itemprop="datePublished" class="page-time">
+  2018-01-23
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>Table Of Content</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#聊聊WEB数据提交方式-POST"><span class="post-toc-number">1.</span> <span class="post-toc-text">聊聊WEB数据提交方式-POST</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#知识点摘录-网络转载"><span class="post-toc-number">2.</span> <span class="post-toc-text">知识点摘录(网络转载)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#知识点补充"><span class="post-toc-number">3.</span> <span class="post-toc-text">知识点补充</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#场景使用"><span class="post-toc-number">4.</span> <span class="post-toc-text">场景使用</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#疑惑内容转载"><span class="post-toc-number">5.</span> <span class="post-toc-text">疑惑内容转载</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#参考"><span class="post-toc-number">6.</span> <span class="post-toc-text">参考</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-2018-01-23-聊聊WEB数据提交方式"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">聊聊WEB数据提交方式-POST</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-01-23 00:00:00" datetime="2018-01-22T16:00:00.000Z"  itemprop="datePublished">2018-01-23</time>
+
+            
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="聊聊WEB数据提交方式-POST"><a href="#聊聊WEB数据提交方式-POST" class="headerlink" title="聊聊WEB数据提交方式-POST"></a>聊聊WEB数据提交方式-POST</h2><h2 id="知识点摘录-网络转载"><a href="#知识点摘录-网络转载" class="headerlink" title="知识点摘录(网络转载)"></a>知识点摘录(网络转载)</h2><p>大家都知道HTTP1.1规定了HTTP的请求方法：OPTIONS、GET、HEAD、POST、PUT、DELETE、TRACE、CONNECT 。 POST就是向服务端提交数据的。</p>
+<p>我们知道，HTTP 协议是以 ASCII 码传输，建立在 TCP/IP 协议之上的应用层规范。规范把 HTTP 请求分为三个部分：状态行、请求头、消息主体。类似于下面这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;method&gt; &lt;request-URL&gt; &lt;version&gt;</span><br><span class="line">&lt;headers&gt;</span><br><span class="line"></span><br><span class="line">&lt;entity-body&gt;</span><br></pre></td></tr></table></figure>
+
+<p>协议规定 POST 提交的数据必须放在消息主体（entity-body）中，但协议并没有规定数据必须使用什么编码方式。实际上，开发者完全可以自己决定消息主体的格式，只要最后发送的 HTTP 请求满足上面的格式就可以。</p>
+<p>但是，数据发送出去，还要服务端解析成功才有意义。一般服务端语言如 php、python 等，以及它们的 framework，都内置了自动解析常见数据格式的功能。服务端通常是根据请求头（headers）中的 Content-Type 字段来获知请求中的消息主体是用何种方式编码，再对主体进行解析。所以说到 POST 提交数据方案，包含了 Content-Type 和消息主体编码方式两部分。下面就正式开始介绍它们。</p>
+<p><strong>application/x-www-form-urlencoded</strong></p>
+<p>这应该是最常见的 POST 提交数据的方式了。浏览器的原生 <form> 表单，如果不设置 enctype 属性，那么最终就会以 application/x-www-form-urlencoded 方式提交数据。请求类似于下面这样（无关的请求头在本文中都省略掉了）：</form></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">POST http://www.example.com HTTP/1.1</span><br><span class="line">Content-Type: application/x-www-form-urlencoded;charset=utf-8</span><br><span class="line"></span><br><span class="line">title=test&amp;sub%5B%5D=1&amp;sub%5B%5D=2&amp;sub%5B%5D=3</span><br></pre></td></tr></table></figure>
+
+<p>首先，Content-Type 被指定为 application/x-www-form-urlencoded；其次，提交的数据按照 key1=val1&amp;key2=val2 的方式进行编码，<font color="red">key 和 val 都进行了 URL 转码</font>。大部分服务端语言都对这种方式有很好的支持。例如 PHP 中，$_POST[‘title’] 可以获取到 title 的值，$_POST[‘sub’] 可以得到 sub 数组。</p>
+<p>很多时候，我们用 Ajax 提交数据时，也是使用这种方式。例如 JQuery 和 QWrap 的 Ajax，Content-Type 默认值都是「application/x-www-form-urlencoded;charset=utf-8」。</p>
+<p><strong>multipart/form-data</strong></p>
+<p>这又是一个常见的 POST 数据提交的方式。我们使用表单上传文件时，必须让 <form> 表单的 enctype 等于 multipart/form-data。直接来看一个请求示例：</form></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">POST http://www.example.com HTTP/1.1</span><br><span class="line">Content-Type:multipart/form-data; boundary=----WebKitFormBoundaryrGKCBY7qhFd3TrwA</span><br><span class="line"></span><br><span class="line">------WebKitFormBoundaryrGKCBY7qhFd3TrwA</span><br><span class="line">Content-Disposition: form-data; name="text"</span><br><span class="line"></span><br><span class="line">title</span><br><span class="line">------WebKitFormBoundaryrGKCBY7qhFd3TrwA</span><br><span class="line">Content-Disposition: form-data; name="file"; filename="chrome.png"</span><br><span class="line">Content-Type: image/png</span><br><span class="line"></span><br><span class="line">PNG ... content of chrome.png ...</span><br><span class="line">------WebKitFormBoundaryrGKCBY7qhFd3TrwA--</span><br></pre></td></tr></table></figure>
+
+<p>这个例子稍微复杂点。首先生成了一个 boundary 用于分割不同的字段，为了避免与正文内容重复，boundary 很长很复杂。然后 Content-Type 里指明了数据是以 multipart/form-data 来编码，本次请求的 boundary 是什么内容。消息主体里按照字段个数又分为多个结构类似的部分，每部分都是以 –boundary 开始，紧接着是内容描述信息，然后是回车，最后是字段具体内容（文本或二进制）。如果传输的是文件，还要包含文件名和文件类型信息。消息主体最后以 –boundary– 标示结束。关于 multipart/form-data 的详细定义，请前往 rfc1867 查看。</p>
+<p>这种方式一般用来上传文件，各大服务端语言对它也有着良好的支持。</p>
+<p>上面提到的这两种 POST 数据的方式，都是浏览器原生支持的，而且现阶段标准中原生 <form> 表单也只支持这两种方式（通过 <form> 元素的 enctype 属性指定，默认为 application/x-www-form-urlencoded。其实 enctype 还支持 text/plain，不过用得非常少）。</form></form></p>
+<p>随着越来越多的 Web 站点，尤其是 WebApp，全部使用 Ajax 进行数据交互之后，我们完全可以定义新的数据提交方式，给开发带来更多便利。</p>
+<p>pplication/json<br>application/json 这个 Content-Type 作为响应头大家肯定不陌生。实际上，现在越来越多的人把它作为请求头，用来告诉服务端消息主体是序列化后的 JSON 字符串。由于 JSON 规范的流行，除了低版本 IE 之外的各大浏览器都原生支持 JSON.stringify，服务端语言也都有处理 JSON 的函数，使用 JSON 不会遇上什么麻烦。</p>
+<p>JSON 格式支持比键值对复杂得多的结构化数据，这一点也很有用。记得我几年前做一个项目时，需要提交的数据层次非常深，我就是把数据 JSON 序列化之后来提交的。不过当时我是把 JSON 字符串作为 val，仍然放在键值对里，以 x-www-form-urlencoded 方式提交。</p>
+<p>Google 的 AngularJS 中的 Ajax 功能，默认就是提交 JSON 字符串。例如下面这段代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var data = &#123;&apos;title&apos;:&apos;test&apos;, &apos;sub&apos; : [1,2,3]&#125;;</span><br><span class="line">$http.post(url, data).success(function(result) &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>最终发送的请求是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">POST http://www.example.com HTTP/1.1 </span><br><span class="line">Content-Type: application/json;charset=utf-8</span><br><span class="line"></span><br><span class="line">&#123;&quot;title&quot;:&quot;test&quot;,&quot;sub&quot;:[1,2,3]&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这种方案，可以方便的提交复杂的结构化数据，特别适合 RESTful 的接口。各大抓包工具如 Chrome 自带的开发者工具、Firebug、Fiddler，都会以树形结构展示 JSON 数据，非常友好。但也有些服务端语言还没有支持这种方式，例如 php 就无法通过 $_POST 对象从上面的请求中获得内容。这时候，需要自己动手处理下：在请求头中 Content-Type 为 application/json 时，从 php://input 里获得原始输入流，再 json_decode 成对象。一些 php 框架已经开始这么做了。</p>
+<p><strong>text/xml</strong><br>我的博客之前提到过 XML-RPC（XML Remote Procedure Call）。它是一种使用 HTTP 作为传输协议，XML 作为编码方式的远程调用规范。典型的 XML-RPC 请求是这样的：</p>
+<p>HTML<br>POST <a href="http://www.example.com" target="_blank" rel="noopener">http://www.example.com</a> HTTP/1.1<br>Content-Type: text/xml</p>
+<?xml version="1.0"?>
+<methodcall>
+    <methodname>examples.getStateName</methodname>
+    <params>
+        <param>
+            <value><i4>41</i4></value>
+        
+    </params>
+</methodcall>
+XML-RPC 协议简单、功能够用，各种语言的实现都有。它的使用也很广泛，如 WordPress 的 XML-RPC Api，搜索引擎的 ping 服务等等。JavaScript 中，也有现成的库支持以这种方式进行数据交互，能很好的支持已有的 XML-RPC 服务。不过，我个人觉得 XML 结构还是过于臃肿，一般场景用 JSON 会更灵活方便。
+
+<p>本文链接：<a href="https://imququ.com/post/four-ways-to-post-data-in-http.html" target="_blank" rel="noopener">https://imququ.com/post/four-ways-to-post-data-in-http.html</a></p>
+<h2 id="知识点补充"><a href="#知识点补充" class="headerlink" title="知识点补充"></a>知识点补充</h2><p>enctype 属性规定在发送到服务器之前应该如何对表单数据进行编码。<br>默认地，表单数据会编码为 “application/x-www-form-urlencoded”。就是说，在发送到服务器之前，所有字符都会进行编码（空格转换为 “+” 加号，特殊符号转换为 ASCII HEX 值）。</p>
+<p><strong>enctype属性值</strong></p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>application/x-www-form-urlencoded</td>
+<td>在发送前编码所有字符（默认）</td>
+</tr>
+<tr>
+<td>multipart/form-data</td>
+<td>不对字符编码。在使用包含文件上传控件的表单时，必须使用该值。</td>
+</tr>
+<tr>
+<td>text/plain</td>
+<td>空格转换为 “+” 加号，但不对特殊字符编码。</td>
+</tr>
+</tbody></table>
+<h2 id="场景使用"><a href="#场景使用" class="headerlink" title="场景使用"></a>场景使用</h2><p>在使用springMVC的时候，前端请求一般使用ajax； ajax里面有一个content-type属性；而这个属性是告诉后端，传递数据的类型是什么。 平常我们前端使用”application/json”和“application/x-www-form-urlencoded” 设置content-type。 而后端我们一般采取”@RequestBody”和”@RequestParam”; 他们区别是什么呢？</p>
+<p> “application/x-www-form-urlencoded”  &gt;&gt;&gt;&gt;&gt;&gt;&gt; @RequestParam 注解配对</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws1.sinaimg.cn/large/006tNc79gy1fnqof06wkgj30vg0dq77g.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p>  “application/json” &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; @RequestBody 注解配对<br> <figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws4.sinaimg.cn/large/006tNc79gy1fnqokrg011j30u40elwi5.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure></p>
+<h2 id="疑惑内容转载"><a href="#疑惑内容转载" class="headerlink" title="疑惑内容转载"></a>疑惑内容转载</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">**解决疑惑的网址：URL**</span><br><span class="line"></span><br><span class="line">具体的处理办法就是在我们的ajax请求中</span><br><span class="line"></span><br><span class="line">headers: &#123;&apos;Content-Type&apos;:&apos;application/x-www-form-urlencoded&apos;&#125;</span><br><span class="line">这里还需要做实验进行测试才行。</span><br><span class="line">还有一个问题是ajax提交方式和post提交方式有所不同，</span><br><span class="line">用jQuery的ajax方法和post方法分别发送请求，在后台Servlet进行处理时结果是不一样</span><br><span class="line">的，比如用$.ajax方法发送请求时（data参数是一个JSON.stringify()处理后的字符串，</span><br><span class="line">而不是一个JSON对象）但此时是不可用request.getParam(key) 来取值的。</span><br><span class="line">如果用$.post方法来发送请求（data参数是一个JSON对象,而不要再用JSON.stringify()</span><br><span class="line">处理为字符串了），结果恰恰相反。</span><br><span class="line"></span><br><span class="line">@RequestParam</span><br><span class="line">A） 常用来处理简单类型的绑定，通过Request.getParameter() 获取的String可直接转</span><br><span class="line">换为简单类型的情况（ String--&gt; 简单类型的转换操作由ConversionService配置的转换</span><br><span class="line">器来完成）；因为使用request.getParameter()方式获取参数，所以可以处理get 方式中</span><br><span class="line">queryString的值，也可以处理post方式中 body data的值；</span><br><span class="line">B）用来处理Content-Type: 为 application/x-www-form-urlencoded编码的内容，</span><br><span class="line">提交方式GET、POST；</span><br><span class="line">C) 该注解有两个属性： value、required； value用来指定要传入值的id名称，</span><br><span class="line">required用来指示参数是否必须绑定；</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@RequestBody</span><br><span class="line">该注解常用来处理Content-Type: 不是application/x-www-form-urlencoded编码的内</span><br><span class="line">容，例如application/json, application/xml等；</span><br><span class="line">它是通过使用HandlerAdapter 配置的HttpMessageConverters来解析post data </span><br><span class="line">body，然后绑定到相应的bean上的。</span><br><span class="line">因为配置有FormHttpMessageConverter，所以也可以用来处理 application/x-www-</span><br><span class="line">form-urlencoded的内容，处理完的结果放在一个MultiValueMap&lt;String, String&gt;里，</span><br><span class="line">这种情况在某些特殊需求下使用，详情查看FormHttpMessageConverter api;</span><br></pre></td></tr></table></figure>
+
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li>参考内容：<br><a href="https://www.jianshu.com/p/d9c17a323e13" target="_blank" rel="noopener">SpringMVC数据传输的过程</a></li>
+<li>参考内容： <a href="https://www.cnblogs.com/softidea/p/5745369.html" target="_blank" rel="noopener">四种常见的 POST 提交数据方式 专题</a></li>
+</ul>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-08-15T06:30:56.000Z" itemprop="dateUpdated">2019-08-15 14:30:56</time>
+</span><br>
+
+
+        
+        欢迎访问http://lmwtuedu.cn，希望此文章对您有帮助!
+        
+    </div>
+    
+    <footer>
+        <a href="http://lmwtuedu.cn">
+            <img src="/img/head.png" alt="darker">
+            darker
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/code/">code</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://lmwtuedu.cn/2018/01/23/2018-01-23-聊聊WEB数据提交方式/&title=《聊聊WEB数据提交方式-POST》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&pic=http://lmwtuedu.cn/img/head.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://lmwtuedu.cn/2018/01/23/2018-01-23-聊聊WEB数据提交方式/&title=《聊聊WEB数据提交方式-POST》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://lmwtuedu.cn/2018/01/23/2018-01-23-聊聊WEB数据提交方式/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《聊聊WEB数据提交方式-POST》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&url=http://lmwtuedu.cn/2018/01/23/2018-01-23-聊聊WEB数据提交方式/&via=http://lmwtuedu.cn" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://lmwtuedu.cn/2018/01/23/2018-01-23-聊聊WEB数据提交方式/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/01/26/2018-01-26-周游记/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">深圳-周游记</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/01/23/2018-01-23-优秀文章归纳/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">优秀内容转载（长期更新....）</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        请喝维他奶~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.PNG" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.PNG" data-alipay="/img/alipay.PNG">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>darker &copy; 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://lmwtuedu.cn/2018/01/23/2018-01-23-聊聊WEB数据提交方式/&title=《聊聊WEB数据提交方式-POST》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&pic=http://lmwtuedu.cn/img/head.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://lmwtuedu.cn/2018/01/23/2018-01-23-聊聊WEB数据提交方式/&title=《聊聊WEB数据提交方式-POST》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://lmwtuedu.cn/2018/01/23/2018-01-23-聊聊WEB数据提交方式/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《聊聊WEB数据提交方式-POST》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&url=http://lmwtuedu.cn/2018/01/23/2018-01-23-聊聊WEB数据提交方式/&via=http://lmwtuedu.cn" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://lmwtuedu.cn/2018/01/23/2018-01-23-聊聊WEB数据提交方式/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACtklEQVR42u3aQW7cMBAEQP//0w6QUw7RbvcM6SyC0kkwtCJLB3LcnK+v+Pr+ff15315Pb3saq/3V6sLDw8MbTf31tJ7+8vSG19N9Pcr+E+Ph4eH9DC953etfPQ4QP/P6ncmHwMPDw/s0XjJMWxAnhTIeHh7e/8HLS+r2kyWbEx4eHt4n8BLAbJgZo40/DmQteHh4eDFvdgD2b++vn+/h4eHhjU7V8yaAZPmeFd+blgU8PDy8G7yzTQCzFTsJO/LR32QteHh4eId4Z5FJ6JDHwSsSHh4e3gVeeyTfNhC0LVyzAv1xXDw8PLwf5OVB6ql2gXwfy8MOPDw8vBu8vOJONozZNtBGFfn2g4eHh3ebl7c35Uv8rBEhj4ajQBkPDw/vKC8PBWaFbxsH14v+600FDw8P7wKvLXDbI67Z0VdbRtf7Hh4eHt6adyqS2JTa+xi36CzDw8PDW4yVl8VtzJpvJ1FHWFtGt1U/Hh4e3qKYzu9zdr6sz1q7Hp/Bw8PDu8BrB95PejZiEpEUeyAeHh7egjcLT9uy+FQjQhvp4uHh4d3jbZbpTZyxCXOjTQgPDw/vAm920HUqot20C2w+Oh4eHt4pXnuI1RbKmyJ7Hx/j4eHhneLlE90s03npnIxbjI6Hh4d3jTcrmtsjsfZo7cCOh4eHh3erD2p1Fb0J8bTajzvbnPDw8PBmvB89yI+P1vLt4c09Hh4e3gVecsTVFs1JqHG2RC6ex8PDw1vzvsvr1GI949XzwcPDw7vAa0OHTaPAbLnfB8d4eHh4N3htW1VbOucTmpXpbwIOPDw8vGu8TfzavqGNQjaNXHh4eHifwJs1EMzaBWZBBh4eHt7n8JJFeVY0nwp//zITPDw8vGu8PIxI2q2S4jjZZtry/UDWgoeHh3fmP/26vN4cYuWBb/Kh8fDw8I7yfgFoeyIWWy9RIQAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'Cherry Up';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'Champion';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

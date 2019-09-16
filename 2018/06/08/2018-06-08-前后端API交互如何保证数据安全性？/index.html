@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>前后端API交互如何保证数据安全性 | I AM SLOW WALKER, BUT I NEVER WALK BACK</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="reprint,code">
+    <meta name="description" content="前后端API交互如何保证数据安全性？前言前后端分离的开发方式，我们以接口为标准来进行推动，定义好接口，各自开发自己的功能，最后进行联调整合。无论是开发原生的APP还是webapp还是PC端的软件,只要是前后端分离的模式，就避免不了调用后端提供的接口来进行业务交互。 网页或者app，只要抓下包就可以清楚的知道这个请求获取到的数据，这样的接口对爬虫工程师来说是一种福音，要抓你的数据简直轻而易举。 数据">
+<meta name="keywords" content="reprint,code">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前后端API交互如何保证数据安全性">
+<meta property="og:url" content="http://lmwtuedu.cn/2018/06/08/2018-06-08-前后端API交互如何保证数据安全性？/index.html">
+<meta property="og:site_name" content="I AM SLOW WALKER, BUT I NEVER WALK BACK">
+<meta property="og:description" content="前后端API交互如何保证数据安全性？前言前后端分离的开发方式，我们以接口为标准来进行推动，定义好接口，各自开发自己的功能，最后进行联调整合。无论是开发原生的APP还是webapp还是PC端的软件,只要是前后端分离的模式，就避免不了调用后端提供的接口来进行业务交互。 网页或者app，只要抓下包就可以清楚的知道这个请求获取到的数据，这样的接口对爬虫工程师来说是一种福音，要抓你的数据简直轻而易举。 数据">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-08-15T06:30:56.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="前后端API交互如何保证数据安全性">
+<meta name="twitter:description" content="前后端API交互如何保证数据安全性？前言前后端分离的开发方式，我们以接口为标准来进行推动，定义好接口，各自开发自己的功能，最后进行联调整合。无论是开发原生的APP还是webapp还是PC端的软件,只要是前后端分离的模式，就避免不了调用后端提供的接口来进行业务交互。 网页或者app，只要抓下包就可以清楚的知道这个请求获取到的数据，这样的接口对爬虫工程师来说是一种福音，要抓你的数据简直轻而易举。 数据">
+    
+        <link rel="alternate" type="application/atom+xml" title="I AM SLOW WALKER, BUT I NEVER WALK BACK" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/head.png">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/head_background.png)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/head.png">
+        </a>
+        <hgroup class="introduce">
+          <h4 class="nickname">darker</h4>
+          <a href="mailto:lmwtuedu@163.com" title="lmwtuedu@163.com" class="mail">lmwtuedu@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                Home
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/share" target="_blank" >
+                <i class="icon icon-lg icon-share-alt-square"></i>
+                Share Link
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-id-badge"></i>
+                About Me
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">前后端API交互如何保证数据安全性</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h3 class="title">前后端API交互如何保证数据安全性</h3>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-06-07T16:00:00.000Z" itemprop="datePublished" class="page-time">
+  2018-06-08
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>Table Of Content</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#前后端API交互如何保证数据安全性？"><span class="post-toc-number">1.</span> <span class="post-toc-text">前后端API交互如何保证数据安全性？</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#如何保证API调用时数据的安全性？"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">如何保证API调用时数据的安全性？</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#对所有请求和响应都进行加解密操作"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">对所有请求和响应都进行加解密操作</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-2018-06-08-前后端API交互如何保证数据安全性？"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">前后端API交互如何保证数据安全性</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-06-08 00:00:00" datetime="2018-06-07T16:00:00.000Z"  itemprop="datePublished">2018-06-08</time>
+
+            
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="前后端API交互如何保证数据安全性？"><a href="#前后端API交互如何保证数据安全性？" class="headerlink" title="前后端API交互如何保证数据安全性？"></a>前后端API交互如何保证数据安全性？</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前后端分离的开发方式，我们以接口为标准来进行推动，定义好接口，各自开发自己的功能，最后进行联调整合。无论是开发原生的APP还是webapp还是PC端的软件,只要是前后端分离的模式，就避免不了调用后端提供的接口来进行业务交互。</p>
+<p>网页或者app，只要抓下包就可以清楚的知道这个请求获取到的数据，这样的接口对爬虫工程师来说是一种福音，要抓你的数据简直轻而易举。</p>
+<p>数据的安全性非常重要，特别是用户相关的信息，稍有不慎就会被不法分子盗用，所以我们对这块要非常重视，容不得马虎。</p>
+<h2 id="如何保证API调用时数据的安全性？"><a href="#如何保证API调用时数据的安全性？" class="headerlink" title="如何保证API调用时数据的安全性？"></a>如何保证API调用时数据的安全性？</h2><ul>
+<li><p>通信使用https</p>
+</li>
+<li><p>请求签名，防止参数被篡改</p>
+</li>
+<li><p>身份确认机制，每次请求都要验证是否合法</p>
+</li>
+<li><p>APP中使用ssl pinning防止抓包操作</p>
+</li>
+<li><p>对所有请求和响应都进行加解密操作</p>
+</li>
+<li><p>等等方案…….</p>
+</li>
+</ul>
+<h2 id="对所有请求和响应都进行加解密操作"><a href="#对所有请求和响应都进行加解密操作" class="headerlink" title="对所有请求和响应都进行加解密操作"></a>对所有请求和响应都进行加解密操作</h2><p>方案有很多种，当你做的越多，也就意味着安全性更高，今天我跟大家来介绍一下对所有请求和响应都进行加解密操作的方案，即使能抓包，即使能调用我的接口，但是我返回的数据是加密的，只要加密算法够安全，你得到了我的加密内容也对我没什么影响。</p>
+<p>像这种工作最好做成统一处理的，你不能让每个开发都去关注这件事情，如果让每个开发去关注这件事情就很麻烦了，返回数据时还得手动调用下加密的方法，接收数据后还得调用下解密的方法。</p>
+<p>为此，我基于Spring Boot封装了一个Starter, 内置了AES加密算法。GitHub地址如下：</p>
+<p><a href="https://github.com/yinjihuan/spring-boot-starter-encrypt" target="_blank" rel="noopener">https://github.com/yinjihuan/spring-boot-starter-encrypt</a></p>
+<p>先来看看怎么使用，可以下载源码，然后引入即可，然后在启动类上增加@EnableEncrypt注解开启加解密操作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@EnableEncrypt</span><br><span class="line">@SpringBootApplication</span><br><span class="line">public class App &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        SpringApplication.run(App.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>增加加密的key配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">spring.encrypt.key=abcdef0123456789</span><br><span class="line">spring.encrypt.debug=false</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>spring.encrypt.key：加密key，必须是16位</p>
+</li>
+<li><p>spring.encrypt.debug：是否开启调试模式,默认为false,如果为true则不启用加解密操作</p>
+</li>
+</ul>
+<p>为了考虑通用性，不会对所有请求都执行加解密，基于注解来做控制</p>
+<p>响应数据需要加密的话，就在Controller的方法上加@Encrypt注解即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Encrypt</span><br><span class="line">@GetMapping(&quot;/list&quot;)</span><br><span class="line">public Response queryNews(String city) &#123;</span><br><span class="line">    return Response.ok(city);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当我们访问/list接口时，返回的数据就是加密之后base64编码的格式。</p>
+<p>还有一种操作就是前段提交的数据，分为2种情况，一种是get请求，这种暂时没处理，后面再考虑，目前只处理的post请求，基于json格式提交的方式，也就是说后台需要用@RequestBody接收数据才行, 需要解密的操作我们加上@Decrypt注解即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@Decrypt</span><br><span class="line">@PostMapping(&quot;/save&quot;)</span><br><span class="line">public Response savePageLog(@RequestBody PageLogParam logParam, HttpServletRequest request) &#123;</span><br><span class="line">    pageLogService.save(logParam);</span><br><span class="line">    return Response.ok();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>加了@Decrypt注解后，前端提交的数据需要按照AES加密算法，进行加密，然后提交到后端，后端这边会自动解密，然后再映射到参数对象中。</p>
+<p>上面讲解的都是后端的代码，前端使用的话我们以js来讲解，当然你也能用别的语言来做，如果是原生的安卓app也是用java代码来处理。</p>
+<p>前段需要做的就2件事情：</p>
+<ul>
+<li><p>统一处理数据的响应，在渲染到页面之前进行解密操作</p>
+</li>
+<li><p>当有POST请求的数据发出时，统一加密</p>
+</li>
+</ul>
+<p>js加密文件请参考我GitHub中encrypt中的aes.js,crypto-js.js,pad-zeropadding.js</p>
+<p>我们以axios来作为请求数据的框架，用axios的拦截器来统一处理加密解密操作</p>
+<p>首先还是要封装一个js加解密的类，需要注意的是加密的key需要和后台的对上，不然无法相互解密，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">var key  = CryptoJS.enc.Latin1.parse(&apos;abcdef0123456789&apos;);</span><br><span class="line">var iv   = CryptoJS.enc.Latin1.parse(&apos;abcdef0123456789&apos;);</span><br><span class="line">// 加密</span><br><span class="line">function EncryptData(data) &#123;</span><br><span class="line">    var srcs = CryptoJS.enc.Utf8.parse(data);</span><br><span class="line">    var encrypted = CryptoJS.AES.encrypt(srcs, key, &#123;</span><br><span class="line">        mode : CryptoJS.mode.ECB,</span><br><span class="line">        padding : CryptoJS.pad.Pkcs7</span><br><span class="line">    &#125;);</span><br><span class="line">    return encrypted.toString();</span><br><span class="line">&#125;</span><br><span class="line">// 解密</span><br><span class="line">function DecryptData(data) &#123;</span><br><span class="line">    var stime = new Date().getTime();</span><br><span class="line">    var decrypt = CryptoJS.AES.decrypt(data, key, &#123;</span><br><span class="line">        mode : CryptoJS.mode.ECB,</span><br><span class="line">        padding : CryptoJS.pad.Pkcs7</span><br><span class="line">    &#125;);</span><br><span class="line">    var result = JSON.parse(CryptoJS.enc.Utf8.stringify(decrypt).toString());</span><br><span class="line">    var etime = new Date().getTime();</span><br><span class="line">    console.log(&quot;DecryptData Time:&quot; + (etime - stime));</span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>axios拦截器中统一处理代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">// 添加请求拦截器</span><br><span class="line">axios.interceptors.request.use(function (config) &#123;</span><br><span class="line">    // 对所有POST请加密，必须是json数据提交，不支持表单</span><br><span class="line">    if (config.method == &quot;post&quot;) &#123;</span><br><span class="line">        config.data = EncryptData(JSON.stringify(config.data));</span><br><span class="line">    &#125;</span><br><span class="line">    return config;</span><br><span class="line">  &#125;, function (error) &#123;</span><br><span class="line">    return Promise.reject(error);</span><br><span class="line">&#125;);</span><br><span class="line">// 添加响应拦截器</span><br><span class="line">axios.interceptors.response.use(function (response) &#123;</span><br><span class="line">    // 后端返回字符串表示需要解密操作</span><br><span class="line">    if(typeof(response.data) == &quot;string&quot;)&#123;</span><br><span class="line">        response.data = DecryptData(response.data);</span><br><span class="line">    &#125;</span><br><span class="line">    return response;</span><br><span class="line">  &#125;, function (error) &#123;</span><br><span class="line">    return Promise.reject(error);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>到此为止，我们就为整个前后端交互的通信做了一个加密的操作，只要加密的key不泄露，别人得到你的数据也没用，问题是如何保证key不泄露呢？</p>
+<p>服务端的安全性较高，可以存储在数据库中或者配置文件中，毕竟在我们自己的服务器上，最危险的其实就时前端了，app还好，可以打包，但是要防止反编译等等问题。</p>
+<p>如果是webapp则可以依赖于js加密来实现，下面我给大家介绍一种动态获取加密key的方式，只不过实现起来比较复杂，我们不上代码，只讲思路：</p>
+<p>加密算法有对称加密和非对称加密，AES是对称加密，RSA是非对称加密。之所以用AES加密数据是因为效率高，RSA运行速度慢,可以用于签名操作。</p>
+<p>我们可以用这2种算法互补，来保证安全性，用RSA来加密传输AES的秘钥，用AES来加密数据，两者相互结合，优势互补。</p>
+<p>其实大家理解了HTTPS的原理的话对于下面的内容应该是一看就懂的，HTTPS比HTTP慢的原因都是因为需要让客户端与服务器端安全地协商出一个对称加密算法。剩下的就是通信时双方使用这个对称加密算法进行加密解密。</p>
+<ol>
+<li><p>客户端启动，发送请求到服务端，服务端用RSA算法生成一对公钥和私钥，我们简称为pubkey1,prikey1，将公钥pubkey1返回给客户端。</p>
+</li>
+<li><p>客户端拿到服务端返回的公钥pubkey1后，自己用RSA算法生成一对公钥和私钥，我们简称为pubkey2,prikey2，并将公钥pubkey2通过公钥pubkey1加密，加密之后传输给服务端。</p>
+</li>
+<li><p>此时服务端收到客户端传输的密文，用私钥prikey1进行解密，因为数据是用公钥pubkey1加密的，通过解密就可以得到客户端生成的公钥pubkey2</p>
+</li>
+<li><p>然后自己在生成对称加密，也就是我们的AES,其实也就是相对于我们配置中的那个16的长度的加密key,生成了这个key之后我们就用公钥pubkey2进行加密，返回给客户端，因为只有客户端有pubkey2对应的私钥prikey2，只有客户端才能解密，客户端得到数据之后，用prikey2进行解密操作，得到AES的加密key,最后就用加密key进行数据传输的加密，至此整个流程结束。</p>
+</li>
+</ol>
+<p>##spring-boot-starter-encrypt原理<br>最后我们来简单的介绍下spring-boot-starter-encrypt的原理吧，也让大家能够理解为什么Spring Boot这么方便，只需要简单的配置一下就可以实现很多功能。</p>
+<p>启动类上的@EnableEncrypt注解是用来开启功能的,通过@Import导入自动配置类</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@Target(&#123;ElementType.TYPE&#125;)</span><br><span class="line">@Retention(RetentionPolicy.RUNTIME)</span><br><span class="line">@Documented</span><br><span class="line">@Inherited</span><br><span class="line">@Import(&#123;EncryptAutoConfiguration.class&#125;)</span><br><span class="line">public @interface EnableEncrypt &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>EncryptAutoConfiguration中配置请求和响应的处理类，用的是Spring中的RequestBodyAdvice和ResponseBodyAdvice，在Spring中对请求进行统计处理比较方便。如果还要更底层去封装那就要从servlet那块去处理了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">@Configuration</span><br><span class="line">@Component</span><br><span class="line">@EnableAutoConfiguration</span><br><span class="line">@EnableConfigurationProperties(EncryptProperties.class)</span><br><span class="line">public class EncryptAutoConfiguration &#123;</span><br><span class="line">    /**</span><br><span class="line">     * 配置请求解密</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    @Bean</span><br><span class="line">    public EncryptResponseBodyAdvice encryptResponseBodyAdvice() &#123;</span><br><span class="line">        return new EncryptResponseBodyAdvice();</span><br><span class="line">    &#125;</span><br><span class="line">    /**</span><br><span class="line">     * 配置请求加密</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    @Bean</span><br><span class="line">    public EncryptRequestBodyAdvice encryptRequestBodyAdvice() &#123;</span><br><span class="line">        return new EncryptRequestBodyAdvice();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过RequestBodyAdvice和ResponseBodyAdvice就可以对请求响应做处理了，大概的原理就是这么多了。</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-08-15T06:30:56.000Z" itemprop="dateUpdated">2019-08-15 14:30:56</time>
+</span><br>
+
+
+        
+        欢迎访问http://lmwtuedu.cn，希望此文章对您有帮助!
+        
+    </div>
+    
+    <footer>
+        <a href="http://lmwtuedu.cn">
+            <img src="/img/head.png" alt="darker">
+            darker
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/code/">code</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/reprint/">reprint</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://lmwtuedu.cn/2018/06/08/2018-06-08-前后端API交互如何保证数据安全性？/&title=《前后端API交互如何保证数据安全性》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&pic=http://lmwtuedu.cn/img/head.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://lmwtuedu.cn/2018/06/08/2018-06-08-前后端API交互如何保证数据安全性？/&title=《前后端API交互如何保证数据安全性》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://lmwtuedu.cn/2018/06/08/2018-06-08-前后端API交互如何保证数据安全性？/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《前后端API交互如何保证数据安全性》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&url=http://lmwtuedu.cn/2018/06/08/2018-06-08-前后端API交互如何保证数据安全性？/&via=http://lmwtuedu.cn" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://lmwtuedu.cn/2018/06/08/2018-06-08-前后端API交互如何保证数据安全性？/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/06/14/2018-06-14-SQL2005 配置SSL证书流程/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">SQL2005 配置SSL证书流程</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/05/18/2018-05-18-累死你的不是工作，而是工作方法/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">累死你的不是工作，而是工作方法</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        请喝维他奶~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.PNG" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.PNG" data-alipay="/img/alipay.PNG">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>darker &copy; 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://lmwtuedu.cn/2018/06/08/2018-06-08-前后端API交互如何保证数据安全性？/&title=《前后端API交互如何保证数据安全性》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&pic=http://lmwtuedu.cn/img/head.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://lmwtuedu.cn/2018/06/08/2018-06-08-前后端API交互如何保证数据安全性？/&title=《前后端API交互如何保证数据安全性》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://lmwtuedu.cn/2018/06/08/2018-06-08-前后端API交互如何保证数据安全性？/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《前后端API交互如何保证数据安全性》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&url=http://lmwtuedu.cn/2018/06/08/2018-06-08-前后端API交互如何保证数据安全性？/&via=http://lmwtuedu.cn" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://lmwtuedu.cn/2018/06/08/2018-06-08-前后端API交互如何保证数据安全性？/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPYAAAD2CAAAAADAeSUUAAADMElEQVR42u3aQY7jMAwEwPz/01lgTgtk7W2KysCmS6cgk9guzaEjkq9XvN4/6+/Xn+8cff7z/c91fsfzZzi6woaFjY2NfRP2+3SdM6qP1f/PnF8zsWBjY2NPZSeMzufXYu8dr/zZsLGxsZ/MPo+fwi2rYRN8FxsbGxs7D6S1WMqR1e3AxsbGxs5/4u9aecPg/PO/VEvDxsbGvjx7rdF7zddf729jY2NjX4zdD6HOoSIpWn0jVrGxsbEnsfPSf6ecVP1up5hVCDZsbGzsEewkivIH7cTbrlHOQnRhY2Njj2Cvjd304ycPufw5k4MNNjY29lR2coNquScPofwu1XGiwoEEGxsbewQ7//J5yHUOHmubuDbiiY2NjT2PvRZg1XZC3r7NDxiFTgg2Njb2UPZaf7gzcFM9oqyN70Sbgo2NjT2Ovfiz/tdjKd/Q1vgONjY29uXZ+VBLHlFrRahdZ4Qo2LCxsbEHsatHjqRI1GkSd0KrPB6EjY2NPY7diZPq4eQb5ady8wMbGxt7BLtVhSq2CtY2sVrqihrS2NjY2OPY1fGXPK6StsHesaEogLGxsbEHsfM4yQ8P/eNNdbvz0R9sbGzseey8QJMHUn61/FBRjUBsbGzs57CTIKkO3OwaAOq3e/8TjdjY2Ngj2NWf/tVoyTd0rW1cDVRsbGzs2exqq7UTOeWpovZYz2FiY2NjY49gV+dYkvCoHmbyKO2Uk/7R38bGxsa+Obv/E3+tlfsKVr8lUL4BNjY29s3Z+dBMciCptofzAcrq0M/hdmBjY2OPY/eja62dkP8DquWqDf1tbGxs7Juw9668iF9tDHTKWNjY2NhPY6+V+NeKO2uN5F2HGWxsbOx57HxoplN1XwubVjMAGxsbeyj7XVx5sT4Z98lJuyINGxsbex5774FhV9Sdb1kebNXSFTY2NvZ92dWCfnWkpnrI6WxHIcCwsbGxx7Hz40G+BUlO7ipUla+PjY2N/WB20ujtDGLm7+R/PTyKYGNjYz+MvdaUrQZV0njIR4U2BBg2Njb2TdjJRXPeWuxVC0atRgU2Njb2IHa10ZtsWb6te48u5++3+tvY2NjYV2T/AUGGgwYw5QVKAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'Cherry Up';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'Champion';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

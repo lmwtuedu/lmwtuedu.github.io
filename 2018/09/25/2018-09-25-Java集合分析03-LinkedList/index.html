@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>Java集合分析03-LinkedList | I AM SLOW WALKER, BUT I NEVER WALK BACK</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="集合">
+    <meta name="description" content="Java集合分析03-LinkedList我本人在工作中，其实用到LinkList的比较少，所以对这个类不死很熟悉，只是知道这个类是一个链表类，线性结构； 数组也是线性结构，数组是内存的物理存储上呈线性，逻辑上也是线性，链表只是在逻辑上呈线性。在链表的每一个存储单元中不仅存储有当前的元素，还有下一个存储单元的地址，这样的可以通过地址将所有的存储单元连接在一起。 具体LinkedList的概念查看0">
+<meta name="keywords" content="集合">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java集合分析03-LinkedList">
+<meta property="og:url" content="http://lmwtuedu.cn/2018/09/25/2018-09-25-Java集合分析03-LinkedList/index.html">
+<meta property="og:site_name" content="I AM SLOW WALKER, BUT I NEVER WALK BACK">
+<meta property="og:description" content="Java集合分析03-LinkedList我本人在工作中，其实用到LinkList的比较少，所以对这个类不死很熟悉，只是知道这个类是一个链表类，线性结构； 数组也是线性结构，数组是内存的物理存储上呈线性，逻辑上也是线性，链表只是在逻辑上呈线性。在链表的每一个存储单元中不仅存储有当前的元素，还有下一个存储单元的地址，这样的可以通过地址将所有的存储单元连接在一起。 具体LinkedList的概念查看0">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNbRwly1fvlu2wfpokj30ji0il41k.jpg">
+<meta property="og:updated_time" content="2019-08-15T06:30:56.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java集合分析03-LinkedList">
+<meta name="twitter:description" content="Java集合分析03-LinkedList我本人在工作中，其实用到LinkList的比较少，所以对这个类不死很熟悉，只是知道这个类是一个链表类，线性结构； 数组也是线性结构，数组是内存的物理存储上呈线性，逻辑上也是线性，链表只是在逻辑上呈线性。在链表的每一个存储单元中不仅存储有当前的元素，还有下一个存储单元的地址，这样的可以通过地址将所有的存储单元连接在一起。 具体LinkedList的概念查看0">
+<meta name="twitter:image" content="https://ws2.sinaimg.cn/large/006tNbRwly1fvlu2wfpokj30ji0il41k.jpg">
+    
+        <link rel="alternate" type="application/atom+xml" title="I AM SLOW WALKER, BUT I NEVER WALK BACK" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/head.png">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/head_background.png)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/head.png">
+        </a>
+        <hgroup class="introduce">
+          <h4 class="nickname">darker</h4>
+          <a href="mailto:lmwtuedu@163.com" title="lmwtuedu@163.com" class="mail">lmwtuedu@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                Home
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/share" target="_blank" >
+                <i class="icon icon-lg icon-share-alt-square"></i>
+                Share Link
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-id-badge"></i>
+                About Me
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Java集合分析03-LinkedList</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h3 class="title">Java集合分析03-LinkedList</h3>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-09-24T16:00:00.000Z" itemprop="datePublished" class="page-time">
+  2018-09-25
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>Table Of Content</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Java集合分析03-LinkedList"><span class="post-toc-number">1.</span> <span class="post-toc-text">Java集合分析03-LinkedList</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Linkedlist的基本存储单元"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">Linkedlist的基本存储单元</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#定义"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">定义</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#构造函数"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">构造函数</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#add（E-e）"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">add（E e）</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#add（int-index-E-element）"><span class="post-toc-number">1.5.</span> <span class="post-toc-text">add（int index , E element）</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#get（int-index）"><span class="post-toc-number">1.6.</span> <span class="post-toc-text">get（int index）</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#remove-int-index"><span class="post-toc-number">1.7.</span> <span class="post-toc-text">remove(int index)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结"><span class="post-toc-number">1.8.</span> <span class="post-toc-text">小结</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#转载"><span class="post-toc-number">1.9.</span> <span class="post-toc-text">转载</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-2018-09-25-Java集合分析03-LinkedList"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Java集合分析03-LinkedList</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-09-25 00:00:00" datetime="2018-09-24T16:00:00.000Z"  itemprop="datePublished">2018-09-25</time>
+
+            
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="Java集合分析03-LinkedList"><a href="#Java集合分析03-LinkedList" class="headerlink" title="Java集合分析03-LinkedList"></a>Java集合分析03-LinkedList</h1><p>我本人在工作中，其实用到LinkList的比较少，所以对这个类不死很熟悉，只是知道这个类是一个链表类，线性结构； 数组也是线性结构，数组是内存的物理存储上呈线性，逻辑上也是线性，链表只是在逻辑上呈线性。在链表的每一个存储单元中不仅存储有当前的元素，还有下一个存储单元的地址，这样的可以通过地址将所有的存储单元连接在一起。</p>
+<p>具体LinkedList的概念查看01介绍。</p>
+<h2 id="Linkedlist的基本存储单元"><a href="#Linkedlist的基本存储单元" class="headerlink" title="Linkedlist的基本存储单元"></a>Linkedlist的基本存储单元</h2><p>LinkedList存在一个基本存储单元，是Linkedlist的一个内部类，节点元素存在两个属性，分别保存 前一个节点和后一个节点的引用。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">E</span>&gt; </span>&#123;</span><br><span class="line">	 <span class="comment">// 存储元素属性</span></span><br><span class="line">       E item;</span><br><span class="line">       <span class="comment">// 下一个节点</span></span><br><span class="line">       Node&lt;E&gt; next;</span><br><span class="line">       <span class="comment">// 前一个节点</span></span><br><span class="line">       Node&lt;E&gt; prev;</span><br><span class="line"></span><br><span class="line">       Node(Node&lt;E&gt; prev, E element, Node&lt;E&gt; next) &#123;</span><br><span class="line">           <span class="keyword">this</span>.item = element;</span><br><span class="line">           <span class="keyword">this</span>.next = next;</span><br><span class="line">           <span class="keyword">this</span>.prev = prev;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">LinkedList&lt;E&gt;</span><br><span class="line">    extends AbstractSequentialList&lt;E&gt;</span><br><span class="line">    implements List&lt;E&gt;, Deque&lt;E&gt;, Cloneable, java.io.Serializable</span><br></pre></td></tr></table></figure>
+
+<p>定义和ArrayList的差不多，但是要注意的是，LinkList实现了Deque：间接的实现了Queue; Deque是一个双向队列，为LinkedList提供了队列的两端访问元素的方法。</p>
+<h2 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Constructs an empty list.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">LinkedList</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Constructs a list containing the elements of the specified</span></span><br><span class="line"><span class="comment">     * collection, in the order they are returned by the collection's</span></span><br><span class="line"><span class="comment">     * iterator.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  c the collection whose elements are to be placed into this list</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> NullPointerException if the specified collection is null</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">LinkedList</span><span class="params">(Collection&lt;? extends E&gt; c)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>();</span><br><span class="line">        addAll(c);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>构造函数 里面没有任何操作，所以我们去查看一下属性</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">transient</span> <span class="keyword">int</span> size = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Pointer to first node.</span></span><br><span class="line"><span class="comment"> * Invariant: (first == null &amp;&amp; last == null) ||</span></span><br><span class="line"><span class="comment"> *            (first.prev == null &amp;&amp; first.item != null)</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">transient</span> Node&lt;E&gt; first;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Pointer to last node.</span></span><br><span class="line"><span class="comment"> * Invariant: (first == null &amp;&amp; last == null) ||</span></span><br><span class="line"><span class="comment"> *            (last.next == null &amp;&amp; last.item != null)</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">transient</span> Node&lt;E&gt; last;</span><br></pre></td></tr></table></figure>
+
+<h2 id="add（E-e）"><a href="#add（E-e）" class="headerlink" title="add（E e）"></a>add（E e）</h2><p>源码分析：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Appends the specified element to the end of this list.</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   * &lt;p&gt;This method is equivalent to &#123;<span class="doctag">@link</span> #addLast&#125;.</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> e element to be appended to this list</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@return</span> &#123;<span class="doctag">@code</span> true&#125; (as specified by &#123;<span class="doctag">@link</span> Collection#add&#125;)</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">      linkLast(e);</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Links e as last element.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">linkLast</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">  	 <span class="comment">// 将最后的一个元素赋值，引用传递， 给节点l final休息，修饰的属性之后不能修改</span></span><br><span class="line">      <span class="keyword">final</span> Node&lt;E&gt; l = last;</span><br><span class="line">      </span><br><span class="line">      <span class="comment">// 调用节点的有参构造方法 创建新的节点， 保存添加的元素</span></span><br><span class="line">      <span class="keyword">final</span> Node&lt;E&gt; newNode = <span class="keyword">new</span> Node&lt;&gt;(l, e, <span class="keyword">null</span>);</span><br><span class="line">      </span><br><span class="line">      <span class="comment">// 此时的新节点是最后一位元素 将新节点赋值给last</span></span><br><span class="line">      last = newNode;</span><br><span class="line">      </span><br><span class="line">      <span class="comment">//如果l是null 意味着这是第一次添加元素 那么将first赋值为新节点  这个list只有一个元素 存储元素 开始元素和最后元素均是同一个元素</span></span><br><span class="line">      <span class="keyword">if</span> (l == <span class="keyword">null</span>)</span><br><span class="line">          first = newNode;</span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">          l.next = newNode;</span><br><span class="line">      size++;</span><br><span class="line">      modCount++;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>从方法中，我们知道，在调用添加方法之后，并不是马上添加的，而是调用了linkLast方法，新元素直接添加到集合最后。</p>
+<p>从以上代码中我们可以看到其在添加元素的时候并不依赖下标。<br>而其中的处理是，通过一个last（Node对象）保存最后一个节点的信息（实际上就是最后一个节点），每次通过不断的变化最后一个元素实现元素的添加。（想要充分理解此处，需要理解java值传递和引用传递的区别和本质）。</p>
+<h2 id="add（int-index-E-element）"><a href="#add（int-index-E-element）" class="headerlink" title="add（int index , E element）"></a>add（int index , E element）</h2><p>源码分析：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Inserts the specified element at the specified position in this list.</span></span><br><span class="line"><span class="comment">    * Shifts the element currently at that position (if any) and any</span></span><br><span class="line"><span class="comment">    * subsequent elements to the right (adds one to their indices).</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> index index at which the specified element is to be inserted</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> element element to be inserted</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> IndexOutOfBoundsException &#123;<span class="doctag">@inheritDoc</span>&#125;</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> index, E element)</span> </span>&#123;</span><br><span class="line">   </span><br><span class="line">   	 <span class="comment">// 检查位置的合法性</span></span><br><span class="line">       checkPositionIndex(index);</span><br><span class="line">	 </span><br><span class="line">	 <span class="comment">// 位置在尾部，尾部添加</span></span><br><span class="line">       <span class="keyword">if</span> (index == size)</span><br><span class="line">           linkLast(element);</span><br><span class="line">       <span class="keyword">else</span></span><br><span class="line">           linkBefore(element, node(index));</span><br><span class="line">   &#125;</span><br><span class="line">   </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Returns the (non-null) Node at the specified element index.</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function">Node&lt;E&gt; <span class="title">node</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">       <span class="comment">// assert isElementIndex(index);</span></span><br><span class="line">		</span><br><span class="line">	 <span class="comment">// 二分查找，如果index小于中间值的index，从头开始找</span></span><br><span class="line">	 <span class="comment">// 如果大于中间值的index，从尾巴开始找</span></span><br><span class="line">       <span class="keyword">if</span> (index &lt; (size &gt;&gt; <span class="number">1</span>)) &#123;</span><br><span class="line">           Node&lt;E&gt; x = first;</span><br><span class="line">           <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; index; i++)</span><br><span class="line">               x = x.next;</span><br><span class="line">           <span class="keyword">return</span> x;</span><br><span class="line">       &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">           Node&lt;E&gt; x = last;</span><br><span class="line">           <span class="keyword">for</span> (<span class="keyword">int</span> i = size - <span class="number">1</span>; i &gt; index; i--)</span><br><span class="line">               x = x.prev;</span><br><span class="line">           <span class="keyword">return</span> x;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   </span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Inserts element e before non-null Node succ.</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">void</span> <span class="title">linkBefore</span><span class="params">(E e, Node&lt;E&gt; succ)</span> </span>&#123;</span><br><span class="line">       <span class="comment">// assert succ != null;</span></span><br><span class="line">       </span><br><span class="line">       <span class="comment">// succ的前一个节点</span></span><br><span class="line">       <span class="keyword">final</span> Node&lt;E&gt; pred = succ.prev;</span><br><span class="line">       </span><br><span class="line">       <span class="comment">// 创建一个新的节点，构成参数 前一个节点和后一个节点，e</span></span><br><span class="line">       <span class="keyword">final</span> Node&lt;E&gt; newNode = <span class="keyword">new</span> Node&lt;&gt;(pred, e, succ);</span><br><span class="line">       <span class="comment">// succ的前一个节点是创建的节点</span></span><br><span class="line">       succ.prev = newNode;</span><br><span class="line">       <span class="comment">// 前一个节点为空那么就是首节点</span></span><br><span class="line">       <span class="keyword">if</span> (pred == <span class="keyword">null</span>)</span><br><span class="line">           first = newNode;</span><br><span class="line">       <span class="keyword">else</span></span><br><span class="line">           pred.next = newNode; <span class="comment">// 前一个节点的下一个节点就是新节点</span></span><br><span class="line">       size++;</span><br><span class="line">       modCount++;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws2.sinaimg.cn/large/006tNbRwly1fvlu2wfpokj30ji0il41k.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+
+<p>上述代码中有一个function： checkPositionIndex</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">checkPositionIndex</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">if</span> (!isPositionIndex(index))</span><br><span class="line">           <span class="keyword">throw</span> <span class="keyword">new</span> IndexOutOfBoundsException(outOfBoundsMsg(index));</span><br><span class="line">   &#125;</span><br><span class="line">   </span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Tells if the argument is the index of a valid position for an</span></span><br><span class="line"><span class="comment">    * iterator or an add operation.</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isPositionIndex</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">return</span> index &gt;= <span class="number">0</span> &amp;&amp; index &lt;= size;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过对两个添加方法的分析，我们可以很明显的感受到LinkedList添加元素的效率，不需要扩容，不需要复制数组。</p>
+<h2 id="get（int-index）"><a href="#get（int-index）" class="headerlink" title="get（int index）"></a>get（int index）</h2><p>源码分析：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Returns the element at the specified position in this list.</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> index index of the element to return</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span> the element at the specified position in this list</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> IndexOutOfBoundsException &#123;<span class="doctag">@inheritDoc</span>&#125;</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> E <span class="title">get</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">       checkElementIndex(index);</span><br><span class="line">       <span class="keyword">return</span> node(index).item;</span><br><span class="line">   &#125;</span><br><span class="line">   </span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Returns the (non-null) Node at the specified element index.</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function">Node&lt;E&gt; <span class="title">node</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">       <span class="comment">// assert isElementIndex(index);</span></span><br><span class="line"></span><br><span class="line">       <span class="keyword">if</span> (index &lt; (size &gt;&gt; <span class="number">1</span>)) &#123;</span><br><span class="line">           Node&lt;E&gt; x = first;</span><br><span class="line">           <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; index; i++)</span><br><span class="line">               x = x.next;</span><br><span class="line">           <span class="keyword">return</span> x;</span><br><span class="line">       &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">           Node&lt;E&gt; x = last;</span><br><span class="line">           <span class="keyword">for</span> (<span class="keyword">int</span> i = size - <span class="number">1</span>; i &gt; index; i--)</span><br><span class="line">               x = x.prev;</span><br><span class="line">           <span class="keyword">return</span> x;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意 add（int index， Element e） 中也用到了 node(int index).</p>
+<p>在这段代码中充分体现了双向链表的优越性，可以从前也可以从后开始遍历，通过对index范围的判断能够显著的提高效率。但是在遍历的时候也可以很明显的看到LinkedList get方法获取元素的低效率，时间复杂度O(n)。</p>
+<h2 id="remove-int-index"><a href="#remove-int-index" class="headerlink" title="remove(int index)"></a>remove(int index)</h2><p>所谓删除节点，就是把节点的前后引用置为null，并且保证没有任何其他节点指向被删除的节点。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Removes the element at the specified position in this list.  Shifts any</span></span><br><span class="line"><span class="comment">   * subsequent elements to the left (subtracts one from their indices).</span></span><br><span class="line"><span class="comment">   * Returns the element that was removed from the list.</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> index the index of the element to be removed</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@return</span> the element previously at the specified position</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@throws</span> IndexOutOfBoundsException &#123;<span class="doctag">@inheritDoc</span>&#125;</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> E <span class="title">remove</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">      checkElementIndex(index);</span><br><span class="line">      <span class="keyword">return</span> unlink(node(index));</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Returns the (non-null) Node at the specified element index.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function">Node&lt;E&gt; <span class="title">node</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">      <span class="comment">// assert isElementIndex(index);</span></span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (index &lt; (size &gt;&gt; <span class="number">1</span>)) &#123;</span><br><span class="line">          Node&lt;E&gt; x = first;</span><br><span class="line">          <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; index; i++)</span><br><span class="line">              x = x.next;</span><br><span class="line">          <span class="keyword">return</span> x;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          Node&lt;E&gt; x = last;</span><br><span class="line">          <span class="keyword">for</span> (<span class="keyword">int</span> i = size - <span class="number">1</span>; i &gt; index; i--)</span><br><span class="line">              x = x.prev;</span><br><span class="line">          <span class="keyword">return</span> x;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Unlinks non-null node x.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function">E <span class="title">unlink</span><span class="params">(Node&lt;E&gt; x)</span> </span>&#123;</span><br><span class="line">      <span class="comment">// assert x != null;</span></span><br><span class="line">      <span class="comment">// 定义一个Element接受item</span></span><br><span class="line">      <span class="keyword">final</span> E element = x.item;</span><br><span class="line">      <span class="comment">// 下一个节点</span></span><br><span class="line">      <span class="keyword">final</span> Node&lt;E&gt; next = x.next;</span><br><span class="line">      <span class="comment">// 上一个节点</span></span><br><span class="line">      <span class="keyword">final</span> Node&lt;E&gt; prev = x.prev;</span><br><span class="line"></span><br><span class="line"> <span class="comment">// 上一个节点为空，说明是头节点</span></span><br><span class="line">      <span class="keyword">if</span> (prev == <span class="keyword">null</span>) &#123;</span><br><span class="line">      	 <span class="comment">// 头节点换成下一个节点</span></span><br><span class="line">          first = next;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      	 <span class="comment">// 上一个节点的下一个节点为下一个节点</span></span><br><span class="line">          prev.next = next;</span><br><span class="line">          x.prev = <span class="keyword">null</span>;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line"> <span class="comment">// 下一个节点为空，说明是尾巴节点</span></span><br><span class="line">      <span class="keyword">if</span> (next == <span class="keyword">null</span>) &#123;</span><br><span class="line">      	  <span class="comment">// 尾巴节点换成前一个节点</span></span><br><span class="line">          last = prev;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      	  <span class="comment">// 下一个节点的前一个节点为前一个节点</span></span><br><span class="line">          next.prev = prev;</span><br><span class="line">          x.next = <span class="keyword">null</span>;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      x.item = <span class="keyword">null</span>;</span><br><span class="line">      size--;</span><br><span class="line">      modCount++;</span><br><span class="line">      <span class="keyword">return</span> element;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意：prev，item，next均置为null 是为了让虚拟机回收； 我们可以看到LinkedList删除元素的效率也不错。</p>
+<blockquote>
+<p>TDDO 队列分析~: 队列只是LinkedList的变换，只是取头和尾巴。</p>
+</blockquote>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ol>
+<li>LinkedList的查询速度比较慢，一般是一分为二查找。效率没有ArrayList高</li>
+<li>添加元素效率比ArrayList高，有优势</li>
+<li>实现队列接口。</li>
+</ol>
+<blockquote>
+<p>ArrayList和LinkedList的区别</p>
+</blockquote>
+<blockquote>
+<p>顺序插入，两者速度都很快，但是ArrayList稍快于LinkedList，数组实现，数组是提前创建好的；LinkedList每次都需要重新new新节点<br>LinedList需要维护前后节点，会更耗费内存<br>遍历，LinedList适合用迭代遍历；ArrayList适合用循环遍历</p>
+</blockquote>
+<blockquote>
+<p>不要使用普通for循环遍历LinedList<br>也不要使用迭代遍历遍历ArrayList（具体看上篇文章《ArrayList分析》）<br>删除和插入就不说了，毕竟ArrayList需要复制数组和扩容。</p>
+</blockquote>
+<h2 id="转载"><a href="#转载" class="headerlink" title="转载"></a>转载</h2><p><a href="https://juejin.im/post/5a5dee406fb9a01c965826ac" target="_blank" rel="noopener">https://juejin.im/post/5a5dee406fb9a01c965826ac</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-08-15T06:30:56.000Z" itemprop="dateUpdated">2019-08-15 14:30:56</time>
+</span><br>
+
+
+        
+        欢迎访问http://lmwtuedu.cn，希望此文章对您有帮助!
+        
+    </div>
+    
+    <footer>
+        <a href="http://lmwtuedu.cn">
+            <img src="/img/head.png" alt="darker">
+            darker
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/集合/">集合</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://lmwtuedu.cn/2018/09/25/2018-09-25-Java集合分析03-LinkedList/&title=《Java集合分析03-LinkedList》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&pic=http://lmwtuedu.cn/img/head.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://lmwtuedu.cn/2018/09/25/2018-09-25-Java集合分析03-LinkedList/&title=《Java集合分析03-LinkedList》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://lmwtuedu.cn/2018/09/25/2018-09-25-Java集合分析03-LinkedList/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java集合分析03-LinkedList》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&url=http://lmwtuedu.cn/2018/09/25/2018-09-25-Java集合分析03-LinkedList/&via=http://lmwtuedu.cn" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://lmwtuedu.cn/2018/09/25/2018-09-25-Java集合分析03-LinkedList/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/09/26/2018-09-26-Java集合05-List/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Java集合05-List 和 Queue</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/09/25/2018-09-25-Java集合分析02-ArrayList/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Java集合分析02-Arraylist</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        请喝维他奶~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.PNG" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.PNG" data-alipay="/img/alipay.PNG">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>darker &copy; 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://lmwtuedu.cn/2018/09/25/2018-09-25-Java集合分析03-LinkedList/&title=《Java集合分析03-LinkedList》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&pic=http://lmwtuedu.cn/img/head.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://lmwtuedu.cn/2018/09/25/2018-09-25-Java集合分析03-LinkedList/&title=《Java集合分析03-LinkedList》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://lmwtuedu.cn/2018/09/25/2018-09-25-Java集合分析03-LinkedList/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java集合分析03-LinkedList》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&url=http://lmwtuedu.cn/2018/09/25/2018-09-25-Java集合分析03-LinkedList/&via=http://lmwtuedu.cn" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://lmwtuedu.cn/2018/09/25/2018-09-25-Java集合分析03-LinkedList/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACsElEQVR42u3aQW7DQAgF0Nz/0qnUbRvnA4MbVc+rKLXseRNpoMDjEV/P7+vnN9ff//zr9T3J94+NCw8PD6+19FfX9T2vXp9/zt9VvQcPDw9vm3cdDPIwcH1n9SS/Xk8SwPDw8PD+lpck2UkgyZeLh4eH9594SfC4TrV79QQ8PDy8z+El//znpdhJIt4rZByoteDh4eHFvGoD7BM+L/b38PDw8AZd9aSUUG3z99LuZ+vCw8PD2+DlyXHeyspT6km5Nm+b4eHh4d3Py1tT1YZZtLhiYPjlXXh4eHjLvCosHxSYh4TrMu7LlePh4eEd5VUb/9cLrba+qiEk/8Xw8PDwtnn5gZ4ksmdHtSaJOB4eHt4G71S1s9owmxd584YcHh4e3gaveqAnjN6h3wtOb56Ah4eHt8arps7J1syflm/KozrLgIeHh7fAy1tfzXGo1jhC9Tl4eHh4Z3nzQz8PBtUW1yQF/6UBhoeHh3eIl9+UJ8q9LTib7uPh4eHdyasWYXsLTYa3JmMKeHh4eHfyrl9ZTYurAwS9FPzA6AAeHh7egDc5pquFiTxUVMu7eHh4eHu8/JW9hllycE+C0Bs8Hh4e3hqvnKTGpdje94VCAx4eHt7tvCR1zpPmXnEhHxeYbCgeHh7ePbz8IM7bWr2yQq8ojIeHh7fBS1r+1aJAdSmTwsebEjMeHh7eMq96TPfiT7W0MUnu8fDw8DZ4k0Jqr/HfK230QhEeHh7eBu9ZvHrLnSTl1eGDKKXGw8PDG/Dyq5dqn22eJRuHh4eHdw8vCQYJYJ6C588p/D54eHh4a7z8QJ8MBJwarso3CA8PD+9vedUhgySQ9DaxsEI8PDy8j+RNlttrhhXCCR4eHt4abzKAVW325yl4kmS/WQMeHh7eAq/XADtbvOiFn2Y3Dw8PD6/P+wLa02nOZDPymQAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'Cherry Up';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'Champion';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

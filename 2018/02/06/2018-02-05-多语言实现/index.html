@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>多语言实现方案 | I AM SLOW WALKER, BUT I NEVER WALK BACK</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="code">
+    <meta name="description" content="前言开发过程中，不知道你的客户是否有海外用户呢？ 如果没有，那么恭喜你，出门右拐；不送！ 好了，废话不多说，上干货； 内容不是我写的，我只是一个搬运工，整理归纳输出： 内容标签：SpringMVC velocity 不要问我：为什么不是 JSP视图解析器 FreeMarker视图解析器 而是 Velocity视图解析器 ； 因为我写的代码框架就是用的Velocity；如果需要其它框架，请自行百度，">
+<meta name="keywords" content="code">
+<meta property="og:type" content="article">
+<meta property="og:title" content="多语言实现方案">
+<meta property="og:url" content="http://lmwtuedu.cn/2018/02/06/2018-02-05-多语言实现/index.html">
+<meta property="og:site_name" content="I AM SLOW WALKER, BUT I NEVER WALK BACK">
+<meta property="og:description" content="前言开发过程中，不知道你的客户是否有海外用户呢？ 如果没有，那么恭喜你，出门右拐；不送！ 好了，废话不多说，上干货； 内容不是我写的，我只是一个搬运工，整理归纳输出： 内容标签：SpringMVC velocity 不要问我：为什么不是 JSP视图解析器 FreeMarker视图解析器 而是 Velocity视图解析器 ； 因为我写的代码框架就是用的Velocity；如果需要其它框架，请自行百度，">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79gy1fo5l6jdq9tj30nl03owfe.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79gy1fo5lbpiwn5j308o03e3yp.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79gy1fo5ldsjdqxj30dq030wez.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79gy1fo5ldpegjhj30aa03swer.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79gy1fo5ljk378yj30dm062gm5.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79gy1fo5lnznz31j30gd043gm5.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79gy1fo5lppvey8j30h103zt92.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcgy1fo6km3flooj30v00b4jts.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcgy1fo6ktf20z9j30nc07m0uo.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1fo6pq39rtvj30nt02u74v.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1fo6psj7rvyj30oz08fdi0.jpg">
+<meta property="og:updated_time" content="2019-08-15T06:30:56.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="多语言实现方案">
+<meta name="twitter:description" content="前言开发过程中，不知道你的客户是否有海外用户呢？ 如果没有，那么恭喜你，出门右拐；不送！ 好了，废话不多说，上干货； 内容不是我写的，我只是一个搬运工，整理归纳输出： 内容标签：SpringMVC velocity 不要问我：为什么不是 JSP视图解析器 FreeMarker视图解析器 而是 Velocity视图解析器 ； 因为我写的代码框架就是用的Velocity；如果需要其它框架，请自行百度，">
+<meta name="twitter:image" content="https://ws4.sinaimg.cn/large/006tNc79gy1fo5l6jdq9tj30nl03owfe.jpg">
+    
+        <link rel="alternate" type="application/atom+xml" title="I AM SLOW WALKER, BUT I NEVER WALK BACK" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/head.png">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/head_background.png)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/head.png">
+        </a>
+        <hgroup class="introduce">
+          <h4 class="nickname">darker</h4>
+          <a href="mailto:lmwtuedu@163.com" title="lmwtuedu@163.com" class="mail">lmwtuedu@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                Home
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/share" target="_blank" >
+                <i class="icon icon-lg icon-share-alt-square"></i>
+                Share Link
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-id-badge"></i>
+                About Me
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">多语言实现方案</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h3 class="title">多语言实现方案</h3>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-02-05T16:00:00.000Z" itemprop="datePublished" class="page-time">
+  2018-02-06
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>Table Of Content</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#正题"><span class="post-toc-number">2.</span> <span class="post-toc-text">正题</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#转载内容"><span class="post-toc-number">3.</span> <span class="post-toc-text">转载内容</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#基于浏览器请求的国际化"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">基于浏览器请求的国际化</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#基于Session的国际化实现"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">基于Session的国际化实现</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#基于Cookie的国际化实现"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">基于Cookie的国际化实现</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#结束语"><span class="post-toc-number">3.4.</span> <span class="post-toc-text">结束语</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-2018-02-05-多语言实现"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">多语言实现方案</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-02-06 00:00:00" datetime="2018-02-05T16:00:00.000Z"  itemprop="datePublished">2018-02-06</time>
+
+            
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>开发过程中，不知道你的客户是否有海外用户呢？ 如果没有，那么恭喜你，出门右拐；不送！</p>
+<p>好了，废话不多说，上干货； 内容不是我写的，我只是一个搬运工，整理归纳输出：</p>
+<p>内容标签：<em><code>SpringMVC</code></em> <em><code>velocity</code></em></p>
+<p>不要问我：为什么不是 <code>JSP视图解析器</code> <code>FreeMarker视图解析器</code> 而是 <code>Velocity视图解析器</code> ； 因为我写的代码框架就是用的Velocity；如果需要其它框架，请自行百度，或者出门右拐，不送！ 闲暇时，我也会整理一些其它框架内容， 如果时间允许，后续补充…。</p>
+<h2 id="正题"><a href="#正题" class="headerlink" title="正题"></a>正题</h2><p>我们常常看别人的开源代码或者其他工程时候，是不是有时会瞟见这样的一个词 <code>I18N</code>; 如果你没见到，没关系，现在你就知道了； “I18N 作为国际化的简称， 其来源时英文单词 internationalization的首末字符的i和n，18为中的字符个数”。</p>
+<h2 id="转载内容"><a href="#转载内容" class="headerlink" title="转载内容"></a>转载内容</h2><p><a href="http://kiritor.github.io/2015/09/11/SpringMVC-i18n/" target="_blank" rel="noopener">Spring MVC + Velocity实现国际化配置</a></p>
+<p>Spring国际化配置主要3个关键点：</p>
+<blockquote>
+<ol>
+<li>ResourceBundleMessageSource： 实现国际化资源的定义</li>
+<li>LocaleResolve: 实现本地化信息的解析</li>
+<li>LocaleChangeInterceptor： 实现本地化信息的监听（来实现url参数动态指定locale）。    </li>
+</ol>
+</blockquote>
+<p><strong>LocaleResolver</strong></p>
+<p>LocaleResolver 是指用什么策略来检测请求是哪一种locale,Spring MVC提供了以下几种策略：</p>
+<p><strong>AcceptHeaderLocaleResolver</strong></p>
+<p>根据浏览器的 http header     中的 accept-language 域判定浏览器的语言环境， 可以通过httpServletRequest.getLocale获取域的内容，但是无法调试localeResolver接口的setLocale设置locale设置locale， 基于这个策略，在后面的demon中； 可以实现基于浏览器的国际化案例。</p>
+<p><strong>SessionLocaleResolver</strong></p>
+<p>根据用户本次会话过程中的语言设定决定语言种类， session级别的，在此sessio周期内可以修改语言种类，但是session失效后，语言设定失效， 基于这个策略，在后面的demon中可以实现基于session的国际化案例。</p>
+<p><strong>CookiedLocaleResolver</strong></p>
+<p>根据Cookie判定用于的语言设定（Cookie保存着用户前一次的语言设定参数)。</p>
+<p><strong>FixedLocaleResolver</strong></p>
+<p>一直使用固定的Locale,改变locale是不支持的。<br>如果需要使用哪一种策略，只需要在DispatcherServlet 制定的Spring配置文件中配置就行，DispatchServlet将在初始化的时候调用initLcaleResolver(context)方法区配置文件中找名字为localeResolver的bean， 如果有就使用配置文件的。没有就使用默认的 AcceptHeaderLocaleResolver 。</p>
+<h3 id="基于浏览器请求的国际化"><a href="#基于浏览器请求的国际化" class="headerlink" title="基于浏览器请求的国际化"></a>基于浏览器请求的国际化</h3><p>使用AcceptHeaderLocaleResolver策略实现基于浏览器语言的国际化。</p>
+<ol>
+<li><p>首先配置国际化的资源文件</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws4.sinaimg.cn/large/006tNc79gy1fo5l6jdq9tj30nl03owfe.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+</li>
+<li><p>定义国际化资源文件内容，后缀为.properties; 注意编写的名称信息</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws1.sinaimg.cn/large/006tNc79gy1fo5lbpiwn5j308o03e3yp.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws1.sinaimg.cn/large/006tNc79gy1fo5ldsjdqxj30dq030wez.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws1.sinaimg.cn/large/006tNc79gy1fo5ldpegjhj30aa03swer.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p> ⚠️注意：中文编码采取unicode</p>
+</li>
+<li><p>配置本地化信息解析策略，这里是基于浏览器的为默认配置，因此可以不做配置。</p>
+</li>
+<li><p>最后前段界面通过使用spring针对不同view视图提供的标记处理国际化信息， velocity标记如下：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws1.sinaimg.cn/large/006tNc79gy1fo5ljk378yj30dm062gm5.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure> 
+</li>
+<li><p>运行测试效果程序，显示不同效果需要将 浏览器的语言更换，例如简体中文，英文（美国）</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws2.sinaimg.cn/large/006tNc79gy1fo5lnznz31j30gd043gm5.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws1.sinaimg.cn/large/006tNc79gy1fo5lppvey8j30h103zt92.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+</li>
+<li><p>基于浏览器的国际化配置就搞定了，由于是根据浏览器的语言环境来解析的，配置十分的简单； 可是搞了大半天我们只是解决了前端一些特定（固定）数据的多语言； 但是交互的数据，后端如何解决国际化呢？ 如果只是一些简单的数据，例如提示错误信息等等，也可以通过配置文件解决。 数据库的国际化问题，是另外一个层面东西；一般很少考虑用户输入的东西是不是国际化。</p>
+</li>
+</ol>
+<h3 id="基于Session的国际化实现"><a href="#基于Session的国际化实现" class="headerlink" title="基于Session的国际化实现"></a>基于Session的国际化实现</h3><p>基于Session的国际化配置比基于浏览器的略复杂，在其基础上，需要经过如下配置。</p>
+<ol>
+<li><p>编写一个action行为，去更改语言（此方法与你手动更改浏览器的效果一样，差不多； 但是这个部分设置可以让你后台数据传输的时候，检查当前的语言环境，通过session获取语言）</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fo6km3flooj30v00b4jts.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+</li>
+<li><p>编写配置文件</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fo6ktf20z9j30nc07m0uo.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+</li>
+<li><p>运行测试<br>与之前编写的浏览器的方式一样，只是更改语言的方式，换成了发送请求，可以用POST请求方法区更改语言； 我为了测试方便，写成了GET请求方法。</p>
+</li>
+<li><p>到此为止，基于session的国际化配置完结，基于session 的国际化是相对基于浏览器语言来说比较常用的一种方式。 缺点： session会话结束时，设置的语言环境就被删除了。</p>
+</li>
+</ol>
+<h3 id="基于Cookie的国际化实现"><a href="#基于Cookie的国际化实现" class="headerlink" title="基于Cookie的国际化实现"></a>基于Cookie的国际化实现</h3><p>大多数情况下，国际化都是基于Cookie的， 用户在设置完一次语言信息之后，之后自己没有修改，就算退出再登录，语言也是之前设置的，除非用户自己手动情况，这种要通过Cookie来实现了。</p>
+<ol>
+<li>配置国际化资源文件（参考基于浏览器国际化配置）</li>
+<li>配置本地话信息解析策略，这里将基于session的该配置项替换成为如下即可：<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fo6pq39rtvj30nt02u74v.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws3.sinaimg.cn/large/006tKfTcgy1fo6psj7rvyj30oz08fdi0.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+
+</li>
+</ol>
+<h3 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h3><blockquote>
+<p>谁的职场都会忙碌辛苦，免不了有加班熬夜，但一定要先让自己成为一个内心幸福的人，才会在一天的埋头十多个小时之后依然觉得满足而充满希望。</p>
+</blockquote>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-08-15T06:30:56.000Z" itemprop="dateUpdated">2019-08-15 14:30:56</time>
+</span><br>
+
+
+        
+        欢迎访问http://lmwtuedu.cn，希望此文章对您有帮助!
+        
+    </div>
+    
+    <footer>
+        <a href="http://lmwtuedu.cn">
+            <img src="/img/head.png" alt="darker">
+            darker
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/code/">code</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://lmwtuedu.cn/2018/02/06/2018-02-05-多语言实现/&title=《多语言实现方案》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&pic=http://lmwtuedu.cn/img/head.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://lmwtuedu.cn/2018/02/06/2018-02-05-多语言实现/&title=《多语言实现方案》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://lmwtuedu.cn/2018/02/06/2018-02-05-多语言实现/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《多语言实现方案》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&url=http://lmwtuedu.cn/2018/02/06/2018-02-05-多语言实现/&via=http://lmwtuedu.cn" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://lmwtuedu.cn/2018/02/06/2018-02-05-多语言实现/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/02/24/2018-02-24-工作不如房子赚的多/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">华为13年：工作不如房子赚的多</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/02/02/2018-02-02-Java 栈和堆/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Java 栈和堆</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        请喝维他奶~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.PNG" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.PNG" data-alipay="/img/alipay.PNG">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>darker &copy; 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://lmwtuedu.cn/2018/02/06/2018-02-05-多语言实现/&title=《多语言实现方案》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&pic=http://lmwtuedu.cn/img/head.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://lmwtuedu.cn/2018/02/06/2018-02-05-多语言实现/&title=《多语言实现方案》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://lmwtuedu.cn/2018/02/06/2018-02-05-多语言实现/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《多语言实现方案》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&url=http://lmwtuedu.cn/2018/02/06/2018-02-05-多语言实现/&via=http://lmwtuedu.cn" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://lmwtuedu.cn/2018/02/06/2018-02-05-多语言实现/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACKUlEQVR42u3aS47CQAwFQO5/aWaLxNDzbIeR0l1ZIQSdVBaWf49HfD1frtdv3n+zPqF6l4svDAyM2zKeyyt/iPdffnqs/HUkz4aBgXEOo/pA65tVg3L19WFgYGDkgW8dQNep3qdzMDAwMCaMSS2ZJ4UYGBgYkyJ2feMkdE7OuawWx8DAuCGj10T7n89fmW9gYGDcivFsXUmiVv3l5MLAwNibUQ2C1VDYK4+r6SYGBsbejLxwTVa+5kVvb9cLAwNjb0a+vFX9pvd9/l8MDIxzGPMwmg8Drg3iv9TiGBgYhzGqzbXqKDT5b7KgVnggDAyM7Rg5ploGV0N2lJJiYGAcwOgNBnrN/TxBzMeiGBgY5zCqjbBqWOyNP6MzMTAwtmb0CtTk0Ml4oLo0hoGBsTej2tafrHY132sy5sTAwDiA0dzRCNa88tZbb5yJgYFxDmO+WpEPHb/xajAwMPZmJIldtQE3b6s1E1YMDIxNGflgIE/48nI3TxCjHiEGBsamjGpszlts1ZFDNfXEwMA4h1FdmLhgRtp6HX/wMDAwtmZU22Hro/OStZz2JeksBgbGpozJMkTSdKsuYfRKawwMjL0Zk/Z9r9zNR5hXhXgMDIw9GNUgONnFypcwkheEgYFxGmPesi9PJJKHy8eZGBgYGK0gmCd5+XoZBgYGRi/g5s24SdkcFbEYGBhbM3rN+vw2ec+vuaiBgYGxNWNSZCb4/OTqilhzvoGBgXEnxg8kaTziYom8uwAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'Cherry Up';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'Champion';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

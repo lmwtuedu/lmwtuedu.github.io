@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>lombok注解简单介绍 | I AM SLOW WALKER, BUT I NEVER WALK BACK</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="code,lombok">
+    <meta name="description" content="lombok注解lombok是一个可以帮助我们简化java代码编写的工具类，尤其简化JavaBean的编写，即通过采用注解的方式，消除代码中的构造方法，getter/setter等代码，使我们编写的类更加简洁，当然，这带来的副作用就是不易阅读；但是还是可以看得懂，废话不多说，上干货：  @NonNull @Cleanup @Getter/@Setter @ToString @EqualsAndHa">
+<meta name="keywords" content="code,lombok">
+<meta property="og:type" content="article">
+<meta property="og:title" content="lombok注解简单介绍">
+<meta property="og:url" content="http://lmwtuedu.cn/2018/03/26/2018-03-26-lombok注解/index.html">
+<meta property="og:site_name" content="I AM SLOW WALKER, BUT I NEVER WALK BACK">
+<meta property="og:description" content="lombok注解lombok是一个可以帮助我们简化java代码编写的工具类，尤其简化JavaBean的编写，即通过采用注解的方式，消除代码中的构造方法，getter/setter等代码，使我们编写的类更加简洁，当然，这带来的副作用就是不易阅读；但是还是可以看得懂，废话不多说，上干货：  @NonNull @Cleanup @Getter/@Setter @ToString @EqualsAndHa">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-08-15T06:30:56.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="lombok注解简单介绍">
+<meta name="twitter:description" content="lombok注解lombok是一个可以帮助我们简化java代码编写的工具类，尤其简化JavaBean的编写，即通过采用注解的方式，消除代码中的构造方法，getter/setter等代码，使我们编写的类更加简洁，当然，这带来的副作用就是不易阅读；但是还是可以看得懂，废话不多说，上干货：  @NonNull @Cleanup @Getter/@Setter @ToString @EqualsAndHa">
+    
+        <link rel="alternate" type="application/atom+xml" title="I AM SLOW WALKER, BUT I NEVER WALK BACK" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/head.png">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/head_background.png)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/head.png">
+        </a>
+        <hgroup class="introduce">
+          <h4 class="nickname">darker</h4>
+          <a href="mailto:lmwtuedu@163.com" title="lmwtuedu@163.com" class="mail">lmwtuedu@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                Home
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/share" target="_blank" >
+                <i class="icon icon-lg icon-share-alt-square"></i>
+                Share Link
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-id-badge"></i>
+                About Me
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">lombok注解简单介绍</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h3 class="title">lombok注解简单介绍</h3>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-03-25T16:00:00.000Z" itemprop="datePublished" class="page-time">
+  2018-03-26
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>Table Of Content</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#lombok注解"><span class="post-toc-number">1.</span> <span class="post-toc-text">lombok注解</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#NonNull"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">@NonNull</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Cleanup"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">@Cleanup</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Getter-Setter"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">@Getter/@Setter</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#ToString-EqualsAndHashCode"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">@ToString/@EqualsAndHashCode</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#NoArgsConstructor-RequiredArgsConstructor-AllArgsConstructor"><span class="post-toc-number">1.5.</span> <span class="post-toc-text">@NoArgsConstructor/@RequiredArgsConstructor /@AllArgsConstructor</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Data-Value"><span class="post-toc-number">1.6.</span> <span class="post-toc-text">@Data/@Value</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#SneakyThrows"><span class="post-toc-number">1.7.</span> <span class="post-toc-text">@SneakyThrows</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Synchronized"><span class="post-toc-number">1.8.</span> <span class="post-toc-text">@Synchronized</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Log"><span class="post-toc-number">1.9.</span> <span class="post-toc-text">@Log</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-2018-03-26-lombok注解"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">lombok注解简单介绍</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-03-26 00:00:00" datetime="2018-03-25T16:00:00.000Z"  itemprop="datePublished">2018-03-26</time>
+
+            
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="lombok注解"><a href="#lombok注解" class="headerlink" title="lombok注解"></a>lombok注解</h2><p>lombok是一个可以帮助我们简化java代码编写的工具类，尤其简化JavaBean的编写，即通过采用注解的方式，消除代码中的构造方法，getter/setter等代码，使我们编写的类更加简洁，当然，这带来的副作用就是不易阅读；但是还是可以看得懂，废话不多说，上干货：</p>
+<ul>
+<li>@NonNull</li>
+<li>@Cleanup</li>
+<li>@Getter/@Setter</li>
+<li>@ToString</li>
+<li>@EqualsAndHashCode</li>
+<li>@NoArgsConstructor/@RequiredArgsConstructor/@AllArgsConstructor</li>
+<li>@Data</li>
+<li>@Value</li>
+<li>@SneakyThrows</li>
+<li>@Synchronized</li>
+<li>@Log</li>
+</ul>
+<h3 id="NonNull"><a href="#NonNull" class="headerlink" title="@NonNull"></a>@NonNull</h3><p>这个注解可以用在成员方法或构造方法的参数前面，会自动产生一个关于此参数的非空检查，如果参数为空，则抛出一个空指针异常，举一个例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 成员方法参数加上@NonNull注解</span><br><span class="line">public String getName(@NonNull Person p)&#123;</span><br><span class="line">	return p.getName();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>效果相当于:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public String getName(Person p)&#123;</span><br><span class="line">	if(null == p)&#123;</span><br><span class="line">		throw new NullPointerException(p.toString() + &quot;is null&quot;)</span><br><span class="line">	&#125;</span><br><span class="line">	return p.getName();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>用构造方法的参数上效果类似，就不再举例子了。</p>
+<h3 id="Cleanup"><a href="#Cleanup" class="headerlink" title="@Cleanup"></a>@Cleanup</h3><p>这个注解用在变量前面，可以保证此变量代表的资源会被自动关闭，默认是调用资源的close（）方法，如果该资源有其它关闭方法，可以使用@Cleanup(“methodName”)来指定要调用的方法，就用输入输出流来举一个例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String[] args) throws IOException&#123;</span><br><span class="line">	@Cleanup InputStream in = new FileInputStream(args[0]);</span><br><span class="line">	@Cleanup OutputStream out = new FileOutputStream(args[1]);</span><br><span class="line">	byte[] b = new bytep[1024];</span><br><span class="line">	while(true)&#123;</span><br><span class="line">		int r = in.read(b);</span><br><span class="line">		if(-1 == r)&#123;</span><br><span class="line">			break;</span><br><span class="line">		&#125;</span><br><span class="line">		out.write(b, 0, r);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>实际效果相当于：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String[] args) throws IOException &#123;</span><br><span class="line">     InputStream in = new FileInputStream(args[0]);</span><br><span class="line">     try &#123;</span><br><span class="line">       OutputStream out = new FileOutputStream(args[1]);</span><br><span class="line">       try &#123;</span><br><span class="line">         byte[] b = new byte[10000];</span><br><span class="line">         while (true) &#123;</span><br><span class="line">           int r = in.read(b);</span><br><span class="line">           if (r == -1) break;</span><br><span class="line">           out.write(b, 0, r);</span><br><span class="line">         &#125;</span><br><span class="line">       &#125; finally &#123;</span><br><span class="line">         if (out != null) &#123;</span><br><span class="line">           out.close();</span><br><span class="line">         &#125;</span><br><span class="line">       &#125;</span><br><span class="line">     &#125; finally &#123;</span><br><span class="line">       if (in != null) &#123;</span><br><span class="line">         in.close();</span><br><span class="line">       &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>是不是简化了很多。</p>
+<h3 id="Getter-Setter"><a href="#Getter-Setter" class="headerlink" title="@Getter/@Setter"></a>@Getter/@Setter</h3><p>这一对注解从名字上就很好理解，用在成员变量前面，相当于为成员变量生成对应的get和set方法，同时还可以为生成的方法指定访问修饰符，当然，默认为public，直接来看下面的简单的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public class Programmer&#123;</span><br><span class="line">    @Getter</span><br><span class="line">    @Setter</span><br><span class="line">    private String name;</span><br><span class="line"></span><br><span class="line">    @Setter(AccessLevel.PROTECTED)</span><br><span class="line">    private int age;</span><br><span class="line"></span><br><span class="line">    @Getter(AccessLevel.PUBLIC)</span><br><span class="line">    private String language;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>效果相当于：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">public class Programmer&#123;</span><br><span class="line">    private String name;</span><br><span class="line">    private int age;</span><br><span class="line">    private String language;</span><br><span class="line"></span><br><span class="line">    public void setName(String name)&#123;</span><br><span class="line">        this.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getName()&#123;</span><br><span class="line">        return name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    protected void setAge(int age)&#123;</span><br><span class="line">        this.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getLanguage()&#123;</span><br><span class="line">        return language;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这两个注解还可以直接用在类上，可以为此类里的所有非静态成员变量生成对应的get和set方法。</p>
+<h3 id="ToString-EqualsAndHashCode"><a href="#ToString-EqualsAndHashCode" class="headerlink" title="@ToString/@EqualsAndHashCode"></a>@ToString/@EqualsAndHashCode</h3><p>这两个注解也比较好理解，就是生成toString，equals和hashcode方法，同时后者还会生成一个canEqual方法，用于判断某个对象是否是当前类的实例，生成方法时只会使用类中的非静态和非transient成员变量，这些都比较好理解，就不举例子了。<br>当然，这两个注解也可以添加限制条件，例如用@ToString(exclude={“param1”，“param2”})来排除param1和param2两个成员变量，或者用@ToString(of={“param1”，“param2”})来指定使用param1和param2两个成员变量，@EqualsAndHashCode注解也有同样的用法。</p>
+<h3 id="NoArgsConstructor-RequiredArgsConstructor-AllArgsConstructor"><a href="#NoArgsConstructor-RequiredArgsConstructor-AllArgsConstructor" class="headerlink" title="@NoArgsConstructor/@RequiredArgsConstructor /@AllArgsConstructor"></a>@NoArgsConstructor/@RequiredArgsConstructor /@AllArgsConstructor</h3><p>这三个注解都是用在类上的</p>
+<p>第一个和第三个都很好理解:就是为该类产生无参的构造方法和包含所有参数的构造方法.</p>
+<p>第二个注解则使用类中所有带有@NonNull注解的或者带有final修饰的成员变量生成对应的构造方法，</p>
+<p>当然，和前面几个注解一样，成员变量都是非静态的，另外，如果类中含有final修饰的成员变量，是无法使用@NoArgsConstructor注解的。 </p>
+<p>三个注解都可以指定生成的构造方法的访问权限，同时，第二个注解还可以用@RequiredArgsConstructor(staticName=”methodName”)的形式生成一个指定名称的静态方法，返回一个调用相应的构造方法产生的对象，下面来看一个生动鲜活的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@RequiredArgsConstructor(staticName = &quot;sunsfan&quot;)</span><br><span class="line">@AllArgsConstructor(access = AccessLevel.PROTECTED)</span><br><span class="line">@NoArgsConstructor</span><br><span class="line">public class Shape &#123;</span><br><span class="line">    private int x;</span><br><span class="line">    @NonNull</span><br><span class="line">    private double y;</span><br><span class="line">    @NonNull</span><br><span class="line">    private String name;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>实际效果相当于：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">public class Shape &#123;</span><br><span class="line">    private int x;</span><br><span class="line">    private double y;</span><br><span class="line">    private String name;</span><br><span class="line"></span><br><span class="line">    public Shape()&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    protected Shape(int x,double y,String name)&#123;</span><br><span class="line">        this.x = x;</span><br><span class="line">        this.y = y;</span><br><span class="line">        this.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Shape(double y,String name)&#123;</span><br><span class="line">        this.y = y;</span><br><span class="line">        this.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static Shape sunsfan(double y,String name)&#123;</span><br><span class="line">        return new Shape(y,name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Data-Value"><a href="#Data-Value" class="headerlink" title="@Data/@Value"></a>@Data/@Value</h3><p>呃!!<br>@Data注解综合了3,4,5和6里面的@RequiredArgsConstructor注解，其中@RequiredArgsConstructor使用了类中的带有@NonNull注解的或者final修饰的成员变量，它可以使用@Data(staticConstructor=”methodName”)来生成一个静态方法，返回一个调用相应的构造方法产生的对象。这个例子就也省略了吧…<br>@Value注解和@Data类似，区别在于它会把所有成员变量默认定义为private final修饰，并且不会生成set方法。</p>
+<h3 id="SneakyThrows"><a href="#SneakyThrows" class="headerlink" title="@SneakyThrows"></a>@SneakyThrows</h3><p>这个注解用在方法上，可以将方法中的代码用try-catch语句包裹起来，捕获异常并在catch中用Lombok.sneakyThrow(e)把异常抛出，可以使用@SneakyThrows(Exception.class)的形式指定抛出哪种异常，很简单的注解，直接看个例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public class SneakyThrows implements Runnable &#123;</span><br><span class="line">    @SneakyThrows(UnsupportedEncodingException.class)</span><br><span class="line">    public String utf8ToString(byte[] bytes) &#123;</span><br><span class="line">        return new String(bytes, &quot;UTF-8&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @SneakyThrows</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        throw new Throwable();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>实际效果相当于：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">public class SneakyThrows implements Runnable &#123;</span><br><span class="line">    @SneakyThrows(UnsupportedEncodingException.class)</span><br><span class="line">    public String utf8ToString(byte[] bytes) &#123;</span><br><span class="line">        try&#123;</span><br><span class="line">            return new String(bytes, &quot;UTF-8&quot;);</span><br><span class="line">        &#125;catch(UnsupportedEncodingException uee)&#123;</span><br><span class="line">            throw Lombok.sneakyThrow(uee);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @SneakyThrows</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        try&#123;</span><br><span class="line">            throw new Throwable();</span><br><span class="line">        &#125;catch(Throwable t)&#123;</span><br><span class="line">            throw Lombok.sneakyThrow(t);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Synchronized"><a href="#Synchronized" class="headerlink" title="@Synchronized"></a>@Synchronized</h3><p>这个注解用在类方法或者实例方法上，效果和synchronized关键字相同，区别在于锁对象不同，对于类方法和实例方法，synchronized关键字的锁对象分别是类的class对象和this对象，而@Synchronized得锁对象分别是私有静态final对象LOCK和私有final对象lock，当然，也可以自己指定锁对象，例子也很简单，往下看：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">public class Synchronized &#123;</span><br><span class="line">    private final Object readLock = new Object();</span><br><span class="line"></span><br><span class="line">    @Synchronized</span><br><span class="line">    public static void hello() &#123;</span><br><span class="line">        System.out.println(&quot;world&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Synchronized</span><br><span class="line">    public int answerToLife() &#123;</span><br><span class="line">        return 42;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Synchronized(&quot;readLock&quot;)</span><br><span class="line">    public void foo() &#123;</span><br><span class="line">        System.out.println(&quot;bar&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>实际效果相当于：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">public class Synchronized &#123;</span><br><span class="line">   private static final Object $LOCK = new Object[0];</span><br><span class="line">   private final Object $lock = new Object[0];</span><br><span class="line">   private final Object readLock = new Object();</span><br><span class="line"></span><br><span class="line">   public static void hello() &#123;</span><br><span class="line">     synchronized($LOCK) &#123;</span><br><span class="line">       System.out.println(&quot;world&quot;);</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   public int answerToLife() &#123;</span><br><span class="line">     synchronized($lock) &#123;</span><br><span class="line">       return 42;</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   public void foo() &#123;</span><br><span class="line">     synchronized(readLock) &#123;</span><br><span class="line">       System.out.println(&quot;bar&quot;);</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Log"><a href="#Log" class="headerlink" title="@Log"></a>@Log</h3><p>这个注解用在类上，可以省去从日志工厂生成日志对象这一步，直接进行日志记录，具体注解根据日志工具的不同而不同，同时，可以在注解中使用topic来指定生成log对象时的类名。不同的日志注解总结如下(上面是注解，下面是实际作用)：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">@CommonsLog</span><br><span class="line">private static final org.apache.commons.logging.Log log = org.apache.commons.logging.LogFactory.getLog(LogExample.class);</span><br><span class="line">@JBossLog</span><br><span class="line">private static final org.jboss.logging.Logger log = org.jboss.logging.Logger.getLogger(LogExample.class);</span><br><span class="line">@Log</span><br><span class="line">private static final java.util.logging.Logger log = java.util.logging.Logger.getLogger(LogExample.class.getName());</span><br><span class="line">@Log4j</span><br><span class="line">private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(LogExample.class);</span><br><span class="line">@Log4j2</span><br><span class="line">private static final org.apache.logging.log4j.Logger log = org.apache.logging.log4j.LogManager.getLogger(LogExample.class);</span><br><span class="line">@Slf4j</span><br><span class="line">private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(LogExample.class);</span><br><span class="line">@XSlf4j</span><br><span class="line">private static final org.slf4j.ext.XLogger log = org.slf4j.ext.XLoggerFactory.getXLogger(LogExample.class);</span><br></pre></td></tr></table></figure>
+
+<p>关于lombok的注解先写到这里，当然，还有其他一些注解需要大家自己去摸索，同时lombok一直在扩展，将来肯定会加入更多的注解元素，拭目以待了。</p>
+<p>转载：<br><a href="https://blog.csdn.net/sunsfan/article/details/53542374" target="_blank" rel="noopener">lombok注解介绍</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-08-15T06:30:56.000Z" itemprop="dateUpdated">2019-08-15 14:30:56</time>
+</span><br>
+
+
+        
+        欢迎访问http://lmwtuedu.cn，希望此文章对您有帮助!
+        
+    </div>
+    
+    <footer>
+        <a href="http://lmwtuedu.cn">
+            <img src="/img/head.png" alt="darker">
+            darker
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/code/">code</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lombok/">lombok</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://lmwtuedu.cn/2018/03/26/2018-03-26-lombok注解/&title=《lombok注解简单介绍》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&pic=http://lmwtuedu.cn/img/head.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://lmwtuedu.cn/2018/03/26/2018-03-26-lombok注解/&title=《lombok注解简单介绍》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://lmwtuedu.cn/2018/03/26/2018-03-26-lombok注解/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《lombok注解简单介绍》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&url=http://lmwtuedu.cn/2018/03/26/2018-03-26-lombok注解/&via=http://lmwtuedu.cn" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://lmwtuedu.cn/2018/03/26/2018-03-26-lombok注解/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/03/27/2018-03-27-我不愿意再为谁一路小跑气喘吁吁了/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">我不愿意再为谁一路小跑，气喘吁吁了</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/03/05/2018-03-05-分布设计架构思路/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">分布式设计架构初步思路</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        请喝维他奶~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.PNG" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.PNG" data-alipay="/img/alipay.PNG">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>darker &copy; 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://lmwtuedu.cn/2018/03/26/2018-03-26-lombok注解/&title=《lombok注解简单介绍》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&pic=http://lmwtuedu.cn/img/head.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://lmwtuedu.cn/2018/03/26/2018-03-26-lombok注解/&title=《lombok注解简单介绍》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://lmwtuedu.cn/2018/03/26/2018-03-26-lombok注解/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《lombok注解简单介绍》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&url=http://lmwtuedu.cn/2018/03/26/2018-03-26-lombok注解/&via=http://lmwtuedu.cn" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://lmwtuedu.cn/2018/03/26/2018-03-26-lombok注解/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACN0lEQVR42u3a0Y7CMAwEwPv/n+ZekRBhN+FOqjt9qqAtmSJZju2fn/h4PB3Pn7yeJ/e+u+vdlV87MDAwLst4LI980etlvT4h4SVrw8DAuA9jvaw1rI2ByXLbV4aBgYGxDo5tapg/DQMDA6NlrBfa3ouBgYHRMpI0Lvm2Lbrlgf5re3EMDIwLMvKq+/+f/0l/AwMD41KMx9aRpJVJypi3Ez6sBwMDYzSjDYIn29F8m5onoBgYGHdgJMF0bxvZjlmsX1AUajEwMIYy9sJlu7nNQ/BRaxMDA+NmjPMG58lwRtskwMDAmM1oy2pJAnceiJOw/iHDxcDAGMTYC6wnyLoWGH+CgYFxB8b5AETb5kx4xdIxMDCGMpLU8KQB0G5625dSbGIxMDAuy8hL8+2P5elm/vy6H4uBgTGOcZ4gJkX8b41uFJ1YDAyMizNOHp0D1p+3CWiRFGJgYIxgrC/KG5N7gLyEV/8nGBgYgxh7ydl58G0HNeqZEQwMjHGMvNGYtzzbMYujl4iBgTGasVdQ2yuita+pTSIxMDCmMtoQmU9h5a3KpC0aFdowMDCGMtoNar7EvabC0fUYGBhDGefDEO1dSfmsfQIGBsZsRhvmPhTo43Zmkp7m5xgYGHdg5MWytnyWLPFrA2QYGBg3YPxdUawd0WhDPwYGBkYeHNsmaPJbGBgYGHsBN2lq5tvUdttc9GMxMDDGMdph070xr3xcNfm26HJgYGBcnNGOOJyMhbXBt009MTAwxjF+ARRNmE6xMsJxAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'Cherry Up';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'Champion';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

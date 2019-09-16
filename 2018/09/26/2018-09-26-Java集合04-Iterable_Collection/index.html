@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>Java集合04-Iterable和Collection | I AM SLOW WALKER, BUT I NEVER WALK BACK</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="集合">
+    <meta name="description" content="Java集合04-Iterable和CollectionIterable注意：Java分析ArrayList的里面提及到Iterable的源码分析。 我们想要遍历集合时，Java为我们提供了多种选择，通常有以下三种写法：  for循环  123for(int i = 0,len = strings.size(); i &amp;lt; len; i++)&amp;#123;	Object value = stri">
+<meta name="keywords" content="集合">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java集合04-Iterable和Collection">
+<meta property="og:url" content="http://lmwtuedu.cn/2018/09/26/2018-09-26-Java集合04-Iterable_Collection/index.html">
+<meta property="og:site_name" content="I AM SLOW WALKER, BUT I NEVER WALK BACK">
+<meta property="og:description" content="Java集合04-Iterable和CollectionIterable注意：Java分析ArrayList的里面提及到Iterable的源码分析。 我们想要遍历集合时，Java为我们提供了多种选择，通常有以下三种写法：  for循环  123for(int i = 0,len = strings.size(); i &amp;lt; len; i++)&amp;#123;	Object value = stri">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-08-15T06:30:56.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java集合04-Iterable和Collection">
+<meta name="twitter:description" content="Java集合04-Iterable和CollectionIterable注意：Java分析ArrayList的里面提及到Iterable的源码分析。 我们想要遍历集合时，Java为我们提供了多种选择，通常有以下三种写法：  for循环  123for(int i = 0,len = strings.size(); i &amp;lt; len; i++)&amp;#123;	Object value = stri">
+    
+        <link rel="alternate" type="application/atom+xml" title="I AM SLOW WALKER, BUT I NEVER WALK BACK" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/head.png">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/head_background.png)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/head.png">
+        </a>
+        <hgroup class="introduce">
+          <h4 class="nickname">darker</h4>
+          <a href="mailto:lmwtuedu@163.com" title="lmwtuedu@163.com" class="mail">lmwtuedu@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                Home
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/share" target="_blank" >
+                <i class="icon icon-lg icon-share-alt-square"></i>
+                Share Link
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-id-badge"></i>
+                About Me
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Java集合04-Iterable和Collection</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h3 class="title">Java集合04-Iterable和Collection</h3>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-09-25T16:00:00.000Z" itemprop="datePublished" class="page-time">
+  2018-09-26
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>Table Of Content</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Java集合04-Iterable和Collection"><span class="post-toc-number">1.</span> <span class="post-toc-text">Java集合04-Iterable和Collection</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Iterable"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">Iterable</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Iterable-1"><span class="post-toc-number">1.1.1.</span> <span class="post-toc-text">Iterable</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#iterator小结"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">iterator小结</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#转载"><span class="post-toc-number">1.2.1.</span> <span class="post-toc-text">转载</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Collection"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">Collection</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#转载-1"><span class="post-toc-number">1.3.1.</span> <span class="post-toc-text">转载</span></a></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-2018-09-26-Java集合04-Iterable_Collection"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Java集合04-Iterable和Collection</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-09-26 00:00:00" datetime="2018-09-25T16:00:00.000Z"  itemprop="datePublished">2018-09-26</time>
+
+            
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="Java集合04-Iterable和Collection"><a href="#Java集合04-Iterable和Collection" class="headerlink" title="Java集合04-Iterable和Collection"></a>Java集合04-Iterable和Collection</h1><h2 id="Iterable"><a href="#Iterable" class="headerlink" title="Iterable"></a>Iterable</h2><p>注意：Java分析ArrayList的里面提及到Iterable的源码分析。</p>
+<p>我们想要遍历集合时，Java为我们提供了多种选择，通常有以下三种写法：</p>
+<ul>
+<li>for循环</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>,len = strings.size(); i &lt; len; i++)&#123;</span><br><span class="line">	Object value = strings.get(i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>foreach循环</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(String <span class="keyword">var</span>: strings)&#123;</span><br><span class="line">	Object value = <span class="keyword">var</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>iterator</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Iterator iterator = strings.iterator();</span><br><span class="line"><span class="keyword">while</span>(iterator.hasNext())&#123;</span><br><span class="line">	Object value = iterator.next();</span><br><span class="line">	iterator.remove()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>那么以上 三种遍历有何区别呢？ for循环我们很熟许，就是根据下标来获取元素，这个特性和数组很吻合； foreach则主要对类似于链表结构的提供支持，例如Linkedlist，链表结构没有下标。 所以使用for循环遍历会大大降低性能。Iterator就是我们今天要讲述的主角，它实际上就是foreach。</p>
+<p>那么，为什么集合可以进行foreach遍历，而我们自己定义的Java对象却不可以呢？有没有办法让任何对象都支持这种遍历方式？下面的内容会告诉我们答案。</p>
+<h3 id="Iterable-1"><a href="#Iterable-1" class="headerlink" title="Iterable"></a>Iterable</h3><p>Iterable是迭代器的意思，作用是为集合类提供for-each循环的支持。由于使用for循环需要通过位置获取元素，而这种获取方式仅有数组支持，其他许多数据结构，比如链表，只能通过查询获取数据，这会大大的降低效率。Iterable就可以让不同的集合类自己提供遍历的最佳方式。</p>
+<p>Iterable的文档声明仅有一句：</p>
+<blockquote>
+<p>Implementing this interface allows an object to be the target of the “for-each loop” statement.</p>
+</blockquote>
+<p>它的作用就是为Java对象提供foreach循环，其主要方法是返回一个Iterator对象：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Iterator&lt;T&gt; <span class="title">iterator</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>也就是说，如果想让一个Java对象支持foreach，只要实现Iterable接口，然后就可以像集合那样，通过Iterator iterator = strings.iterator()方式，或者使用foreach，进行遍历了。</p>
+<p>Iterator是foreach遍历的主体，它的代码实现如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 判断一个对象集合是否还有下一个元素</span></span><br><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">hasNext</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取下一个元素</span></span><br><span class="line"><span class="function">E <span class="title">next</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 删除最后一个元素。默认是不支持的，因为在很多情况下其结果不可预测，比如数据集合在此时被修改</span></span><br><span class="line"><span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">()</span></span>&#123;...&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 主要将每个元素作为参数发给action来执行特定操作</span></span><br><span class="line"><span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">forEachRemaining</span><span class="params">(Consumer&lt;? <span class="keyword">super</span> E&gt; action)</span></span>&#123;...&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Iterator还有一个子接口，是为需要双向遍历数据时准备的，ArrayList和LinkedList时都会看到它。它主要增加了以下几个方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 是否有前一个元素</span></span><br><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">hasPrevious</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取前一个元素</span></span><br><span class="line"><span class="function">E <span class="title">previous</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取下一个元素的位置</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">nextIndex</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取前一个元素的位置</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">previousIndex</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加一个元素</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">add</span><span class="params">(E e)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 替换当前元素值</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">set</span><span class="params">(E e)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="iterator小结"><a href="#iterator小结" class="headerlink" title="iterator小结"></a>iterator小结</h2><p>在Java中有许多特性都是通过接口来实现的，foreach循环也是。foreach主要是解决for循环依赖下标的问题，为高效遍历更多的数据结构提供了支持。如果你清楚数组和链表的区别，应该就可以回答以下问题了：for与foreach有何区别，哪个更高效？</p>
+<h3 id="转载"><a href="#转载" class="headerlink" title="转载"></a>转载</h3><p><a href="https://www.jianshu.com/p/8c4dae2c1ae0" target="_blank" rel="noopener">https://www.jianshu.com/p/8c4dae2c1ae0</a></p>
+<h2 id="Collection"><a href="#Collection" class="headerlink" title="Collection"></a>Collection</h2><p>Collection 是List、Queue和Set的超集，它直接继承于 Iterable，也就是所有的Collection集合都支持for-each 循环。 除此之外，Collection也是面向接口编程的典范，通过它可以在多种实现类之间转换，这也是面向编程的魅力之一。</p>
+<p>源码查看：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns the number of elements in this collection.  If this collection</span></span><br><span class="line"><span class="comment">     * contains more than &lt;tt&gt;Integer.MAX_VALUE&lt;/tt&gt; elements, returns</span></span><br><span class="line"><span class="comment">     * &lt;tt&gt;Integer.MAX_VALUE&lt;/tt&gt;.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> the number of elements in this collection</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">size</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns &lt;tt&gt;true&lt;/tt&gt; if this collection contains no elements.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> &lt;tt&gt;true&lt;/tt&gt; if this collection contains no elements</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns &lt;tt&gt;true&lt;/tt&gt; if this collection contains the specified element.</span></span><br><span class="line"><span class="comment">     * More formally, returns &lt;tt&gt;true&lt;/tt&gt; if and only if this collection</span></span><br><span class="line"><span class="comment">     * contains at least one element &lt;tt&gt;e&lt;/tt&gt; such that</span></span><br><span class="line"><span class="comment">     * &lt;tt&gt;(o==null&amp;nbsp;?&amp;nbsp;e==null&amp;nbsp;:&amp;nbsp;o.equals(e))&lt;/tt&gt;.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> o element whose presence in this collection is to be tested</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> &lt;tt&gt;true&lt;/tt&gt; if this collection contains the specified</span></span><br><span class="line"><span class="comment">     *         element</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> ClassCastException if the type of the specified element</span></span><br><span class="line"><span class="comment">     *         is incompatible with this collection</span></span><br><span class="line"><span class="comment">     *         (&lt;a href="#optional-restrictions"&gt;optional&lt;/a&gt;)</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> NullPointerException if the specified element is null and this</span></span><br><span class="line"><span class="comment">     *         collection does not permit null elements</span></span><br><span class="line"><span class="comment">     *         (&lt;a href="#optional-restrictions"&gt;optional&lt;/a&gt;)</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(Object o)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns an iterator over the elements in this collection.  There are no</span></span><br><span class="line"><span class="comment">     * guarantees concerning the order in which the elements are returned</span></span><br><span class="line"><span class="comment">     * (unless this collection is an instance of some class that provides a</span></span><br><span class="line"><span class="comment">     * guarantee).</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> an &lt;tt&gt;Iterator&lt;/tt&gt; over the elements in this collection</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">Iterator&lt;E&gt; <span class="title">iterator</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns an array containing all of the elements in this collection.</span></span><br><span class="line"><span class="comment">     * If this collection makes any guarantees as to what order its elements</span></span><br><span class="line"><span class="comment">     * are returned by its iterator, this method must return the elements in</span></span><br><span class="line"><span class="comment">     * the same order.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;The returned array will be "safe" in that no references to it are</span></span><br><span class="line"><span class="comment">     * maintained by this collection.  (In other words, this method must</span></span><br><span class="line"><span class="comment">     * allocate a new array even if this collection is backed by an array).</span></span><br><span class="line"><span class="comment">     * The caller is thus free to modify the returned array.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;This method acts as bridge between array-based and collection-based</span></span><br><span class="line"><span class="comment">     * APIs.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> an array containing all of the elements in this collection</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    Object[] toArray();</span><br><span class="line">    </span><br><span class="line">     <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Ensures that this collection contains the specified element (optional</span></span><br><span class="line"><span class="comment">     * operation).  Returns &lt;tt&gt;true&lt;/tt&gt; if this collection changed as a</span></span><br><span class="line"><span class="comment">     * result of the call.  (Returns &lt;tt&gt;false&lt;/tt&gt; if this collection does</span></span><br><span class="line"><span class="comment">     * not permit duplicates and already contains the specified element.)&lt;p&gt;</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * Collections that support this operation may place limitations on what</span></span><br><span class="line"><span class="comment">     * elements may be added to this collection.  In particular, some</span></span><br><span class="line"><span class="comment">     * collections will refuse to add &lt;tt&gt;null&lt;/tt&gt; elements, and others will</span></span><br><span class="line"><span class="comment">     * impose restrictions on the type of elements that may be added.</span></span><br><span class="line"><span class="comment">     * Collection classes should clearly specify in their documentation any</span></span><br><span class="line"><span class="comment">     * restrictions on what elements may be added.&lt;p&gt;</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * If a collection refuses to add a particular element for any reason</span></span><br><span class="line"><span class="comment">     * other than that it already contains the element, it &lt;i&gt;must&lt;/i&gt; throw</span></span><br><span class="line"><span class="comment">     * an exception (rather than returning &lt;tt&gt;false&lt;/tt&gt;).  This preserves</span></span><br><span class="line"><span class="comment">     * the invariant that a collection always contains the specified element</span></span><br><span class="line"><span class="comment">     * after this call returns.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> e element whose presence in this collection is to be ensured</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> &lt;tt&gt;true&lt;/tt&gt; if this collection changed as a result of the</span></span><br><span class="line"><span class="comment">     *         call</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> UnsupportedOperationException if the &lt;tt&gt;add&lt;/tt&gt; operation</span></span><br><span class="line"><span class="comment">     *         is not supported by this collection</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> ClassCastException if the class of the specified element</span></span><br><span class="line"><span class="comment">     *         prevents it from being added to this collection</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> NullPointerException if the specified element is null and this</span></span><br><span class="line"><span class="comment">     *         collection does not permit null elements</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> IllegalArgumentException if some property of the element</span></span><br><span class="line"><span class="comment">     *         prevents it from being added to this collection</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> IllegalStateException if the element cannot be added at this</span></span><br><span class="line"><span class="comment">     *         time due to insertion restrictions</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span></span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Removes a single instance of the specified element from this</span></span><br><span class="line"><span class="comment">     * collection, if it is present (optional operation).  More formally,</span></span><br><span class="line"><span class="comment">     * removes an element &lt;tt&gt;e&lt;/tt&gt; such that</span></span><br><span class="line"><span class="comment">     * &lt;tt&gt;(o==null&amp;nbsp;?&amp;nbsp;e==null&amp;nbsp;:&amp;nbsp;o.equals(e))&lt;/tt&gt;, if</span></span><br><span class="line"><span class="comment">     * this collection contains one or more such elements.  Returns</span></span><br><span class="line"><span class="comment">     * &lt;tt&gt;true&lt;/tt&gt; if this collection contained the specified element (or</span></span><br><span class="line"><span class="comment">     * equivalently, if this collection changed as a result of the call).</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> o element to be removed from this collection, if present</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> &lt;tt&gt;true&lt;/tt&gt; if an element was removed as a result of this call</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> ClassCastException if the type of the specified element</span></span><br><span class="line"><span class="comment">     *         is incompatible with this collection</span></span><br><span class="line"><span class="comment">     *         (&lt;a href="#optional-restrictions"&gt;optional&lt;/a&gt;)</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> NullPointerException if the specified element is null and this</span></span><br><span class="line"><span class="comment">     *         collection does not permit null elements</span></span><br><span class="line"><span class="comment">     *         (&lt;a href="#optional-restrictions"&gt;optional&lt;/a&gt;)</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> UnsupportedOperationException if the &lt;tt&gt;remove&lt;/tt&gt; operation</span></span><br><span class="line"><span class="comment">     *         is not supported by this collection</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(Object o)</span></span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns &lt;tt&gt;true&lt;/tt&gt; if this collection contains all of the elements</span></span><br><span class="line"><span class="comment">     * in the specified collection.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  c collection to be checked for containment in this collection</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> &lt;tt&gt;true&lt;/tt&gt; if this collection contains all of the elements</span></span><br><span class="line"><span class="comment">     *         in the specified collection</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> ClassCastException if the types of one or more elements</span></span><br><span class="line"><span class="comment">     *         in the specified collection are incompatible with this</span></span><br><span class="line"><span class="comment">     *         collection</span></span><br><span class="line"><span class="comment">     *         (&lt;a href="#optional-restrictions"&gt;optional&lt;/a&gt;)</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> NullPointerException if the specified collection contains one</span></span><br><span class="line"><span class="comment">     *         or more null elements and this collection does not permit null</span></span><br><span class="line"><span class="comment">     *         elements</span></span><br><span class="line"><span class="comment">     *         (&lt;a href="#optional-restrictions"&gt;optional&lt;/a&gt;),</span></span><br><span class="line"><span class="comment">     *         or if the specified collection is null.</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@see</span>    #contains(Object)</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">containsAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Adds all of the elements in the specified collection to this collection</span></span><br><span class="line"><span class="comment">     * (optional operation).  The behavior of this operation is undefined if</span></span><br><span class="line"><span class="comment">     * the specified collection is modified while the operation is in progress.</span></span><br><span class="line"><span class="comment">     * (This implies that the behavior of this call is undefined if the</span></span><br><span class="line"><span class="comment">     * specified collection is this collection, and this collection is</span></span><br><span class="line"><span class="comment">     * nonempty.)</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> c collection containing elements to be added to this collection</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> &lt;tt&gt;true&lt;/tt&gt; if this collection changed as a result of the call</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> UnsupportedOperationException if the &lt;tt&gt;addAll&lt;/tt&gt; operation</span></span><br><span class="line"><span class="comment">     *         is not supported by this collection</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> ClassCastException if the class of an element of the specified</span></span><br><span class="line"><span class="comment">     *         collection prevents it from being added to this collection</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> NullPointerException if the specified collection contains a</span></span><br><span class="line"><span class="comment">     *         null element and this collection does not permit null elements,</span></span><br><span class="line"><span class="comment">     *         or if the specified collection is null</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> IllegalArgumentException if some property of an element of the</span></span><br><span class="line"><span class="comment">     *         specified collection prevents it from being added to this</span></span><br><span class="line"><span class="comment">     *         collection</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> IllegalStateException if not all the elements can be added at</span></span><br><span class="line"><span class="comment">     *         this time due to insertion restrictions</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@see</span> #add(Object)</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">addAll</span><span class="params">(Collection&lt;? extends E&gt; c)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Removes all of this collection's elements that are also contained in the</span></span><br><span class="line"><span class="comment">     * specified collection (optional operation).  After this call returns,</span></span><br><span class="line"><span class="comment">     * this collection will contain no elements in common with the specified</span></span><br><span class="line"><span class="comment">     * collection.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> c collection containing elements to be removed from this collection</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> &lt;tt&gt;true&lt;/tt&gt; if this collection changed as a result of the</span></span><br><span class="line"><span class="comment">     *         call</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> UnsupportedOperationException if the &lt;tt&gt;removeAll&lt;/tt&gt; method</span></span><br><span class="line"><span class="comment">     *         is not supported by this collection</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> ClassCastException if the types of one or more elements</span></span><br><span class="line"><span class="comment">     *         in this collection are incompatible with the specified</span></span><br><span class="line"><span class="comment">     *         collection</span></span><br><span class="line"><span class="comment">     *         (&lt;a href="#optional-restrictions"&gt;optional&lt;/a&gt;)</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> NullPointerException if this collection contains one or more</span></span><br><span class="line"><span class="comment">     *         null elements and the specified collection does not support</span></span><br><span class="line"><span class="comment">     *         null elements</span></span><br><span class="line"><span class="comment">     *         (&lt;a href="#optional-restrictions"&gt;optional&lt;/a&gt;),</span></span><br><span class="line"><span class="comment">     *         or if the specified collection is null</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@see</span> #remove(Object)</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@see</span> #contains(Object)</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">removeAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;</span><br><span class="line">    </span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Retains only the elements in this collection that are contained in the</span></span><br><span class="line"><span class="comment">     * specified collection (optional operation).  In other words, removes from</span></span><br><span class="line"><span class="comment">     * this collection all of its elements that are not contained in the</span></span><br><span class="line"><span class="comment">     * specified collection.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> c collection containing elements to be retained in this collection</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> &lt;tt&gt;true&lt;/tt&gt; if this collection changed as a result of the call</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> UnsupportedOperationException if the &lt;tt&gt;retainAll&lt;/tt&gt; operation</span></span><br><span class="line"><span class="comment">     *         is not supported by this collection</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> ClassCastException if the types of one or more elements</span></span><br><span class="line"><span class="comment">     *         in this collection are incompatible with the specified</span></span><br><span class="line"><span class="comment">     *         collection</span></span><br><span class="line"><span class="comment">     *         (&lt;a href="#optional-restrictions"&gt;optional&lt;/a&gt;)</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> NullPointerException if this collection contains one or more</span></span><br><span class="line"><span class="comment">     *         null elements and the specified collection does not permit null</span></span><br><span class="line"><span class="comment">     *         elements</span></span><br><span class="line"><span class="comment">     *         (&lt;a href="#optional-restrictions"&gt;optional&lt;/a&gt;),</span></span><br><span class="line"><span class="comment">     *         or if the specified collection is null</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@see</span> #remove(Object)</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@see</span> #contains(Object)</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">retainAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Removes all of the elements from this collection (optional operation).</span></span><br><span class="line"><span class="comment">     * The collection will be empty after this method returns.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> UnsupportedOperationException if the &lt;tt&gt;clear&lt;/tt&gt; operation</span></span><br><span class="line"><span class="comment">     *         is not supported by this collection</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">clear</span><span class="params">()</span></span>;</span><br><span class="line">    </span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Compares the specified object with this collection for equality. &lt;p&gt;</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * While the &lt;tt&gt;Collection&lt;/tt&gt; interface adds no stipulations to the</span></span><br><span class="line"><span class="comment">     * general contract for the &lt;tt&gt;Object.equals&lt;/tt&gt;, programmers who</span></span><br><span class="line"><span class="comment">     * implement the &lt;tt&gt;Collection&lt;/tt&gt; interface "directly" (in other words,</span></span><br><span class="line"><span class="comment">     * create a class that is a &lt;tt&gt;Collection&lt;/tt&gt; but is not a &lt;tt&gt;Set&lt;/tt&gt;</span></span><br><span class="line"><span class="comment">     * or a &lt;tt&gt;List&lt;/tt&gt;) must exercise care if they choose to override the</span></span><br><span class="line"><span class="comment">     * &lt;tt&gt;Object.equals&lt;/tt&gt;.  It is not necessary to do so, and the simplest</span></span><br><span class="line"><span class="comment">     * course of action is to rely on &lt;tt&gt;Object&lt;/tt&gt;'s implementation, but</span></span><br><span class="line"><span class="comment">     * the implementor may wish to implement a "value comparison" in place of</span></span><br><span class="line"><span class="comment">     * the default "reference comparison."  (The &lt;tt&gt;List&lt;/tt&gt; and</span></span><br><span class="line"><span class="comment">     * &lt;tt&gt;Set&lt;/tt&gt; interfaces mandate such value comparisons.)&lt;p&gt;</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * The general contract for the &lt;tt&gt;Object.equals&lt;/tt&gt; method states that</span></span><br><span class="line"><span class="comment">     * equals must be symmetric (in other words, &lt;tt&gt;a.equals(b)&lt;/tt&gt; if and</span></span><br><span class="line"><span class="comment">     * only if &lt;tt&gt;b.equals(a)&lt;/tt&gt;).  The contracts for &lt;tt&gt;List.equals&lt;/tt&gt;</span></span><br><span class="line"><span class="comment">     * and &lt;tt&gt;Set.equals&lt;/tt&gt; state that lists are only equal to other lists,</span></span><br><span class="line"><span class="comment">     * and sets to other sets.  Thus, a custom &lt;tt&gt;equals&lt;/tt&gt; method for a</span></span><br><span class="line"><span class="comment">     * collection class that implements neither the &lt;tt&gt;List&lt;/tt&gt; nor</span></span><br><span class="line"><span class="comment">     * &lt;tt&gt;Set&lt;/tt&gt; interface must return &lt;tt&gt;false&lt;/tt&gt; when this collection</span></span><br><span class="line"><span class="comment">     * is compared to any list or set.  (By the same logic, it is not possible</span></span><br><span class="line"><span class="comment">     * to write a class that correctly implements both the &lt;tt&gt;Set&lt;/tt&gt; and</span></span><br><span class="line"><span class="comment">     * &lt;tt&gt;List&lt;/tt&gt; interfaces.)</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> o object to be compared for equality with this collection</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> &lt;tt&gt;true&lt;/tt&gt; if the specified object is equal to this</span></span><br><span class="line"><span class="comment">     * collection</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@see</span> Object#equals(Object)</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@see</span> Set#equals(Object)</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@see</span> List#equals(Object)</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object o)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns the hash code value for this collection.  While the</span></span><br><span class="line"><span class="comment">     * &lt;tt&gt;Collection&lt;/tt&gt; interface adds no stipulations to the general</span></span><br><span class="line"><span class="comment">     * contract for the &lt;tt&gt;Object.hashCode&lt;/tt&gt; method, programmers should</span></span><br><span class="line"><span class="comment">     * take note that any class that overrides the &lt;tt&gt;Object.equals&lt;/tt&gt;</span></span><br><span class="line"><span class="comment">     * method must also override the &lt;tt&gt;Object.hashCode&lt;/tt&gt; method in order</span></span><br><span class="line"><span class="comment">     * to satisfy the general contract for the &lt;tt&gt;Object.hashCode&lt;/tt&gt; method.</span></span><br><span class="line"><span class="comment">     * In particular, &lt;tt&gt;c1.equals(c2)&lt;/tt&gt; implies that</span></span><br><span class="line"><span class="comment">     * &lt;tt&gt;c1.hashCode()==c2.hashCode()&lt;/tt&gt;.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> the hash code value for this collection</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@see</span> Object#hashCode()</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@see</span> Object#equals(Object)</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>网上有很多人用中文编写的解释，但是我觉得英文可能表达更加清楚。有必要查看一下Collection的源码。</p>
+<p>分析一下 AbstractCollection的类中 ToArray的实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">   * &#123;<span class="doctag">@inheritDoc</span>&#125;</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   * &lt;p&gt;This implementation returns an array containing all the elements</span></span><br><span class="line"><span class="comment">   * returned by this collection's iterator, in the same order, stored in</span></span><br><span class="line"><span class="comment">   * consecutive elements of the array, starting with index &#123;<span class="doctag">@code</span> 0&#125;.</span></span><br><span class="line"><span class="comment">   * The length of the returned array is equal to the number of elements</span></span><br><span class="line"><span class="comment">   * returned by the iterator, even if the size of this collection changes</span></span><br><span class="line"><span class="comment">   * during iteration, as might happen if the collection permits</span></span><br><span class="line"><span class="comment">   * concurrent modification during iteration.  The &#123;<span class="doctag">@code</span> size&#125; method is</span></span><br><span class="line"><span class="comment">   * called only as an optimization hint; the correct result is returned</span></span><br><span class="line"><span class="comment">   * even if the iterator returns a different number of elements.</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   * &lt;p&gt;This method is equivalent to:</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   *  &lt;pre&gt; &#123;<span class="doctag">@code</span></span></span><br><span class="line"><span class="comment">   * List&lt;E&gt; list = new ArrayList&lt;E&gt;(size());</span></span><br><span class="line"><span class="comment">   * for (E e : this)</span></span><br><span class="line"><span class="comment">   *     list.add(e);</span></span><br><span class="line"><span class="comment">   * return list.toArray();</span></span><br><span class="line"><span class="comment">   * &#125;&lt;/pre&gt;</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">public</span> Object[] toArray() &#123;</span><br><span class="line">      <span class="comment">// Estimate size of array; be prepared to see more or fewer elements</span></span><br><span class="line">      Object[] r = <span class="keyword">new</span> Object[size()];</span><br><span class="line">      Iterator&lt;E&gt; it = iterator();</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; r.length; i++) &#123;</span><br><span class="line">      	  <span class="comment">// 集合元素没有r.length长度，说明数组长度浪费，取i的结束的长度</span></span><br><span class="line">          <span class="keyword">if</span> (! it.hasNext()) <span class="comment">// fewer elements than expected</span></span><br><span class="line">              <span class="keyword">return</span> Arrays.copyOf(r, i);</span><br><span class="line">          r[i] = it.next();</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">// 如果it还有元素，则用finishToArray继续扩容，否者说明size的大小刚刚好。</span></span><br><span class="line">      <span class="keyword">return</span> it.hasNext() ? finishToArray(r, it) : r;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Reallocates the array being used within toArray when the iterator</span></span><br><span class="line"><span class="comment">   * returned more elements than expected, and finishes filling it from</span></span><br><span class="line"><span class="comment">   * the iterator.</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> r the array, replete with previously stored elements</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> it the in-progress iterator over this collection</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@return</span> array containing the elements in the given array, plus any</span></span><br><span class="line"><span class="comment">   *         further elements returned by the iterator, trimmed to size</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> &lt;T&gt; T[] finishToArray(T[] r, Iterator&lt;?&gt; it) &#123;</span><br><span class="line">  	 <span class="comment">// 记录当前数组长度</span></span><br><span class="line">      <span class="keyword">int</span> i = r.length;</span><br><span class="line">      <span class="keyword">while</span> (it.hasNext()) &#123;</span><br><span class="line">          <span class="keyword">int</span> cap = r.length;</span><br><span class="line">          <span class="comment">// r的长度不够，继续分配</span></span><br><span class="line">          <span class="keyword">if</span> (i == cap) &#123;</span><br><span class="line">          	   <span class="comment">// 扩充的方式为 cap + cap/2 + 1,也就是1，5倍</span></span><br><span class="line">              <span class="keyword">int</span> newCap = cap + (cap &gt;&gt; <span class="number">1</span>) + <span class="number">1</span>;</span><br><span class="line">              <span class="comment">// overflow-conscious code</span></span><br><span class="line">              <span class="comment">// 超过了最大的容量，MAX_ARRAY_SIZE = Integer.MAX_VALUE-8</span></span><br><span class="line">              <span class="keyword">if</span> (newCap - MAX_ARRAY_SIZE &gt; <span class="number">0</span>)</span><br><span class="line">              		<span class="comment">// 重新设置cap的大小</span></span><br><span class="line">                  newCap = hugeCapacity(cap + <span class="number">1</span>);</span><br><span class="line">              <span class="comment">// 对r重新扩容</span></span><br><span class="line">              r = Arrays.copyOf(r, newCap);</span><br><span class="line">          &#125;</span><br><span class="line">          r[i++] = (T)it.next();</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">// trim if overallocated</span></span><br><span class="line">      <span class="keyword">return</span> (i == r.length) ? r : Arrays.copyOf(r, i);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// Arrays.copyOf</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[] copyOf(<span class="keyword">int</span>[] original, <span class="keyword">int</span> newLength) &#123;</span><br><span class="line">      <span class="keyword">int</span>[] copy = <span class="keyword">new</span> <span class="keyword">int</span>[newLength];</span><br><span class="line">      System.arraycopy(original, <span class="number">0</span>, copy, <span class="number">0</span>,</span><br><span class="line">                       Math.min(original.length, newLength));</span><br><span class="line">      <span class="keyword">return</span> copy;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="转载-1"><a href="#转载-1" class="headerlink" title="转载"></a>转载</h3><p><a href="https://www.jianshu.com/p/9af4ade0910a" target="_blank" rel="noopener">https://www.jianshu.com/p/9af4ade0910a</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-08-15T06:30:56.000Z" itemprop="dateUpdated">2019-08-15 14:30:56</time>
+</span><br>
+
+
+        
+        欢迎访问http://lmwtuedu.cn，希望此文章对您有帮助!
+        
+    </div>
+    
+    <footer>
+        <a href="http://lmwtuedu.cn">
+            <img src="/img/head.png" alt="darker">
+            darker
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/集合/">集合</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://lmwtuedu.cn/2018/09/26/2018-09-26-Java集合04-Iterable_Collection/&title=《Java集合04-Iterable和Collection》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&pic=http://lmwtuedu.cn/img/head.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://lmwtuedu.cn/2018/09/26/2018-09-26-Java集合04-Iterable_Collection/&title=《Java集合04-Iterable和Collection》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://lmwtuedu.cn/2018/09/26/2018-09-26-Java集合04-Iterable_Collection/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java集合04-Iterable和Collection》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&url=http://lmwtuedu.cn/2018/09/26/2018-09-26-Java集合04-Iterable_Collection/&via=http://lmwtuedu.cn" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://lmwtuedu.cn/2018/09/26/2018-09-26-Java集合04-Iterable_Collection/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/09/26/2018-09-26-Java集合06-Deque和ArrayDeque/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Java集合06-Deque和ArrayDeque</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/09/26/2018-09-26-Java集合05-List/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Java集合05-List 和 Queue</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        请喝维他奶~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.PNG" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.PNG" data-alipay="/img/alipay.PNG">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>darker &copy; 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://lmwtuedu.cn/2018/09/26/2018-09-26-Java集合04-Iterable_Collection/&title=《Java集合04-Iterable和Collection》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&pic=http://lmwtuedu.cn/img/head.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://lmwtuedu.cn/2018/09/26/2018-09-26-Java集合04-Iterable_Collection/&title=《Java集合04-Iterable和Collection》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://lmwtuedu.cn/2018/09/26/2018-09-26-Java集合04-Iterable_Collection/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java集合04-Iterable和Collection》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&url=http://lmwtuedu.cn/2018/09/26/2018-09-26-Java集合04-Iterable_Collection/&via=http://lmwtuedu.cn" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://lmwtuedu.cn/2018/09/26/2018-09-26-Java集合04-Iterable_Collection/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACwUlEQVR42u3aQY7bMBAEwP3/pxMgV8dy94yoOEDpZBhciaUFSLpnfn7i69ef6/Xz65jr6/r+ryPzO6wuPDw8vNHUryeUTDf5fnPP5G//8grw8PDwjvHyzSBfptul/B2v3Zzw8PDwvod3DdtsG7OjNh4eHt7/xcsPtdfTSl7ZP9gY8PDw8AJeEkbkj2nj4GQTOp614OHh4U3qUDdM65nPD9X38PDw8EbF/hPlsc0xupgbHh4e3gFeG9e2y3QeQ1wX2NqRwzQaDw8PL+DNpthuEm0BLIkVVu1WeHh4eAd4SXNAXvjft2oNtys8PDy8A7z81slh997QYdNq8BaJh4eHdxOvPey2i/KmLSCfYdQZgYeHh7fmtT/78yPvPsDdBCV4eHh4z/BmB9m62rZIWdvmMDw8PLzTvGShz+ODvHFqVlq7IYbAw8PDWwS4szJYPvW8/N+WyqLn4uHh4R3jzRbiNt7dNBCs2gXw8PDwbuK1AWt7EN+80KT89oGKh4eHd4A3ixVmj5+Nb8e8TVzw8PDwHuElDQSzwHfWNDAry+Hh4eGd4CXLblL62rysOkEZBcd4eHh4e17OyCeXf58c6JNtKWq6wsPDw7uJ1/6wT15Bzsiv9vV9+B/i4eHhHeMlk8sfs9lIksP3hwYCPDw8vJt4sxaBdtHPxyShbf4ZDw8P7wSvKBoF6WgeZ8xavjYvCw8PD+8uXnKobQOC6/F5O0IeNBf7Hh4eHt6al28Mm6U/36Pa++dbDh4eHt5dvFkhah86tFtF+8Rif8PDw8MrebOdpI1fN2P25TQ8PDy8E7y7Gp7yv9qUxNpjOh4eHt45Xvv469L+MxtM0liAh4eH9z284gHraHi2ReHh4eF9A29WxGoD2eS5SXiBh4eHd5q3b65qQ9tZwNGGv3h4eHgneO1P/TZUTYpYm/E31/fw8PDwrr75Ddz3St/gvAlUAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'Cherry Up';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'Champion';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

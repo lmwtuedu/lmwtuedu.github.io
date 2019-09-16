@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>MacOS 使用Ruby Gem坑 | I AM SLOW WALKER, BUT I NEVER WALK BACK</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="code">
+    <meta name="description" content="MacOS    使用Ruby Gem坑系统版本                                                                                             系统版本               问题在OS X 下， 通过 gem安装软件遇到这种问题：">
+<meta name="keywords" content="code">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MacOS 使用Ruby Gem坑">
+<meta property="og:url" content="http://lmwtuedu.cn/2018/01/12/2018-01-12-MacOS使用Ruby-Gem坑/index.html">
+<meta property="og:site_name" content="I AM SLOW WALKER, BUT I NEVER WALK BACK">
+<meta property="og:description" content="MacOS    使用Ruby Gem坑系统版本                                                                                             系统版本               问题在OS X 下， 通过 gem安装软件遇到这种问题：">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1fnata1irq9j306701gdfw.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1fndrtl2wtcj30fq02hjse.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1fnds7j0u3ej30fq0bv0yx.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1fndsfq1n2bj30a508rtck.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1fndsi5kkasj30fu0c8age.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1fndsmtuyxtj30co0dh467.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1fndswpve07j30e906t0wi.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1fndsy23s8kj30fn0enk17.jpg">
+<meta property="og:updated_time" content="2019-08-15T06:30:56.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MacOS 使用Ruby Gem坑">
+<meta name="twitter:description" content="MacOS    使用Ruby Gem坑系统版本                                                                                             系统版本               问题在OS X 下， 通过 gem安装软件遇到这种问题：">
+<meta name="twitter:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1fnata1irq9j306701gdfw.jpg">
+    
+        <link rel="alternate" type="application/atom+xml" title="I AM SLOW WALKER, BUT I NEVER WALK BACK" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/head.png">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/head_background.png)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/head.png">
+        </a>
+        <hgroup class="introduce">
+          <h4 class="nickname">darker</h4>
+          <a href="mailto:lmwtuedu@163.com" title="lmwtuedu@163.com" class="mail">lmwtuedu@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                Home
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/share" target="_blank" >
+                <i class="icon icon-lg icon-share-alt-square"></i>
+                Share Link
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-id-badge"></i>
+                About Me
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">MacOS 使用Ruby Gem坑</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h3 class="title">MacOS 使用Ruby Gem坑</h3>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-01-11T16:00:00.000Z" itemprop="datePublished" class="page-time">
+  2018-01-12
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>Table Of Content</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#MacOS-使用Ruby-Gem坑"><span class="post-toc-number">1.</span> <span class="post-toc-text">MacOS    使用Ruby Gem坑</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#系统版本"><span class="post-toc-number">2.</span> <span class="post-toc-text">系统版本</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#问题"><span class="post-toc-number">3.</span> <span class="post-toc-text">问题</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#解决"><span class="post-toc-number">4.</span> <span class="post-toc-text">解决</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#结束"><span class="post-toc-number">5.</span> <span class="post-toc-text">结束</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-2018-01-12-MacOS使用Ruby-Gem坑"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">MacOS 使用Ruby Gem坑</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-01-12 00:00:00" datetime="2018-01-11T16:00:00.000Z"  itemprop="datePublished">2018-01-12</time>
+
+            
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="MacOS-使用Ruby-Gem坑"><a href="#MacOS-使用Ruby-Gem坑" class="headerlink" title="MacOS    使用Ruby Gem坑"></a>MacOS    使用Ruby Gem坑</h1><h1 id="系统版本"><a href="#系统版本" class="headerlink" title="系统版本"></a>系统版本</h1><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws1.sinaimg.cn/large/006tNc79ly1fnata1irq9j306701gdfw.jpg" alt="系统版本" title>
+                </div>
+                <div class="image-caption">系统版本</div>
+            </figure>
+
+<h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>在OS X 下， 通过 gem安装软件遇到这种问题：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws2.sinaimg.cn/large/006tKfTcly1fndrtl2wtcj30fq02hjse.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p><code>You dont have write permission for the /Library/Ruby/Gems/2.3.0 directory</code></p>
+<p>字面的意思即是： gem 向某个目录写文件，但是你的权限不够！ 为什么呢？ 因为你使用的是Apple自带的ruby，在尝试网Apple自家的库塞东西，默认这个位置的权限是给root的。</p>
+<h1 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h1><p><em>低端方案：</em></p>
+<ol>
+<li><p>在前面增加： sudo gem install xxxx</p>
+</li>
+<li><p>另一种方法是：修改 /Library/Ruby/Gems/2.3.0  这个目录的用户</p>
+<p> <code>sudo chown -R your_name:your_name /Library/Ruby/Gems/2.3.0</code></p>
+</li>
+</ol>
+<p><em>建议方案：</em><br>通过homebrew再安装一个ruby，这样 local归local， system归system<br><code>brew install ruby</code></p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws4.sinaimg.cn/large/006tKfTcly1fnds7j0u3ej30fq0bv0yx.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>    
+
+<p>安装完成之后brew安装的gem会被安装到 /usr/local/lib/ruby/gems/2.5.0 这个目录。 2.5.0 是版本位置</p>
+<p>我们检查 gem， 发现系统里面完全用两套库了：</p>
+<p>例如：<br>系统目录：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws3.sinaimg.cn/large/006tKfTcly1fndsfq1n2bj30a508rtck.jpg" alt="系统" title>
+                </div>
+                <div class="image-caption">系统</div>
+            </figure>
+
+<p>用户安装：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws3.sinaimg.cn/large/006tKfTcly1fndsi5kkasj30fu0c8age.jpg" alt="用户" title>
+                </div>
+                <div class="image-caption">用户</div>
+            </figure>
+
+<p>从上面发现：<code>gem install jekyll</code> 提示不成功，因为gem运行的是系统的，需要用 <code>/usr/local/bin/gem</code></p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws4.sinaimg.cn/large/006tKfTcly1fndsmtuyxtj30co0dh467.jpg" alt="安装" title>
+                </div>
+                <div class="image-caption">安装</div>
+            </figure>
+
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws4.sinaimg.cn/large/006tKfTcly1fndswpve07j30e906t0wi.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ws4.sinaimg.cn/large/006tKfTcly1fndsy23s8kj30fn0enk17.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<h1 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h1><blockquote>
+<p>世界就是这样，好马配好鞍， 好船配好帆， 王八对绿豆， 傻叉配脑瘫；没太大意外，万物都会自然归位。  ——–韩寒</p>
+</blockquote>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-08-15T06:30:56.000Z" itemprop="dateUpdated">2019-08-15 14:30:56</time>
+</span><br>
+
+
+        
+        欢迎访问http://lmwtuedu.cn，希望此文章对您有帮助!
+        
+    </div>
+    
+    <footer>
+        <a href="http://lmwtuedu.cn">
+            <img src="/img/head.png" alt="darker">
+            darker
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/code/">code</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://lmwtuedu.cn/2018/01/12/2018-01-12-MacOS使用Ruby-Gem坑/&title=《MacOS 使用Ruby Gem坑》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&pic=http://lmwtuedu.cn/img/head.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://lmwtuedu.cn/2018/01/12/2018-01-12-MacOS使用Ruby-Gem坑/&title=《MacOS 使用Ruby Gem坑》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://lmwtuedu.cn/2018/01/12/2018-01-12-MacOS使用Ruby-Gem坑/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MacOS 使用Ruby Gem坑》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&url=http://lmwtuedu.cn/2018/01/12/2018-01-12-MacOS使用Ruby-Gem坑/&via=http://lmwtuedu.cn" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://lmwtuedu.cn/2018/01/12/2018-01-12-MacOS使用Ruby-Gem坑/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/01/13/2018-01-13-大梅沙记录/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">深圳-大梅沙</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/01/11/2018-01-11-最美的不过风景/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">最美的不过风景</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        请喝维他奶~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.PNG" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.PNG" data-alipay="/img/alipay.PNG">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>darker &copy; 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://lmwtuedu.cn/2018/01/12/2018-01-12-MacOS使用Ruby-Gem坑/&title=《MacOS 使用Ruby Gem坑》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&pic=http://lmwtuedu.cn/img/head.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://lmwtuedu.cn/2018/01/12/2018-01-12-MacOS使用Ruby-Gem坑/&title=《MacOS 使用Ruby Gem坑》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://lmwtuedu.cn/2018/01/12/2018-01-12-MacOS使用Ruby-Gem坑/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MacOS 使用Ruby Gem坑》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&url=http://lmwtuedu.cn/2018/01/12/2018-01-12-MacOS使用Ruby-Gem坑/&via=http://lmwtuedu.cn" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://lmwtuedu.cn/2018/01/12/2018-01-12-MacOS使用Ruby-Gem坑/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACr0lEQVR42u3awXKsMAwEwP3/n06uL7Ub0EhWHofmlCLB0E4VFmO9XuXj6+349/z73/x2bf0u1/c9fODh4eGNH/0UozfO+5jX195MAR4eHt4aLx36+u+vx0kfevQMeHh4eA/gVa6a/LY+EXh4eHjP59XL6N4S0ivx8fDw8P4XrzJcPQJIo4q0jF7JWvDw8PDKvPou0nN+Xtnfw8PDwxvvqqeLRCV0SK9KF6cfI+Dh4eEt8CYf//XWqI1trXocjIeHh3eWN4kM0g2zeYNXPE14eHh4a7z0I7/3Wq8DehP0SvsU8PDw8Fq8DUwaWMzvMvlX4eHh4U149egh3byvxxa9kUvTgYeHh3eIV48V6kXw9flJdFtvw8LDw8Pb5lVq7UltnkYPvUXow/Pg4eHhLfAmhW86QtDL0Iozbs7j4eHhHeKll9W385uv78LExWEEHh4e3gKvt1VfL4srV/WK7BskHh4e3gKvtxjUb9lrLEjPBP1leHh4eId4vYc+G+P24trSxwAeHh7eUV4akk5e5WkpPAlwP8S4eHh4eAu8XnHca5ZKQ+RmMIGHh4f3J7x689OpF/2kvaD0rYCHh4e3wEuDg5TUC4Ur97o+j4eHh7fHS1/fKWPSblWH4eHh4f0Nr1mqhnFqvTFrHnZ8oOLh4eEt83pxQG8jrf5yr+BLCwMeHh7eAq8eHPQC3DTSTVsZSokLHh4e3iHePFS9CQXCMHfSDouHh4e3x/sKjzRCTZtN6xNaWoTw8PDwFnintqDSTa/e1KQNYXh4eHh7vMpiMF820sUj3VS7iXHx8PDwFnjz6GGyFh0oi38T4eHh4T2AV2H0pqPOC5YHPDw8vAfw0mggLdPT9oLFkhoPDw/vUBiRFtDpBlvpoXudEXh4eHiHeJPGpnmA29v0ipcHPDw8vDO8bzi03zwP3fxdAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'Cherry Up';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'Champion';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

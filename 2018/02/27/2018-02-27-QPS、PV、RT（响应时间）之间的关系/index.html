@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>QPS、PV、RT（响应时间）之间的关系 | I AM SLOW WALKER, BUT I NEVER WALK BACK</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="code">
+    <meta name="description" content="QPS、PV、RT（响应时间）之间的关系在进行系统性能压测和系统性能优化的时候，会涉及到QPS、PV、RT相关的概念。 QPSQPS： query per seconds 单个进程每秒请求服务器的成功次数 QPS = rep/sec = 请求数/秒 QPS如何统计？QPS统计方式【一般使用http_load进行统计】 QPS= 总请求数 /（进程总数*请求时间） 根据QPS推算PV单台服务器每天P">
+<meta name="keywords" content="code">
+<meta property="og:type" content="article">
+<meta property="og:title" content="QPS、PV、RT（响应时间）之间的关系">
+<meta property="og:url" content="http://lmwtuedu.cn/2018/02/27/2018-02-27-QPS、PV、RT（响应时间）之间的关系/index.html">
+<meta property="og:site_name" content="I AM SLOW WALKER, BUT I NEVER WALK BACK">
+<meta property="og:description" content="QPS、PV、RT（响应时间）之间的关系在进行系统性能压测和系统性能优化的时候，会涉及到QPS、PV、RT相关的概念。 QPSQPS： query per seconds 单个进程每秒请求服务器的成功次数 QPS = rep/sec = 请求数/秒 QPS如何统计？QPS统计方式【一般使用http_load进行统计】 QPS= 总请求数 /（进程总数*请求时间） 根据QPS推算PV单台服务器每天P">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-08-15T06:30:56.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="QPS、PV、RT（响应时间）之间的关系">
+<meta name="twitter:description" content="QPS、PV、RT（响应时间）之间的关系在进行系统性能压测和系统性能优化的时候，会涉及到QPS、PV、RT相关的概念。 QPSQPS： query per seconds 单个进程每秒请求服务器的成功次数 QPS = rep/sec = 请求数/秒 QPS如何统计？QPS统计方式【一般使用http_load进行统计】 QPS= 总请求数 /（进程总数*请求时间） 根据QPS推算PV单台服务器每天P">
+    
+        <link rel="alternate" type="application/atom+xml" title="I AM SLOW WALKER, BUT I NEVER WALK BACK" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/head.png">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/head_background.png)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/head.png">
+        </a>
+        <hgroup class="introduce">
+          <h4 class="nickname">darker</h4>
+          <a href="mailto:lmwtuedu@163.com" title="lmwtuedu@163.com" class="mail">lmwtuedu@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                Home
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/share" target="_blank" >
+                <i class="icon icon-lg icon-share-alt-square"></i>
+                Share Link
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-id-badge"></i>
+                About Me
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">QPS、PV、RT（响应时间）之间的关系</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h3 class="title">QPS、PV、RT（响应时间）之间的关系</h3>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-02-26T16:00:00.000Z" itemprop="datePublished" class="page-time">
+  2018-02-27
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>Table Of Content</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#QPS、PV、RT（响应时间）之间的关系"><span class="post-toc-number">1.</span> <span class="post-toc-text">QPS、PV、RT（响应时间）之间的关系</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#QPS"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">QPS</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#QPS如何统计？"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">QPS如何统计？</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#根据QPS推算PV"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">根据QPS推算PV</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#根据QPS、PV推算服务器数量"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">根据QPS、PV推算服务器数量</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#最佳线程数"><span class="post-toc-number">1.5.</span> <span class="post-toc-text">最佳线程数</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#影响最佳线程数的主要因素"><span class="post-toc-number">1.6.</span> <span class="post-toc-text">影响最佳线程数的主要因素</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-2018-02-27-QPS、PV、RT（响应时间）之间的关系"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">QPS、PV、RT（响应时间）之间的关系</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-02-27 00:00:00" datetime="2018-02-26T16:00:00.000Z"  itemprop="datePublished">2018-02-27</time>
+
+            
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="QPS、PV、RT（响应时间）之间的关系"><a href="#QPS、PV、RT（响应时间）之间的关系" class="headerlink" title="QPS、PV、RT（响应时间）之间的关系"></a>QPS、PV、RT（响应时间）之间的关系</h2><p>在进行系统性能压测和系统性能优化的时候，会涉及到QPS、PV、RT相关的概念。</p>
+<h3 id="QPS"><a href="#QPS" class="headerlink" title="QPS"></a>QPS</h3><p>QPS： query per seconds 单个进程每秒请求服务器的成功次数</p>
+<p>QPS = rep/sec = 请求数/秒</p>
+<h3 id="QPS如何统计？"><a href="#QPS如何统计？" class="headerlink" title="QPS如何统计？"></a>QPS如何统计？</h3><p>QPS统计方式【一般使用http_load进行统计】</p>
+<p>QPS= 总请求数 /（进程总数*请求时间）</p>
+<h3 id="根据QPS推算PV"><a href="#根据QPS推算PV" class="headerlink" title="根据QPS推算PV"></a>根据QPS推算PV</h3><p>单台服务器每天PV计算<br>公式1: 每天总PV = QPS<em>3600</em>6<br>公式2: 每天总PV = QPS<em>3600</em>8</p>
+<h3 id="根据QPS、PV推算服务器数量"><a href="#根据QPS、PV推算服务器数量" class="headerlink" title="根据QPS、PV推算服务器数量"></a>根据QPS、PV推算服务器数量</h3><p>服务器数量 = 每天总PV / 单台服务器每天总PV</p>
+<p>峰值QPS和机器计算公式：</p>
+<p>原理： 每天80%的访问集中在20%的时间里，这20%时间叫做峰值时间</p>
+<p>峰值时间每秒请求数（QPS）： （总PV数 * 80%）/（每天秒数*20%）</p>
+<p>峰值机器数量： 峰值时间QPS / 单台机器的QPS</p>
+<p>例子：</p>
+<p>Q： 每天300W PV的在单台机器上，这台机器需要多少QPS？</p>
+<p>A： （3000000 * 0.8）/（86400 * 0.2） = 139（QPS）</p>
+<p>Q： 如果一台机器的QPS是58， 需要几台机器来支持？ </p>
+<p>A： 139/58 = 3</p>
+<h3 id="最佳线程数"><a href="#最佳线程数" class="headerlink" title="最佳线程数"></a>最佳线程数</h3><p>性能压测的情况下, 起初随着用户的增加， QPS会上升，当到了一定的阀值之后，用户数量增加QPS并不会增加，或者增加不明显，同时请求的响应时间却大幅增加，这个阀值我们认为是最佳线程数。</p>
+<p>为什么要找最佳线程数？</p>
+<ul>
+<li>过多的线程只会造成，更多的内存开销，更多的CPU开销，但是对提升QPS确毫无帮助</li>
+<li>找到最佳线程数后通过简单的设置，可以让web系统更加稳定，得到最高、最稳定的QPS输出。</li>
+</ul>
+<p>最佳线程数的获取：</p>
+<ul>
+<li>通过用户慢慢递增来进行性能压测，观察QPS，响应时间</li>
+<li>根据公式计算： 服务器端最佳线程数量 = （（线程等待时间 + 线程CPU时间）/（线程CPU时间））* cpu数量</li>
+<li>单用户压测，查看CPU的消耗，然后直接乘以百分比，再进行压测，一般这个值的附近应该就是最佳线程数量。</li>
+</ul>
+<h3 id="影响最佳线程数的主要因素"><a href="#影响最佳线程数的主要因素" class="headerlink" title="影响最佳线程数的主要因素"></a>影响最佳线程数的主要因素</h3><ol>
+<li><p>IO</p>
+<p> IO开销较多的应用，其CPU线程等待时间会比较长，所以线程数量可以开的多一些，相反则线程数量要少一些， 其实有两种极端，纯IO的应用，比如 proxy， 则线程数量可以开到非常大（实在太大了则需要考虑线程切换的开销），这种应用基本上后端（比如这个proxy是代理搜索的）的QPS能有多少， proxy就有多少。</p>
+</li>
+<li><p>CPU</p>
+<p> 对于耗CPU的计算，这种情况一般来讲只能开到CPU个数的线程数量。但是并不是说这种应用的QPS就不高，往往这种应用QPS可以很高，因为耗CPU计算的应用，往往处理单次请求的时间会很短。</p>
+</li>
+<li><p>QPS和线程数的关系</p>
+<ol>
+<li>在最佳线程数量之前，QPS和线程是相互递增的关系，线程数量到了最佳线程之后，QPS持平，不在上升，甚至略有下降，同时响应时间持续上升。</li>
+<li>同一个系统而言，最佳线程数越多，QPS越高。</li>
+</ol>
+</li>
+</ol>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-08-15T06:30:56.000Z" itemprop="dateUpdated">2019-08-15 14:30:56</time>
+</span><br>
+
+
+        
+        欢迎访问http://lmwtuedu.cn，希望此文章对您有帮助!
+        
+    </div>
+    
+    <footer>
+        <a href="http://lmwtuedu.cn">
+            <img src="/img/head.png" alt="darker">
+            darker
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/code/">code</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://lmwtuedu.cn/2018/02/27/2018-02-27-QPS、PV、RT（响应时间）之间的关系/&title=《QPS、PV、RT（响应时间）之间的关系》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&pic=http://lmwtuedu.cn/img/head.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://lmwtuedu.cn/2018/02/27/2018-02-27-QPS、PV、RT（响应时间）之间的关系/&title=《QPS、PV、RT（响应时间）之间的关系》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://lmwtuedu.cn/2018/02/27/2018-02-27-QPS、PV、RT（响应时间）之间的关系/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《QPS、PV、RT（响应时间）之间的关系》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&url=http://lmwtuedu.cn/2018/02/27/2018-02-27-QPS、PV、RT（响应时间）之间的关系/&via=http://lmwtuedu.cn" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://lmwtuedu.cn/2018/02/27/2018-02-27-QPS、PV、RT（响应时间）之间的关系/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/03/02/2018-03-02-当前流行-的一些软件保护技术/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">当前流行的一些软件保护技术</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/02/24/2018-02-24-越调控越上涨，楼市将出现报复性反弹/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">越调控越上涨，楼市将出现报复性反弹？</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        请喝维他奶~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.PNG" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.PNG" data-alipay="/img/alipay.PNG">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>darker &copy; 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://lmwtuedu.cn/2018/02/27/2018-02-27-QPS、PV、RT（响应时间）之间的关系/&title=《QPS、PV、RT（响应时间）之间的关系》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&pic=http://lmwtuedu.cn/img/head.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://lmwtuedu.cn/2018/02/27/2018-02-27-QPS、PV、RT（响应时间）之间的关系/&title=《QPS、PV、RT（响应时间）之间的关系》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://lmwtuedu.cn/2018/02/27/2018-02-27-QPS、PV、RT（响应时间）之间的关系/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《QPS、PV、RT（响应时间）之间的关系》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&url=http://lmwtuedu.cn/2018/02/27/2018-02-27-QPS、PV、RT（响应时间）之间的关系/&via=http://lmwtuedu.cn" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://lmwtuedu.cn/2018/02/27/2018-02-27-QPS、PV、RT（响应时间）之间的关系/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPYAAAD2CAAAAADAeSUUAAADQElEQVR42u3aS47bMBAFwLn/pR0gyCZIJL3XtAGLKq0MjSyy6EVPf35+4uv1+zq68+/nozuz9xw9c3TnbRc2Njb2Tdiv0yvf+jng6MkWkKx1bsHGxsbelX2+iWS70WJBUExWSY7gwoiNjY39SHabrpwfTXJk7brY2NjY2LPXrRxKW2xKUh1sbGzsZ7KTotJ6wSgvKuWJx8dradjY2Nhfz24bvd/8+YP9bWxsbOyvZL/Ka9YYzgNVHn5mb/jzLWxsbOyN2EnhPm/QtsM3bTrRlrEunsfGxsbejj0bkWnfs9JyaMMqNjY29nPY58iVQnyyrVnT920DQNjY2Ng3Z5+Hk3VSW6jKB3TagyhmkbCxsbFvyG7L8W2y0QbFJOC1P9hfT2JjY2NvxJ61TvOBnllonJW02pYGNjY29h7sdslhvao8ptmvVyQw2NjY2Nux8zCWb26W3szeU+8cGxsbe2t2OzSTB6RZ4WmWJkW1NGxsbOyN2PXXyhGcNiFpWwLte7CxsbF3Yq+En/Un27HL5CjzZ7CxsbH3YM9arbMQWIzRlCM7ySEedkWwsbGxt2Pnwakt6LcjOCsHFLUHsLGxsbdgt2FppdG7Epba9CY6MmxsbOwt2HmS0AaqtnCfB6pZEQobGxv7aey2udtuuh3oaUNalIRgY2Njb8FeL8onLYE2FCV/XRn3wcbGxt6PnW+xbSq0Ld42yOUB7CIhwcbGxr4tu/hnPf4Xvw0t7cBN2x74z36wsbGxN2LPls95SbE+D4RFAyD+LjY2Nvbd2XlhvQ0eOfUTv+HFUWJjY2NvxJ4V/fOkpU1g8sC2chzY2NjYO7FnQSIf4lkZwWmToqLJgY2Njb0pu23f5uX4JCy1q+RB7qKohI2NjX1z9qxFOhvWeW/60SZFF+kQNjY29m3Zr/KaFaFm5aGVZsDF0WNjY2NvxG7HLt811tNud6X4NQRjY2Nj34qdh5lZy3b9sGZpT9TfxsbGxt6IPQsMswDTtgTWU4vDPAwbGxv7Yeykmbp+cG3LNt8VNjY2NvZwIGY2Ihncn40NYWNjY+/KbotKeSLRBrz1YZ0oXcHGxsbeiL3S6J2Ft1ki0Qa52XgQNjY29q3YvwDajn4Zp11WOwAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'Cherry Up';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'Champion';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
