@@ -10,6 +10,7 @@
 
 
     <meta charset="utf-8">
+    <meta name="referrer" content="no-referrer">
     
     
     
@@ -21,20 +22,20 @@
     
     
     <meta name="keywords" content="rpc">
-    <meta name="description" content="#闲说-RPC（一）  我只是一个网络搬运工，客观的归纳整理。 如有侵权，请联系我  环境 Java JDK1.8 IDEA maven  基本原理常言道听的多了就懂了，一老听同事RPC，我本人也懂得一些rpc的用法，例如一些开源框架阿里的dubbo，调度中心的工具zookeeper。 熟练的运用如何操作。通过spring只需简单的配置一些配置，例如： 服务端配置： 1234567891011&amp;l">
+    <meta name="description" content="#闲说-RPC_01  我只是一个网络搬运工，客观的归纳整理。 如有侵权，请联系我  环境 Java JDK1.8 IDEA maven  基本原理常言道听的多了就懂了，一老听同事RPC，我本人也懂得一些rpc的用法，例如一些开源框架阿里的dubbo，调度中心的工具zookeeper。 熟练的运用如何操作。通过spring只需简单的配置一些配置，例如： 服务端配置： 1234567891011&amp;l">
 <meta name="keywords" content="rpc">
 <meta property="og:type" content="article">
 <meta property="og:title" content="闲说RPC_01">
 <meta property="og:url" content="http://lmwtuedu.cn/2018/09/05/2018-09-05-闲说RPC_01/index.html">
 <meta property="og:site_name" content="I AM SLOW WALKER, BUT I NEVER WALK BACK">
-<meta property="og:description" content="#闲说-RPC（一）  我只是一个网络搬运工，客观的归纳整理。 如有侵权，请联系我  环境 Java JDK1.8 IDEA maven  基本原理常言道听的多了就懂了，一老听同事RPC，我本人也懂得一些rpc的用法，例如一些开源框架阿里的dubbo，调度中心的工具zookeeper。 熟练的运用如何操作。通过spring只需简单的配置一些配置，例如： 服务端配置： 1234567891011&amp;l">
+<meta property="og:description" content="#闲说-RPC_01  我只是一个网络搬运工，客观的归纳整理。 如有侵权，请联系我  环境 Java JDK1.8 IDEA maven  基本原理常言道听的多了就懂了，一老听同事RPC，我本人也懂得一些rpc的用法，例如一些开源框架阿里的dubbo，调度中心的工具zookeeper。 熟练的运用如何操作。通过spring只需简单的配置一些配置，例如： 服务端配置： 1234567891011&amp;l">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNbRwgy1fuyhjsuwwdj30hv0adtah.jpg">
 <meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNbRwgy1fuyhkql03nj30ij0b2ju7.jpg">
-<meta property="og:updated_time" content="2019-08-15T06:30:56.000Z">
+<meta property="og:updated_time" content="2019-09-17T08:19:44.544Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="闲说RPC_01">
-<meta name="twitter:description" content="#闲说-RPC（一）  我只是一个网络搬运工，客观的归纳整理。 如有侵权，请联系我  环境 Java JDK1.8 IDEA maven  基本原理常言道听的多了就懂了，一老听同事RPC，我本人也懂得一些rpc的用法，例如一些开源框架阿里的dubbo，调度中心的工具zookeeper。 熟练的运用如何操作。通过spring只需简单的配置一些配置，例如： 服务端配置： 1234567891011&amp;l">
+<meta name="twitter:description" content="#闲说-RPC_01  我只是一个网络搬运工，客观的归纳整理。 如有侵权，请联系我  环境 Java JDK1.8 IDEA maven  基本原理常言道听的多了就懂了，一老听同事RPC，我本人也懂得一些rpc的用法，例如一些开源框架阿里的dubbo，调度中心的工具zookeeper。 熟练的运用如何操作。通过spring只需简单的配置一些配置，例如： 服务端配置： 1234567891011&amp;l">
 <meta name="twitter:image" content="https://ws3.sinaimg.cn/large/006tNbRwgy1fuyhjsuwwdj30hv0adtah.jpg">
     
         <link rel="alternate" type="application/atom+xml" title="I AM SLOW WALKER, BUT I NEVER WALK BACK" href="/atom.xml">
@@ -153,6 +154,8 @@
 </time>
 
 
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/framework/">framework</a></li></ul>
+
             
         </h5>
     </div>
@@ -182,13 +185,15 @@
             <time class="post-time" title="2018-09-05 00:00:00" datetime="2018-09-04T16:00:00.000Z"  itemprop="datePublished">2018-09-05</time>
 
             
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/framework/">framework</a></li></ul>
+
 
 
             
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <p>#闲说-RPC（一）</p>
+            <p>#闲说-RPC_01</p>
 <blockquote>
 <p>我只是一个网络搬运工，客观的归纳整理。 如有侵权，请联系我</p>
 </blockquote>
@@ -257,12 +262,12 @@
     <div class="content">
         
 <span class="post-time">
-    Last updated: <time datetime="2019-08-15T06:30:56.000Z" itemprop="dateUpdated">2019-08-15 14:30:56</time>
+    Last updated: <time datetime="2019-09-17T08:19:44.544Z" itemprop="dateUpdated">2019-09-17 16:19:44</time>
 </span><br>
 
 
         
-        欢迎访问http://lmwtuedu.cn，希望此文章对您有帮助!
+        欢迎访问 http://lmwtuedu.cn，希望此文章对您有帮助!
         
     </div>
     
@@ -414,16 +419,6 @@
 </div>
 
         <footer class="footer">
-    <div class="top">
-        
-
-        <p>
-            
-                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
-            
-            <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
-        </p>
-    </div>
     <div class="bottom">
         <p><span>darker &copy; 2019</span>
             <span>
