@@ -15,23 +15,24 @@
     
     
     
-    <title>No title | I AM SLOW WALKER, BUT I NEVER WALK BACK</title>
+    <title>线程安全-原子性概念 | I AM SLOW WALKER, BUT I NEVER WALK BACK</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content>
+    <meta name="keywords" content="线程,原子性">
     <meta name="description" content="Google和baidu 一下讲解多线程的很多很多。通过我的学习以及记录一些我认为“有条理”的多线程。  线程的原子性我对于原子性的理解： “不可拆分；不可中断，全部执行完或者全部不执行”。 线程针对于原子性（Atomicity）的操作就是安全的。所以我们只需要保证操作的对象是原子性的就可以了。 12345678910111213141516171819202122232425262728293">
+<meta name="keywords" content="线程,原子性">
 <meta property="og:type" content="article">
-<meta property="og:title" content="No title">
+<meta property="og:title" content="线程安全-原子性概念">
 <meta property="og:url" content="http://lmwtuedu.cn/2019/09/25/2019-09-25-线程安全-原子性概念-01/index.html">
 <meta property="og:site_name" content="I AM SLOW WALKER, BUT I NEVER WALK BACK">
 <meta property="og:description" content="Google和baidu 一下讲解多线程的很多很多。通过我的学习以及记录一些我认为“有条理”的多线程。  线程的原子性我对于原子性的理解： “不可拆分；不可中断，全部执行完或者全部不执行”。 线程针对于原子性（Atomicity）的操作就是安全的。所以我们只需要保证操作的对象是原子性的就可以了。 12345678910111213141516171819202122232425262728293">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-09-25T05:33:20.853Z">
+<meta property="og:updated_time" content="2019-09-25T05:35:10.768Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="No title">
+<meta name="twitter:title" content="线程安全-原子性概念">
 <meta name="twitter:description" content="Google和baidu 一下讲解多线程的很多很多。通过我的学习以及记录一些我认为“有条理”的多线程。  线程的原子性我对于原子性的理解： “不可拆分；不可中断，全部执行完或者全部不执行”。 线程针对于原子性（Atomicity）的操作就是安全的。所以我们只需要保证操作的对象是原子性的就可以了。 12345678910111213141516171819202122232425262728293">
     
         <link rel="alternate" type="application/atom+xml" title="I AM SLOW WALKER, BUT I NEVER WALK BACK" href="/atom.xml">
@@ -120,7 +121,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">No title</div>
+        <div class="flex-col header-title ellipsis">线程安全-原子性概念</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -142,13 +143,15 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h3 class="title">No title</h3>
+        <h3 class="title">线程安全-原子性概念</h3>
         <h5 class="subtitle">
             
-                <time datetime="2019-09-25T02:40:54.430Z" itemprop="datePublished" class="page-time">
+                <time datetime="2019-09-24T16:00:00.000Z" itemprop="datePublished" class="page-time">
   2019-09-25
 </time>
 
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/线程/">线程</a></li></ul>
 
             
         </h5>
@@ -174,11 +177,13 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">No title</h1>
+        <h1 class="post-card-title">线程安全-原子性概念</h1>
         <div class="post-meta">
-            <time class="post-time" title="2019-09-25 10:40:54" datetime="2019-09-25T02:40:54.430Z"  itemprop="datePublished">2019-09-25</time>
+            <time class="post-time" title="2019-09-25 00:00:00" datetime="2019-09-24T16:00:00.000Z"  itemprop="datePublished">2019-09-25</time>
 
             
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/线程/">线程</a></li></ul>
+
 
 
             
@@ -209,7 +214,7 @@
     <div class="content">
         
 <span class="post-time">
-    Last updated: <time datetime="2019-09-25T05:33:20.853Z" itemprop="dateUpdated">2019-09-25 13:33:20</time>
+    Last updated: <time datetime="2019-09-25T05:35:10.768Z" itemprop="dateUpdated">2019-09-25 13:35:10</time>
 </span><br>
 
 
@@ -235,6 +240,8 @@
 
         <div class="post-footer">
             
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/原子性/">原子性</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/线程/">线程</a></li></ul>
+
 
             
 <div class="page-share-wrap">
@@ -243,7 +250,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://lmwtuedu.cn/2019/09/25/2019-09-25-线程安全-原子性概念-01/&title=《No title》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&pic=http://lmwtuedu.cn/img/head.png" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://lmwtuedu.cn/2019/09/25/2019-09-25-线程安全-原子性概念-01/&title=《线程安全-原子性概念》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&pic=http://lmwtuedu.cn/img/head.png" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -253,7 +260,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://lmwtuedu.cn/2019/09/25/2019-09-25-线程安全-原子性概念-01/&title=《No title》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://lmwtuedu.cn/2019/09/25/2019-09-25-线程安全-原子性概念-01/&title=《线程安全-原子性概念》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -263,7 +270,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《No title》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&url=http://lmwtuedu.cn/2019/09/25/2019-09-25-线程安全-原子性概念-01/&via=http://lmwtuedu.cn" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《线程安全-原子性概念》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&url=http://lmwtuedu.cn/2019/09/25/2019-09-25-线程安全-原子性概念-01/&via=http://lmwtuedu.cn" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -376,7 +383,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://lmwtuedu.cn/2019/09/25/2019-09-25-线程安全-原子性概念-01/&title=《No title》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&pic=http://lmwtuedu.cn/img/head.png" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://lmwtuedu.cn/2019/09/25/2019-09-25-线程安全-原子性概念-01/&title=《线程安全-原子性概念》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&pic=http://lmwtuedu.cn/img/head.png" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -386,7 +393,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://lmwtuedu.cn/2019/09/25/2019-09-25-线程安全-原子性概念-01/&title=《No title》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://lmwtuedu.cn/2019/09/25/2019-09-25-线程安全-原子性概念-01/&title=《线程安全-原子性概念》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -396,7 +403,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《No title》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&url=http://lmwtuedu.cn/2019/09/25/2019-09-25-线程安全-原子性概念-01/&via=http://lmwtuedu.cn" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《线程安全-原子性概念》 — I AM SLOW WALKER, BUT I NEVER WALK BACK&url=http://lmwtuedu.cn/2019/09/25/2019-09-25-线程安全-原子性概念-01/&via=http://lmwtuedu.cn" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
